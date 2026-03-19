@@ -1,0 +1,26 @@
+title: Reaction Tester
+description: Быстрый и точный тест реакции с киберпанк дизайном
+theme: null
+plugins:
+  - jekyll-feed
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+
+# GitHub Pages specific
+plugins_dir: ./_plugins
+safe: false
+
+# Exclude unnecessary files
+exclude:
+  - .github/
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+  - README.md
+  - GITHUB_PAGES_SETUP.md
+  - reaction_timer.py
