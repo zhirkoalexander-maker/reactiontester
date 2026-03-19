@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ff006e">
+    <meta name="description" content="Быстрый и точный тест реакции с классическим и продвинутым режимами">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Тест Реакции">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230a0e27' width='192' height='192'/><text x='96' y='120' font-size='100' font-weight='bold' text-anchor='middle' fill='%23ff006e'>⚡</text></svg>">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%230a0e27' width='100' height='100'/><text x='50' y='75' font-size='60' font-weight='bold' text-anchor='middle' fill='%23ff006e'>⚡</text></svg>">
+    <title>Тест Реакции</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 900px;
+            width: 95%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .test-box {
+            background: rgba(20, 20, 50, 0.8);
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-box:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .test-1 {
+            border-color: #ff006e;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.3);
+        }
+
+        .test-1:hover {
+            box-shadow: 0 0 50px rgba(255, 0, 110, 0.6);
+            transform: translateY(-5px);
+        }
+
+        .test-2 {
+            border-color: #00d9ff;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .test-2:hover {
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.6);
+            transform: translateY(-5px);
+        }
+
+        .test-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .test-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .test-1 .test-title {
+            color: #ff006e;
+        }
+
+        .test-2 .test-title {
+            color: #00d9ff;
+        }
+
+        .test-description {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .test-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .test-1 .test-button {
+            background: #ff006e;
+            color: #fff;
+        }
+
+        .test-1 .test-button:hover {
+            background: #ff1a7e;
+            transform: scale(1.05);
+        }
+
+        .test-2 .test-button {
+            background: #00d9ff;
+            color: #000;
+        }
+
+        .test-2 .test-button:hover {
+            background: #1ae9ff;
+            transform: scale(1.05);
+        }
+
+        /* Модальное окно теста */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 50, 0.9);
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-test1 {
+            border-color: #ff006e;
+            box-shadow: 0 0 60px rgba(255, 0, 110, 0.5);
+        }
+
+        .modal-test2 {
+            border-color: #00d9ff;
+            box-shadow: 0 0 60px rgba(0, 217, 255, 0.5);
+        }
+
+        .test-area {
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            font-weight: bold;
+            border-radius: 10px;
+            margin: 30px 0;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-area:active {
+            transform: scale(0.98);
+        }
+
+        .test-1 .test-area {
+            background: rgba(255, 0, 110, 0.1);
+            border: 2px solid #ff006e;
+            color: #ff006e;
+        }
+
+        .test-2 .test-area {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid #00d9ff;
+            color: #00d9ff;
+        }
+
+        .test-area.waiting {
+            background: rgba(255, 200, 0, 0.2);
+            border-color: #ffc800;
+            color: #ffc800;
+        }
+
+        .test-area.ready {
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .modal-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .modal-test1 .modal-title {
+            color: #ff006e;
+        }
+
+        .modal-test2 .modal-title {
+            color: #00d9ff;
+        }
+
+        .stats {
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .modal-test1 .stat-value {
+            color: #ff006e;
+        }
+
+        .modal-test2 .stat-value {
+            color: #00d9ff;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .title-screen {
+            text-align: center;
+            color: #fff;
+            z-index: 15;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .main-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #ff006e, #00d9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #aaa;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .main-title {
+                font-size: 36px;
+            }
+
+            .test-title {
+                font-size: 24px;
+            }
+
+            .modal-content {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="title-screen">
+        <div class="main-title">⚡ ТЕСТ РЕАКЦИИ ⚡</div>
+        <div class="subtitle">Выбери режим и проверь свою скорость</div>
+    </div>
+
+    <div class="container">
+        <!-- Классический тест -->
+        <div class="test-box test-1">
+            <div class="test-content">
+                <div class="test-title">CLASSIC</div>
+                <div class="test-description">
+                    Классический режим. Жди зелёного квадрата и нажимай как можно быстрее!
+                </div>
+                <button class="test-button" onclick="startTest('classic')">Начать</button>
+            </div>
+        </div>
+
+        <!-- Усложненный тест -->
+        <div class="test-box test-2">
+            <div class="test-content">
+                <div class="test-title">INSANE</div>
+                <div class="test-description">
+                    Продвинутый режим. Квадрат появляется в случайных местах. Поймаешь?
+                </div>
+                <button class="test-button" onclick="startTest('insane')">Начать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно классического теста -->
+    <div class="modal modal-test1" id="modal-classic">
+        <div class="modal-content modal-test1">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="modal-title" id="classic-title">ГОТОВ?</div>
+            <div class="test-area" id="classic-area" onclick="handleClick('classic')">
+                ЖДИ...
+            </div>
+            <div id="classic-stats" class="stats" style="display:none;">
+                <div class="stat-line">
+                    <span>Время реакции:</span>
+                    <span class="stat-value" id="classic-time">0 мс</span>
+                </div>
+                <div class="stat-line">
+                    <span>Оценка:</span>
+                    <span class="stat-value" id="classic-rating">-</span>
+                </div>
+                <div class="stat-line">
+                    <span>Попыток:</span>
+                    <span class="stat-value" id="classic-attempts">0</span>
+                </div>
+                <div class="stat-line">
+                    <span>Среднее:</span>
+                    <span class="stat-value" id="classic-avg">0 мс</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно продвинутого теста -->
+    <div class="modal modal-test2" id="modal-insane">
+        <div class="modal-content modal-test2">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="modal-title" id="insane-title">ГОТОВ?</div>
+            <div class="test-area" id="insane-area" onclick="handleClick('insane')">
+                ЖДИ...
+            </div>
+            <div id="insane-stats" class="stats" style="display:none;">
+                <div class="stat-line">
+                    <span>Время реакции:</span>
+                    <span class="stat-value" id="insane-time">0 мс</span>
+                </div>
+                <div class="stat-line">
+                    <span>Оценка:</span>
+                    <span class="stat-value" id="insane-rating">-</span>
+                </div>
+                <div class="stat-line">
+                    <span>Попыток:</span>
+                    <span class="stat-value" id="insane-attempts">0</span>
+                </div>
+                <div class="stat-line">
+                    <span>Среднее:</span>
+                    <span class="stat-value" id="insane-avg">0 мс</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Создаем звёзды на фоне
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 2 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Регистрация Service Worker для PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('✅ Service Worker зарегистрирован:', reg);
+                }).catch(err => {
+                    console.log('❌ Service Worker ошибка:', err);
+                });
+            });
+        }
+
+        // Состояние тестов
+        const testState = {
+            classic: { active: false, startTime: null, results: [], testTiming: null, randomDelay: null },
+            insane: { active: false, startTime: null, results: [], testTiming: null, randomDelay: null, position: null }
+        };
+
+        function startTest(type) {
+            const modal = document.getElementById(`modal-${type}`);
+            const area = document.getElementById(`${type}-area`);
+            const title = document.getElementById(`${type}-title`);
+
+            modal.classList.add('active');
+            testState[type].active = true;
+            area.textContent = '⏳ ЖДИ...';
+            area.className = 'test-area waiting';
+            title.textContent = 'ГОТОВ?';
+
+            // Случайная задержка 1-4 секунды
+            const delay = Math.random() * 3000 + 1000;
+            testState[type].randomDelay = setTimeout(() => {
+                showSignal(type);
+            }, delay);
+        }
+
+        function showSignal(type) {
+            const area = document.getElementById(`${type}-area`);
+            const title = document.getElementById(`${type}-title`);
+
+            if (type === 'classic') {
+                area.textContent = '🟢';
+                area.className = 'test-area ready';
+                title.textContent = 'ЩЁЛКАЙ!';
+            } else if (type === 'insane') {
+                // Случайная позиция
+                const x = Math.random() * 80 + 10;
+                const y = Math.random() * 30 + 10;
+                area.style.position = 'relative';
+                area.style.justifyContent = 'flex-start';
+                area.style.alignItems = 'flex-start';
+                area.textContent = '🟢';
+                area.className = 'test-area ready';
+                area.style.paddingLeft = x + '%';
+                area.style.paddingTop = y + '%';
+                testState[type].position = { x, y };
+                title.textContent = 'ПОЙМАЙ!';
+            }
+
+            area.style.cursor = 'pointer';
+            testState[type].startTime = performance.now();
+        }
+
+        function handleClick(type) {
+            if (!testState[type].startTime) return;
+
+            const reactionTime = Math.round(performance.now() - testState[type].startTime);
+            testState[type].results.push(reactionTime);
+            testState[type].active = false;
+
+            if (testState[type].randomDelay) {
+                clearTimeout(testState[type].randomDelay);
+            }
+
+            displayResult(type, reactionTime);
+        }
+
+        function displayResult(type, reactionTime) {
+            const statsDiv = document.getElementById(`${type}-stats`);
+            const timeEl = document.getElementById(`${type}-time`);
+            const ratingEl = document.getElementById(`${type}-rating`);
+            const attemptsEl = document.getElementById(`${type}-attempts`);
+            const avgEl = document.getElementById(`${type}-avg`);
+            const area = document.getElementById(`${type}-area`);
+            const title = document.getElementById(`${type}-title`);
+
+            area.className = 'test-area';
+            area.style.position = 'relative';
+            area.style.justifyContent = 'center';
+            area.style.alignItems = 'center';
+            area.style.paddingLeft = '0';
+            area.style.paddingTop = '0';
+
+            // Определяем оценку
+            let rating;
+            if (reactionTime < 150) rating = '🔥 НЕВЕРОЯТНАЯ!';
+            else if (reactionTime < 250) rating = '⭐ ОТЛИЧНАЯ!';
+            else if (reactionTime < 350) rating = '👍 ХОРОШАЯ';
+            else rating = '💤 НЕПЛОХАЯ';
+
+            timeEl.textContent = reactionTime + ' мс';
+            ratingEl.textContent = rating;
+            attemptsEl.textContent = testState[type].results.length;
+
+            const avg = Math.round(testState[type].results.reduce((a, b) => a + b) / testState[type].results.length);
+            avgEl.textContent = avg + ' мс';
+
+            title.textContent = rating;
+            area.textContent = `${reactionTime} мс`;
+
+            statsDiv.style.display = 'block';
+
+            // Снова предлагаем тест через 3 секунды
+            setTimeout(() => {
+                if (testState[type].active === false && statsDiv.style.display === 'block') {
+                    startTest(type);
+                }
+            }, 3000);
+        }
+
+        function closeTest() {
+            document.getElementById('modal-classic').classList.remove('active');
+            document.getElementById('modal-insane').classList.remove('active');
+            testState.classic.active = false;
+            testState.insane.active = false;
+            if (testState.classic.randomDelay) clearTimeout(testState.classic.randomDelay);
+            if (testState.insane.randomDelay) clearTimeout(testState.insane.randomDelay);
+        }
+    </script>
+</body>
+</html>
