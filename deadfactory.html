@@ -24,6 +24,7 @@
             color: #00ff88 !important;
             padding: 20px;
             overflow-x: hidden;
+            user-select: none;
         }
 
         .container {
@@ -371,8 +372,11 @@
             transform: scale(1.02);
         }
 
-        .start-btn:active {
-            transform: scale(0.98);
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            color: #666;
+            border-color: #666;
         }
 
         .modal {
@@ -670,7 +674,10 @@
     </div>
 
     <div class="results-section">
-        <div class="results-title">RESULTS & STATS</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="results-title">RESULTS & STATS</div>
+            <button class="guide-btn" onclick="clearAllStats()" style="font-size: 11px; padding: 6px 12px;">CLEAR DATA</button>
+        </div>
         <table class="results-table">
             <thead>
                 <tr>
@@ -1026,6 +1033,18 @@
             guideModal.classList.toggle('active');
         }
 
+        function clearAllStats() {
+            if (!confirm('Clear all saved stats? This cannot be undone.')) return;
+            
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat'].forEach(type => {
+                localStorage.removeItem(`reactions_${type}_best`);
+                localStorage.removeItem(`reactions_${type}_correct`);
+            });
+            
+            loadAndDisplayStats();
+            alert('All stats cleared!');
+        }
+
         // ===== CLASSIC TEST =====
         function startTest(type) {
             state[type].currentAttempt = 1;
@@ -1054,6 +1073,7 @@
             area.textContent = '⏳';
             area.classList.remove('ready');
             area.onclick = null;
+            area.style.background = '#051405';
 
             const delays = {
                 easy: [1000, 2000],
@@ -1063,9 +1083,24 @@
             const [min, max] = delays[state.classic.diff];
             const delay = Math.random() * (max - min) + min;
 
+            // Prevent false starts - block clicks before ready
+            let clickBlocked = true;
+            area.onclick = () => {
+                if (clickBlocked) {
+                    area.style.background = '#ff0000';
+                    area.textContent = '✗ TOO EARLY!';
+                    setTimeout(() => {
+                        area.style.background = '#051405';
+                        area.textContent = '⏳';
+                    }, 500);
+                }
+            };
+
             setTimeout(() => {
+                clickBlocked = false;
                 area.textContent = '🟢 CLICK!';
                 area.classList.add('ready');
+                area.style.background = '#05ff05';
                 state.classic.startTime = performance.now();
                 
                 const handleClassicResponse = () => {
@@ -1081,11 +1116,9 @@
                         e.preventDefault();
                         e.stopPropagation();
                         if (area.classList.contains('ready')) {
-                            area.style.background = '#05ff05';
-                            area.style.borderColor = '#00ff88';
+                            area.style.background = '#00ff88';
                             setTimeout(() => {
-                                area.style.background = '#051405';
-                                area.style.borderColor = '#00ff88';
+                                area.style.background = '#05ff05';
                             }, 100);
                             handleClassicResponse();
                         }

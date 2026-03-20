@@ -24,6 +24,7 @@
             color: #00ff88 !important;
             padding: 20px;
             overflow-x: hidden;
+            user-select: none;
         }
 
         .container {
@@ -361,6 +362,7 @@
             font-family: 'Courier New', monospace;
             letter-spacing: 1px;
             box-shadow: inset 0 0 10px rgba(0, 255, 136, 0);
+            touch-action: manipulation;
         }
 
         .start-btn:hover {
@@ -373,6 +375,13 @@
 
         .start-btn:active {
             transform: scale(0.98);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            color: #666;
+            border-color: #666;
         }
 
         .modal {
@@ -671,7 +680,10 @@
 
     <!-- RESULTS TABLE -->
     <div class="results-section">
-        <div class="results-title">RESULTS & STATS</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div class="results-title">RESULTS & STATS</div>
+            <button class="guide-btn" onclick="clearAllStats()" style="font-size: 11px; padding: 6px 12px;">CLEAR DATA</button>
+        </div>
         <table class="results-table">
             <thead>
                 <tr>
@@ -920,6 +932,9 @@
         console.log('--- Not seeing changes? Open PRIVATE WINDOW (Ctrl+Shift+P)');
         document.body.style.backgroundColor = '#000000';
 
+        // GLOBAL TEST GUARD - Prevent multiple simultaneous tests
+        let testInProgress = false;
+
         // STATE
         const state = {
             classic: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
@@ -1019,6 +1034,35 @@
                 document.removeEventListener('keydown', state.chat.submitHandler);
                 state.chat.submitHandler = null;
             }
+            // Clean up visual click handlers
+            if (type === 'visual') {
+                const grid = document.getElementById('visual-grid');
+                if (grid) {
+                    grid.innerHTML = '';
+                    grid.style.pointerEvents = 'auto';
+                }
+            }
+            // Clean up insane area
+            if (type === 'insane') {
+                const area = document.getElementById('insane-area');
+                if (area) {
+                    area.onclick = null;
+                    area.style.transform = 'translate(0, 0)';
+                    area.textContent = '⏳';
+                }
+            }
+            // Reset input fields
+            const inputField = document.getElementById(`${type}-input`);
+            if (inputField) {
+                inputField.value = '';
+                inputField.disabled = false;
+            }
+            // Reset button grid
+            const buttonGrid = document.getElementById('button-grid');
+            if (buttonGrid) {
+                buttonGrid.innerHTML = '';
+            }
+            testInProgress = false;
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
@@ -1027,12 +1071,49 @@
             guideModal.classList.toggle('active');
         }
 
+        function clearAllStats() {
+            if (!confirm('Clear all saved stats? This cannot be undone.')) return;
+            
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat'].forEach(type => {
+                localStorage.removeItem(`reactions_${type}_best`);
+                localStorage.removeItem(`reactions_${type}_correct`);
+            });
+            
+            loadAndDisplayStats();
+            alert('All stats cleared!');
+        }
+
         // ===== CLASSIC TEST =====
         function startTest(type) {
+            // Prevent multiple simultaneous tests
+            if (testInProgress) {
+                console.warn('Test already in progress');
+                return;
+            }
+            testInProgress = true;
+            
+            // Reset state for this test
             state[type].currentAttempt = 1;
             state[type].results = [];
             state[type].correct = 0;
+            state[type].sequence = [];
+            state[type].userSequence = [];
+            
+            // Reset display
             document.getElementById(`${type}-attempt`).textContent = `ATTEMPT 1 / 3`;
+            
+            // Clear all input fields and grids
+            const modal = document.getElementById(`modal-${type}`);
+            if (modal) {
+                const inputs = modal.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.disabled = false;
+                });
+                const grid = modal.querySelector('#visual-grid, #button-grid');
+                if (grid) grid.innerHTML = '';
+            }
+            
             document.getElementById(`modal-${type}`).classList.add('active');
 
             if (type === 'classic') {
@@ -1055,6 +1136,7 @@
             area.textContent = '⏳';
             area.classList.remove('ready');
             area.onclick = null;
+            area.style.background = '#051405';
 
             const delays = {
                 easy: [1000, 2000],
@@ -1064,9 +1146,24 @@
             const [min, max] = delays[state.classic.diff];
             const delay = Math.random() * (max - min) + min;
 
+            // Prevent false starts - block clicks before ready
+            let clickBlocked = true;
+            area.onclick = () => {
+                if (clickBlocked) {
+                    area.style.background = '#ff0000';
+                    area.textContent = '✗ TOO EARLY!';
+                    setTimeout(() => {
+                        area.style.background = '#051405';
+                        area.textContent = '⏳';
+                    }, 500);
+                }
+            };
+
             setTimeout(() => {
+                clickBlocked = false;
                 area.textContent = '🟢 CLICK!';
                 area.classList.add('ready');
+                area.style.background = '#05ff05';
                 state.classic.startTime = performance.now();
                 
                 const handleClassicResponse = () => {
@@ -1082,14 +1179,17 @@
                         e.preventDefault();
                         e.stopPropagation();
                         if (area.classList.contains('ready')) {
-                            area.style.background = '#05ff05';
-                            area.style.borderColor = '#00ff88';
+                            area.style.background = '#00ff88';
                             setTimeout(() => {
-                                area.style.background = '#051405';
-                                area.style.borderColor = '#00ff88';
+                                area.style.background = '#05ff05';
                             }, 100);
                             handleClassicResponse();
                         }
+                    }
+                };
+                document.addEventListener('keydown', state.classic.spaceHandler);
+            }, delay);
+        }
                     }
                 };
                 document.addEventListener('keydown', state.classic.spaceHandler);
