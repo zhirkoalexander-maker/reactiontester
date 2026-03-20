@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ff006e">
+    <meta name="description" content="Тест реакции - классический киберпанк тестер">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ReactionTest">
+    <link rel="manifest" href="manifest.json">
+    <title>ReactionTester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #fff;
+            border: 2px solid #00ff88;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 95%;
+            z-index: 10;
+            position: relative;
+        }
+
+        .title-screen {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .main-title {
+            font-size: 52px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            color: #00ff88;
+            text-shadow: 0 0 20px #00ff88;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .test-card {
+            padding: 24px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #111;
+            border-radius: 0;
+            border: 2px solid #ff00ff;
+            backdrop-filter: none;
+            overflow: visible;
+        }
+
+        .test-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: none;
+            pointer-events: none;
+        }
+
+        .test-card:hover {
+            transform: none;
+            background: #1a1a1a;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .card-label {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            color: #00ff88;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-number {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 18px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-header-content {
+            flex: 1;
+        }
+
+        .dropdown-toggle {
+            width: 32px;
+            height: 32px;
+            background: #1a1a1a;
+            border: 2px solid #00ff88;
+            border-radius: 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00ff88;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .dropdown-toggle:hover {
+            background: #00ff88;
+            border-color: #00ff88;
+            color: #000;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .dropdown-toggle.active {
+            background: #00ff88;
+            border-color: #00ff88;
+            color: #000;
+            transform: rotate(180deg);
+        }
+
+        .difficulty-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: #111;
+            border: 2px solid #00ff88;
+            border-radius: 0;
+            backdrop-filter: none;
+            min-width: 140px;
+            display: none;
+            z-index: 50;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .difficulty-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .difficulty-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #333;
+            transition: all 0.2s ease;
+            background: transparent;
+        }
+
+        .difficulty-option:last-child {
+            border-bottom: none;
+        }
+
+        .difficulty-option:hover {
+            background: #222;
+            color: #00ff88;
+            box-shadow: inset 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .difficulty-option.selected {
+            background: #00ff88;
+            color: #000;
+            border-left: 3px solid #fff;
+        }
+
+        .difficulty-select {
+            width: 100%;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-family: inherit;
+            cursor: pointer;
+            margin-bottom: 12px;
+            font-size: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .difficulty-select option {
+            background: #667eea;
+            color: #fff;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 10px;
+            font-weight: 700;
+            border: 2px solid #00ff88;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.8px;
+            border-radius: 0;
+            color: #00ff88;
+            background: transparent;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .start-btn:hover {
+            background: #00ff88;
+            color: #000;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Модальные окна тестов */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: none;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0a0a0a;
+            border-radius: 0;
+            padding: 40px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            border: 2px solid #00ff88;
+            backdrop-filter: none;
+            color: #fff;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 2px solid #ff00ff;
+            color: #ff00ff;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0;
+        }
+
+        .close-btn:hover {
+            background: #ff00ff;
+            color: #000;
+            box-shadow: 0 0 10px #ff00ff;
+            transform: rotate(90deg);
+        }
+
+        .attempt-counter {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .test-title {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+            background-clip: unset;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .test-area {
+            min-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            margin: 30px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #ff00ff;
+            border-radius: 0;
+            background: #111;
+        }
+
+        .test-area.ready {
+            animation: pulse-glow 0.6s infinite;
+            border-color: #00ff88;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* Visual тест - фигуры в сетке */
+        .shapes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .shape-btn {
+            border: 2px solid #00ff88;
+            padding: 40px;
+            cursor: pointer;
+            font-size: 48px;
+            background: #111;
+            transition: all 0.2s ease;
+            border-radius: 0;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .shape-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px #00ff88;
+            background: #1a1a1a;
+            border-color: #00ff88;
+        }
+
+        /* Color Grid для Color Reaction */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .color-btn {
+            border: 3px solid transparent;
+            padding: 50px;
+            cursor: pointer;
+            font-size: 40px;
+            background: #111;
+            transition: all 0.2s ease;
+            border-radius: 0;
+            font-weight: 600;
+        }
+
+        .color-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px #00ff88;
+            border-color: #00ff88;
+        }
+
+        /* Sequence Grid */
+        .sequence-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .sequence-btn {
+            border: 2px solid #00ff88;
+            padding: 30px;
+            cursor: pointer;
+            font-size: 24px;
+            background: #111;
+            transition: all 0.2s ease;
+            border-radius: 0;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .sequence-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 15px #00ff88;
+            background: #1a1a1a;
+        }
+
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .answer-btn {
+            border: 2px solid #e0e0e0;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 700;
+            background: #f8f9fa;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .answer-btn:hover {
+            background: #fff;
+            border-color: #667eea;
+            color: #667eea;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Статистика */
+        .stats {
+            margin-top: 25px;
+            background: #111;
+            padding: 20px;
+            border-radius: 0;
+            display: none;
+            border: 1px solid #333;
+        }
+
+        .stats.show {
+            display: block;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 15px;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: #999;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 16px;
+            color: #00ff88;
+        }
+
+        .countdown {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 120px;
+            font-weight: 900;
+            color: #00ff88;
+            text-shadow: 0 0 30px #00ff88;
+            z-index: 150;
+            animation: countdownPulse 1s ease-out;
+        }
+
+        @keyframes countdownPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 36px; }
+            .test-grid { grid-template-columns: 1fr; }
+            .shapes-grid { grid-template-columns: repeat(2, 1fr); }
+            .answers-grid { grid-template-columns: 1fr; }
+            .color-grid { grid-template-columns: 1fr; }
+            .sequence-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-screen">
+            <div class="main-title">Speed Test</div>
+            <div class="subtitle">Test Your Reaction Time</div>
+        </div>
+
+        <div class="test-grid">
+            <!-- Classic -->
+            <div class="test-card">
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-number">01 / TEST</div>
+                        <div class="card-label">Classic</div>
+                        <div class="card-desc">Wait for the signal and click as fast as you can</div>
+                    </div>
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event, 'classic')">▼</div>
+                </div>
+                <div class="difficulty-dropdown" id="classic-dropdown">
+                    <div class="difficulty-option selected" onclick="setDifficulty(event, 'classic', 'easy')">EASY</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'classic', 'medium')">MEDIUM</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'classic', 'hard')">HARD</div>
+                </div>
+                <button class="start-btn" onclick="startTest('classic')">START</button>
+            </div>
+
+            <!-- Insane -->
+            <div class="test-card">
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-number">02 / TEST</div>
+                        <div class="card-label">Insane</div>
+                        <div class="card-desc">Click the moving target before it moves again</div>
+                    </div>
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event, 'insane')">▼</div>
+                </div>
+                <div class="difficulty-dropdown" id="insane-dropdown">
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'insane', 'easy')">EASY</div>
+                    <div class="difficulty-option selected" onclick="setDifficulty(event, 'insane', 'medium')">MEDIUM</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'insane', 'hard')">HARD</div>
+                </div>
+                <button class="start-btn" onclick="startTest('insane')">START</button>
+            </div>
+
+            <!-- Visual -->
+            <div class="test-card">
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-number">03 / TEST</div>
+                        <div class="card-label">Visual</div>
+                        <div class="card-desc">Find the different shape among others</div>
+                    </div>
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event, 'visual')">▼</div>
+                </div>
+                <div class="difficulty-dropdown" id="visual-dropdown">
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'visual', 'easy')">EASY</div>
+                    <div class="difficulty-option selected" onclick="setDifficulty(event, 'visual', 'medium')">MEDIUM</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'visual', 'hard')">HARD</div>
+                </div>
+                <button class="start-btn" onclick="startTest('visual')">START</button>
+            </div>
+
+            <!-- Mental -->
+            <div class="test-card">
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-number">04 / TEST</div>
+                        <div class="card-label">Mental</div>
+                        <div class="card-desc">Solve the math problem as quickly as possible</div>
+                    </div>
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event, 'mental')">▼</div>
+                </div>
+                <div class="difficulty-dropdown" id="mental-dropdown">
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'mental', 'easy')">EASY</div>
+                    <div class="difficulty-option selected" onclick="setDifficulty(event, 'mental', 'medium')">MEDIUM</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'mental', 'hard')">HARD</div>
+                </div>
+                <button class="start-btn" onclick="startTest('mental')">START</button>
+            </div>
+
+            <!-- Color Reaction -->
+            <div class="test-card">
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-number">05 / TEST</div>
+                        <div class="card-label">Color</div>
+                        <div class="card-desc">Match the color that appears on screen</div>
+                    </div>
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event, 'color')">▼</div>
+                </div>
+                <div class="difficulty-dropdown" id="color-dropdown">
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'color', 'easy')">EASY</div>
+                    <div class="difficulty-option selected" onclick="setDifficulty(event, 'color', 'medium')">MEDIUM</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'color', 'hard')">HARD</div>
+                </div>
+                <button class="start-btn" onclick="startTest('color')">START</button>
+            </div>
+
+            <!-- Sequence Memory -->
+            <div class="test-card">
+                <div class="card-header">
+                    <div class="card-header-content">
+                        <div class="card-number">06 / TEST</div>
+                        <div class="card-label">Memory</div>
+                        <div class="card-desc">Repeat the sequence of numbers shown</div>
+                    </div>
+                    <div class="dropdown-toggle" onclick="toggleDropdown(event, 'sequence')">▼</div>
+                </div>
+                <div class="difficulty-dropdown" id="sequence-dropdown">
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'sequence', 'easy')">EASY</div>
+                    <div class="difficulty-option selected" onclick="setDifficulty(event, 'sequence', 'medium')">MEDIUM</div>
+                    <div class="difficulty-option" onclick="setDifficulty(event, 'sequence', 'hard')">HARD</div>
+                </div>
+                <button class="start-btn" onclick="startTest('sequence')">START</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classic Modal -->
+    <div class="modal" id="modal-classic">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="attempt-counter" id="classic-attempts-display">ATTEMPT 1 / 3</div>
+            <div class="test-title">CLASSIC</div>
+            <div class="test-area" id="classic-area" onclick="handleClick('classic')">ЖДИ...</div>
+            <div class="stats show" id="classic-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Попытка:</span>
+                    <span class="stat-value" id="classic-current">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Лучший результат:</span>
+                    <span class="stat-value" id="classic-best">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Среднее:</span>
+                    <span class="stat-value" id="classic-avg">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Худший результат:</span>
+                    <span class="stat-value" id="classic-worst">— мс</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insane Modal -->
+    <div class="modal" id="modal-insane">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="attempt-counter" id="insane-attempts-display">ATTEMPT 1 / 3</div>
+            <div class="test-title">INSANE</div>
+            <div class="test-area" id="insane-area" onclick="handleClick('insane')">ЖДИ...</div>
+            <div class="stats show" id="insane-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Попытка:</span>
+                    <span class="stat-value" id="insane-current">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Лучший результат:</span>
+                    <span class="stat-value" id="insane-best">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Среднее:</span>
+                    <span class="stat-value" id="insane-avg">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Худший результат:</span>
+                    <span class="stat-value" id="insane-worst">— мс</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visual Modal -->
+    <div class="modal" id="modal-visual">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="attempt-counter" id="visual-attempts-display">ATTEMPT 1 / 3</div>
+            <div class="test-title">НАЙДИ ФИГУРУ</div>
+            <div class="shapes-grid" id="visual-shapes"></div>
+            <div class="stats show" id="visual-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Попытка:</span>
+                    <span class="stat-value" id="visual-current">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Лучший результат:</span>
+                    <span class="stat-value" id="visual-best">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Среднее:</span>
+                    <span class="stat-value" id="visual-avg">— мс</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Точность:</span>
+                    <span class="stat-value" id="visual-accuracy">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mental Modal -->
+    <div class="modal" id="modal-mental">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="attempt-counter" id="mental-attempts-display">ATTEMPT 1 / 3</div>
+            <div class="test-title">Mental</div>
+            <div class="problem-display" id="mental-problem">2 + 2</div>
+            <div class="answers-grid" id="mental-answers"></div>
+            <div class="stats show" id="mental-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Current:</span>
+                    <span class="stat-value" id="mental-current">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Best:</span>
+                    <span class="stat-value" id="mental-best">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Average:</span>
+                    <span class="stat-value" id="mental-avg">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy:</span>
+                    <span class="stat-value" id="mental-accuracy">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Color Modal -->
+    <div class="modal" id="modal-color">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="attempt-counter" id="color-attempts-display">ATTEMPT 1 / 3</div>
+            <div class="test-title">Color</div>
+            <div id="color-target" style="font-size: 48px; margin: 30px 0; padding: 20px; border: 2px solid #00ff88; background: #111; color: #00ff88; font-weight: 700; text-shadow: 0 0 10px #00ff88;">Wait for color...</div>
+            <div class="color-grid" id="color-grid"></div>
+            <div class="stats show" id="color-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Current:</span>
+                    <span class="stat-value" id="color-current">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Best:</span>
+                    <span class="stat-value" id="color-best">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Average:</span>
+                    <span class="stat-value" id="color-avg">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy:</span>
+                    <span class="stat-value" id="color-accuracy">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sequence Modal -->
+    <div class="modal" id="modal-sequence">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeTest()">✕</button>
+            <div class="attempt-counter" id="sequence-attempts-display">ATTEMPT 1 / 3</div>
+            <div class="test-title">Memory</div>
+            <div style="font-size: 18px; margin: 20px 0; color: #00ff88; font-weight: 700; text-shadow: 0 0 10px #00ff88;">Sequence: <span id="sequence-display">—</span></div>
+            <div class="sequence-grid" id="sequence-grid"></div>
+            <div class="stats show" id="sequence-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Current:</span>
+                    <span class="stat-value" id="sequence-current">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Best:</span>
+                    <span class="stat-value" id="sequence-best">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Average:</span>
+                    <span class="stat-value" id="sequence-avg">— ms</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Accuracy:</span>
+                    <span class="stat-value" id="sequence-accuracy">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Service Worker отключен из-за кэширования
+        // if ('serviceWorker' in navigator) {
+        //     window.addEventListener('load', () => {
+        //         navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+        //     });
+        // }
+
+        const testState = {
+            classic: { attempt: 0, results: [], startTime: null, delay: null, difficulty: 'medium' },
+            insane: { attempt: 0, results: [], startTime: null, delay: null, difficulty: 'medium' },
+            visual: { attempt: 0, results: [], correct: 0, startTime: null, difficulty: 'medium', shapes: [] },
+            mental: { attempt: 0, results: [], correct: 0, startTime: null, difficulty: 'medium', problem: null },
+            color: { attempt: 0, results: [], correct: 0, startTime: null, difficulty: 'medium', target: null },
+            sequence: { attempt: 0, results: [], correct: 0, startTime: null, difficulty: 'medium', sequence: [], userSequence: [] }
+        };
+
+        const ATTEMPTS = 3;
+
+        const visualShapes = {
+            easy: ['⭕', '⭕', '⭕', '⭕', '⭕', '◾'],
+            medium: ['🔵', '🔵', '🔵', '🟡', '🔵', '🔵'],
+            hard: ['◇', '◇', '◇', '◇', '◆', '◇']
+        };
+
+        const colors = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣'];
+
+        function toggleDropdown(event, type) {
+            event.stopPropagation();
+            const dropdown = document.getElementById(`${type}-dropdown`);
+            const toggle = event.target.closest('.dropdown-toggle');
+            
+            // Закрыть все остальные dropdowns
+            document.querySelectorAll('.difficulty-dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.remove('show');
+            });
+            document.querySelectorAll('.dropdown-toggle').forEach(t => {
+                if (t !== toggle) t.classList.remove('active');
+            });
+            
+            // Переключить текущий dropdown
+            dropdown.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        function setDifficulty(event, type, difficulty) {
+            event.stopPropagation();
+            
+            // Обновить выбранный элемент
+            const dropdown = document.getElementById(`${type}-dropdown`);
+            dropdown.querySelectorAll('.difficulty-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            // Сохранить сложность в testState
+            testState[type].difficulty = difficulty;
+            
+            // Закрыть dropdown
+            dropdown.classList.remove('show');
+            document.querySelector(`[onclick*="toggleDropdown(event, '${type}')"]`)?.classList.remove('active');
+        }
+
+        // Закрыть dropdown при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.test-card')) {
+                document.querySelectorAll('.difficulty-dropdown').forEach(d => d.classList.remove('show'));
+                document.querySelectorAll('.dropdown-toggle').forEach(t => t.classList.remove('active'));
+            }
+        });
+
+        function startTest(type) {
+            testState[type].attempt = 1;
+            testState[type].results = [];
+            testState[type].correct = 0;
+            // Сложность уже установлена в setDifficulty или по умолчанию 'medium'
+
+            document.getElementById(`modal-${type}`).classList.add('active');
+
+            if (type === 'visual') {
+                generateVisualRound();
+            } else if (type === 'mental') {
+                generateMentalRound();
+            } else if (type === 'color') {
+                generateColorRound();
+            } else if (type === 'sequence') {
+                generateSequenceRound();
+            } else {
+                setupClassicRound(type);
+            }
+        }
+
+        function setupClassicRound(type) {
+            const area = document.getElementById(`${type}-area`);
+            area.textContent = '⏳';
+            area.classList.remove('ready');
+
+            // Задержка зависит от сложности
+            let minDelay = 1000, maxDelay = 3000;
+            if (type === 'classic') {
+                if (testState.classic.difficulty === 'easy') { minDelay = 1000; maxDelay = 2500; }
+                if (testState.classic.difficulty === 'medium') { minDelay = 1500; maxDelay = 3500; }
+                if (testState.classic.difficulty === 'hard') { minDelay = 2000; maxDelay = 4000; }
+            } else if (type === 'insane') {
+                if (testState.insane.difficulty === 'easy') { minDelay = 800; maxDelay = 2000; }
+                if (testState.insane.difficulty === 'medium') { minDelay = 1200; maxDelay = 2500; }
+                if (testState.insane.difficulty === 'hard') { minDelay = 1500; maxDelay = 3000; }
+            }
+
+            const delay = Math.random() * (maxDelay - minDelay) + minDelay;
+            testState[type].delay = setTimeout(() => {
+                showSignal(type);
+            }, delay);
+        }
+
+        function showSignal(type) {
+            const area = document.getElementById(`${type}-area`);
+            area.textContent = '🟢';
+            area.classList.add('ready');
+            testState[type].startTime = performance.now();
+        }
+
+        function handleClick(type) {
+            if (!testState[type].startTime) return;
+            const time = Math.round(performance.now() - testState[type].startTime);
+            testState[type].results.push(time);
+            testState[type].startTime = null;
+            displayResult(type, time);
+        }
+
+        function showCountdown(callback) {
+            let count = 3;
+            const countdownEl = document.createElement('div');
+            countdownEl.className = 'countdown';
+            document.body.appendChild(countdownEl);
+
+            const showNumber = () => {
+                if (count === 0) {
+                    countdownEl.remove();
+                    if (callback) callback();
+                    return;
+                }
+                countdownEl.textContent = count;
+                count--;
+                setTimeout(showNumber, 1000);
+            };
+
+            showNumber();
+        }
+
+        function generateVisualRound() {
+            showCountdown(() => {
+                const shapes = visualShapes[testState.visual.difficulty];
+                testState.visual.shapes = shapes.sort(() => Math.random() - 0.5);
+                const container = document.getElementById('visual-shapes');
+                container.innerHTML = '';
+
+                testState.visual.shapes.forEach((shape, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'shape-btn';
+                    btn.textContent = shape;
+                    btn.onclick = () => handleVisualClick(i);
+                    container.appendChild(btn);
+                });
+
+                testState.visual.startTime = performance.now();
+            });
+        }
+
+        function handleVisualClick(index) {
+            if (!testState.visual.startTime) return;
+            const time = Math.round(performance.now() - testState.visual.startTime);
+            const isCorrect = index === testState.visual.shapes.length - 1;
+            if (isCorrect) testState.visual.correct++;
+            testState.visual.results.push(time);
+            testState.visual.startTime = null;
+            displayResult('visual', time, isCorrect);
+        }
+
+        function generateMentalRound() {
+            showCountdown(() => {
+                const { a, b, op, result } = generateProblem(testState.mental.difficulty);
+                testState.mental.problem = { a, b, op, result };
+
+                document.getElementById('mental-problem').textContent = `${a} ${op} ${b}`;
+
+                const answers = [result];
+                while (answers.length < 4) {
+                    const wrong = result + (Math.floor(Math.random() * 20) - 10);
+                    if (wrong !== result && !answers.includes(wrong) && wrong > 0) answers.push(wrong);
+                }
+                answers.sort(() => Math.random() - 0.5);
+
+                const container = document.getElementById('mental-answers');
+                container.innerHTML = '';
+                answers.forEach(ans => {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn';
+                    btn.textContent = ans;
+                    btn.onclick = () => handleMentalClick(ans);
+                    container.appendChild(btn);
+                });
+
+                testState.mental.startTime = performance.now();
+            });
+        }
+
+        function generateProblem(difficulty) {
+            let a, b, operations;
+            if (difficulty === 'easy') {
+                a = Math.floor(Math.random() * 10) + 1;
+                b = Math.floor(Math.random() * 10) + 1;
+                operations = ['+', '-'];
+            } else if (difficulty === 'medium') {
+                a = Math.floor(Math.random() * 20) + 1;
+                b = Math.floor(Math.random() * 20) + 1;
+                operations = ['+', '-', '×'];
+            } else {
+                a = Math.floor(Math.random() * 50) + 1;
+                b = Math.floor(Math.random() * 50) + 1;
+                operations = ['+', '-', '×', '÷'];
+            }
+
+            const op = operations[Math.floor(Math.random() * operations.length)];
+            let result;
+            if (op === '+') result = a + b;
+            else if (op === '-') result = a - b;
+            else if (op === '×') result = a * b;
+            else result = Math.floor(a / b);
+
+            return { a, b, op, result };
+        }
+
+        function handleMentalClick(answer) {
+            if (!testState.mental.startTime) return;
+            const time = Math.round(performance.now() - testState.mental.startTime);
+            const isCorrect = answer === testState.mental.problem.result;
+            if (isCorrect) testState.mental.correct++;
+            testState.mental.results.push(time);
+            testState.mental.startTime = null;
+            displayResult('mental', time, isCorrect);
+        }
+
+        function generateColorRound() {
+            testState.color.target = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('color-target').textContent = 'Find: ' + testState.color.target;
+            document.getElementById('color-target').style.fontSize = '48px';
+
+            const container = document.getElementById('color-grid');
+            container.innerHTML = '';
+
+            // Количество опций зависит от сложности
+            let numOptions = 4;
+            if (testState.color.difficulty === 'medium') numOptions = 5;
+            if (testState.color.difficulty === 'hard') numOptions = 6;
+
+            const colorOptions = [];
+            colorOptions.push(testState.color.target);
+            while (colorOptions.length < numOptions) {
+                const c = colors[Math.floor(Math.random() * colors.length)];
+                if (!colorOptions.includes(c)) colorOptions.push(c);
+            }
+            colorOptions.sort(() => Math.random() - 0.5);
+
+            colorOptions.forEach(color => {
+                const btn = document.createElement('button');
+                btn.className = 'color-btn';
+                btn.textContent = color;
+                btn.onclick = () => handleColorClick(color);
+                container.appendChild(btn);
+            });
+
+            testState.color.startTime = performance.now();
+        }
+
+        function handleColorClick(color) {
+            if (!testState.color.startTime) return;
+            const time = Math.round(performance.now() - testState.color.startTime);
+            const isCorrect = color === testState.color.target;
+            if (isCorrect) testState.color.correct++;
+            testState.color.results.push(time);
+            testState.color.startTime = null;
+            displayResult('color', time, isCorrect);
+        }
+
+        function generateSequenceRound() {
+            testState.sequence.sequence = [];
+            testState.sequence.userSequence = [];
+            
+            let length = 3;
+            if (testState.sequence.difficulty === 'medium') length = 4;
+            if (testState.sequence.difficulty === 'hard') length = 5;
+
+            for (let i = 0; i < length; i++) {
+                testState.sequence.sequence.push(Math.floor(Math.random() * 9) + 1);
+            }
+
+            document.getElementById('sequence-display').textContent = testState.sequence.sequence.join(' ');
+
+            const container = document.getElementById('sequence-grid');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 9; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'sequence-btn';
+                btn.textContent = i;
+                btn.onclick = () => handleSequenceClick(i, btn);
+                container.appendChild(btn);
+            }
+
+            testState.sequence.startTime = performance.now();
+        }
+
+        function handleSequenceClick(num, btn) {
+            if (!testState.sequence.startTime) return;
+            
+            testState.sequence.userSequence.push(num);
+            btn.style.background = '#00ff88';
+            btn.style.color = '#000';
+            
+            setTimeout(() => {
+                btn.style.background = '#111';
+                btn.style.color = '#00ff88';
+            }, 200);
+
+            if (testState.sequence.userSequence.length === testState.sequence.sequence.length) {
+                const time = Math.round(performance.now() - testState.sequence.startTime);
+                const isCorrect = testState.sequence.userSequence.join('') === testState.sequence.sequence.join('');
+                if (isCorrect) testState.sequence.correct++;
+                testState.sequence.results.push(time);
+                testState.sequence.startTime = null;
+                displayResult('sequence', time, isCorrect);
+            }
+        }
+
+        function displayResult(type, time, correct = true) {
+            updateStats(type, time);
+
+            if (testState[type].attempt < ATTEMPTS) {
+                testState[type].attempt++;
+                document.getElementById(`${type}-attempts-display`).textContent = `ATTEMPT ${testState[type].attempt} / ${ATTEMPTS}`;
+
+                setTimeout(() => {
+                    if (type === 'visual') generateVisualRound();
+                    else if (type === 'mental') generateMentalRound();
+                    else if (type === 'color') generateColorRound();
+                    else if (type === 'sequence') generateSequenceRound();
+                    else setupClassicRound(type);
+                }, 2000);
+            } else {
+                document.getElementById(`${type}-attempts-display`).textContent = 'COMPLETED';
+            }
+        }
+
+        function updateStats(type, time) {
+            const results = testState[type].results;
+            const best = Math.min(...results);
+            const worst = Math.max(...results);
+            const avg = Math.round(results.reduce((a, b) => a + b) / results.length);
+
+            document.getElementById(`${type}-current`).textContent = time + ' ms';
+            document.getElementById(`${type}-best`).textContent = best + ' ms';
+            document.getElementById(`${type}-avg`).textContent = avg + ' ms';
+            document.getElementById(`${type}-worst`)?.textContent && (document.getElementById(`${type}-worst`).textContent = worst + ' ms');
+
+            if (type === 'visual' || type === 'color' || type === 'sequence') {
+                const accuracy = Math.round((testState[type].correct / testState[type].results.length) * 100);
+                document.getElementById(`${type}-accuracy`).textContent = accuracy + '%';
+            }
+            if (type === 'mental') {
+                const accuracy = Math.round((testState.mental.correct / testState.mental.results.length) * 100);
+                document.getElementById('mental-accuracy').textContent = accuracy + '%';
+            }
+        }
+
+        function closeTest() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            ['classic', 'insane', 'visual', 'mental', 'color', 'sequence'].forEach(type => {
+                testState[type].attempt = 0;
+                if (testState[type].delay) clearTimeout(testState[type].delay);
+            });
+        }
+    </script>
+</body>
+</html>

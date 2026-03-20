@@ -167,6 +167,53 @@
             margin-top: 8px;
         }
 
+        .results-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #00ff88;
+        }
+
+        .results-title {
+            font-size: 24px;
+            color: #00ff88;
+            text-shadow: 2px 2px 0 #ff00ff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #00ff88;
+            background: #0a0a0a;
+        }
+
+        .results-table th {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #00ff88;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .results-table td {
+            color: #aaa;
+            padding: 12px 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        .results-table tr:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -408,6 +455,16 @@
             cursor: pointer;
             outline: 2px solid #660066;
             outline-offset: -10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .square-inside {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: none;
         }
 
         .test-area.ready {
@@ -596,6 +653,52 @@
         </div>
     </div>
 
+    <div class="results-section">
+        <div class="results-title">RESULTS & STATS</div>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>TEST</th>
+                    <th>BEST TIME</th>
+                    <th>CORRECT</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="result-classic">
+                    <td>CLASSIC</td>
+                    <td id="result-classic-best">—</td>
+                    <td>—</td>
+                    <td id="result-classic-status">NO DATA</td>
+                </tr>
+                <tr id="result-insane">
+                    <td>INSANE</td>
+                    <td id="result-insane-best">—</td>
+                    <td>—</td>
+                    <td id="result-insane-status">NO DATA</td>
+                </tr>
+                <tr id="result-visual">
+                    <td>VISUAL</td>
+                    <td>—</td>
+                    <td id="result-visual-correct">0/3</td>
+                    <td id="result-visual-status">NO DATA</td>
+                </tr>
+                <tr id="result-mental">
+                    <td>MENTAL</td>
+                    <td>—</td>
+                    <td id="result-mental-correct">0/3</td>
+                    <td id="result-mental-status">NO DATA</td>
+                </tr>
+                <tr id="result-memory">
+                    <td>MEMORY</td>
+                    <td>—</td>
+                    <td id="result-memory-correct">0/3</td>
+                    <td id="result-memory-status">NO DATA</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <!-- CLASSIC MODAL -->
     <div class="modal" id="modal-classic">
         <div class="modal-content">
@@ -626,7 +729,7 @@
             <button class="close" onclick="closeModal('insane')">✕</button>
             <div class="modal-title">INSANE</div>
             <div class="attempt-info" id="insane-attempt">ATTEMPT 1 / 3</div>
-            <div class="test-area" id="insane-area" style="cursor: pointer;">🟩</div>
+            <div class="test-area" id="insane-area" style="cursor: pointer;"><span class="square-inside" id="square-sprite">🟩</span></div>
             <div class="stats">
                 <div class="stat">
                     <span>Current:</span>
@@ -796,12 +899,22 @@
         function loadAndDisplayStats() {
             ['classic', 'insane', 'visual', 'mental', 'memory'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
+                const resultBest = document.getElementById(`result-${type}-best`);
+                const resultCorrect = document.getElementById(`result-${type}-correct`);
+                const resultStatus = document.getElementById(`result-${type}-status`);
+                
                 if (type === 'classic' || type === 'insane') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
+                    if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
+                    if (resultCorrect) resultCorrect.textContent = '—';
+                    if (resultStatus) resultStatus.textContent = best ? '✓ Complete' : '⊘ Not Taken';
                 } else {
                     const correct = localStorage.getItem(`reactions_${type}_correct`) || '0';
                     statsEl.textContent = `✓ ${correct} / 3`;
+                    if (resultBest) resultBest.textContent = '—';
+                    if (resultCorrect) resultCorrect.textContent = `${correct} / 3`;
+                    if (resultStatus) resultStatus.textContent = correct > 0 ? '✓ Complete' : '⊘ Not Taken';
                 }
             });
         }
@@ -943,9 +1056,15 @@
         }
 
         function moveSquare(area) {
-            const x = Math.random() * (area.clientWidth - 80);
-            const y = Math.random() * (area.clientHeight - 80);
-            area.style.transform = `translate(${x}px, ${y}px)`;
+            const square = document.getElementById('square-sprite');
+            const maxX = area.clientWidth - square.offsetWidth;
+            const maxY = area.clientHeight - square.offsetHeight;
+            
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            
+            square.style.left = x + 'px';
+            square.style.top = y + 'px';
             state.insane.movingPos = { x, y };
 
             area.onclick = () => {
@@ -986,6 +1105,7 @@
         // ===== VISUAL TEST =====
         function runVisualRound() {
             const grid = document.getElementById('visual-grid');
+            grid.style.pointerEvents = 'auto';  // Re-enable for new round
             grid.innerHTML = '';
 
             const counts = { easy: 6, medium: 9, hard: 12 };
@@ -1053,7 +1173,10 @@
 
         // ===== MENTAL TEST =====
         function generateMentalProblem() {
-            const ranges = { easy: 10, medium: 50, hard: 100 };
+            const answersDiv = document.getElementById('answers');
+            answersDiv.style.pointerEvents = 'auto';  // Re-enable for new round
+            
+            const ranges = { easy: 20, medium: 100, hard: 200 };
             const max = ranges[state.mental.diff];
             const a = Math.floor(Math.random() * max) + 1;
             const b = Math.floor(Math.random() * max) + 1;
@@ -1085,8 +1208,9 @@
             answersDiv.innerHTML = '';
 
             const answers = [state.mental.currentProblem.answer];
+            const wrongRange = state.mental.diff === 'hard' ? 50 : (state.mental.diff === 'medium' ? 30 : 20);
             while (answers.length < 4) {
-                const wrong = state.mental.currentProblem.answer + (Math.floor(Math.random() * 30) - 15);
+                const wrong = state.mental.currentProblem.answer + (Math.floor(Math.random() * wrongRange) - wrongRange/2);
                 if (wrong > 0 && !answers.includes(wrong)) answers.push(wrong);
             }
             answers.sort(() => Math.random() - 0.5);
@@ -1172,6 +1296,7 @@
             const buttonDelay = buttonDelays[state.memory.diff];
 
             const grid = document.getElementById('button-grid');
+            grid.style.pointerEvents = 'auto';  // Re-enable for new round
             grid.innerHTML = '';
 
             for (let i = 1; i <= 9; i++) {
