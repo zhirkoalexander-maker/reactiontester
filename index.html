@@ -1014,11 +1014,18 @@
                 
                 area.onclick = handleClassicResponse;
                 
-                // Add spacebar support
+                // Add spacebar support with visual feedback
                 state.classic.spaceHandler = (e) => {
-                    if (e.code === 'Space') {
+                    if (e.code === 'Space' || e.key === ' ') {
                         e.preventDefault();
+                        e.stopPropagation();
                         if (area.classList.contains('ready')) {
+                            area.style.background = '#05ff05';
+                            area.style.borderColor = '#00ff88';
+                            setTimeout(() => {
+                                area.style.background = '#051405';
+                                area.style.borderColor = '#00ff88';
+                            }, 100);
                             handleClassicResponse();
                         }
                     }
