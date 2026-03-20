@@ -839,6 +839,7 @@
             <div class="modal-title">CHAT RESPONSE</div>
             <div class="attempt-info" id="chat-attempt">ATTEMPT 1 / 3</div>
             <div id="chat-message" style="font-size: 18px; margin: 20px 0; color: #ff00ff; min-height: 30px;">Waiting...</div>
+            <div id="chat-example" style="font-size: 14px; color: #00ff88; margin: 10px 0; min-height: 20px;"></div>
             <input type="text" id="chat-input" placeholder="Type your response and press ENTER..." style="width: 100%; padding: 10px; background: #000; border: 2px solid #ff00ff; color: #00ff88; font-size: 14px; margin: 15px 0;">
             <div class="stats">
                 <div class="stat">
@@ -1514,25 +1515,31 @@
         function generateChatMessage() {
             const messages = {
                 easy: [
-                    { msg: 'hello how are you?', answers: ['good thanks', 'good', 'fine'] },
-                    { msg: 'whats up?', answers: ['all good', 'not much', 'chilling'] },
-                    { msg: 'how are you?', answers: ['good', 'fine thanks', 'great'] },
-                    { msg: 'nice to meet you', answers: ['nice to meet you too', 'you too', 'thanks'] },
-                    { msg: 'goodbye', answers: ['bye', 'see you', 'take care'] }
+                    { msg: 'hello how are you?', example: 'Example: "good thanks"', answers: ['good thanks', 'good', 'fine', 'im good'] },
+                    { msg: 'whats up?', example: 'Example: "not much"', answers: ['all good', 'not much', 'chilling', 'nothing'] },
+                    { msg: 'hey!', example: 'Example: "hey there"', answers: ['hey', 'whats up', 'hello', 'hi'] },
+                    { msg: 'nice to meet you', example: 'Example: "you too"', answers: ['nice to meet you too', 'you too', 'thanks', 'likewise'] },
+                    { msg: 'see you later', example: 'Example: "bye"', answers: ['bye', 'see you', 'take care', 'later'] },
+                    { msg: 'how are things?', example: 'Example: "going well"', answers: ['good', 'great', 'fine', 'perfect'] },
+                    { msg: 'what are you doing?', example: 'Example: "just relaxing"', answers: ['just', 'relaxing', 'working', 'coding'] }
                 ],
                 medium: [
-                    { msg: 'im learning coding what do you think?', answers: ['thats cool', 'awesome', 'great idea'] },
-                    { msg: 'do you like games?', answers: ['yes i do', 'sure', 'sometimes'] },
-                    { msg: 'whats your hobby?', answers: ['coding', 'gaming', 'reading'] },
-                    { msg: 'can you help me?', answers: ['of course', 'sure thing', 'absolutely'] },
-                    { msg: 'how was your day?', answers: ['good', 'great', 'not bad'] }
+                    { msg: 'im learning coding what do you think?', example: 'Example: "thats awesome"', answers: ['thats cool', 'awesome', 'great idea', 'nice'] },
+                    { msg: 'do you like games?', example: 'Example: "yes i do"', answers: ['yes i do', 'sure', 'sometimes', 'not really'] },
+                    { msg: 'what kind of movies do you like?', example: 'Example: "action and sci-fi"', answers: ['action', 'comedy', 'drama', 'sci-fi'] },
+                    { msg: 'can you help me understand this?', example: 'Example: "of course"', answers: ['of course', 'sure thing', 'absolutely', 'ill try'] },
+                    { msg: 'how was your weekend?', example: 'Example: "it was great"', answers: ['great', 'good', 'amazing', 'relaxing'] },
+                    { msg: 'have you tried python?', example: 'Example: "yes its great"', answers: ['yes', 'its great', 'love it', 'learning'] },
+                    { msg: 'want to grab coffee later?', example: 'Example: "sure sounds good"', answers: ['sure', 'sounds good', 'why not', 'love to'] }
                 ],
                 hard: [
-                    { msg: 'what do you think about artificial intelligence?', answers: ['very interesting', 'its revolutionary', 'the future'] },
-                    { msg: 'how would you solve this problem?', answers: ['lets think about it', 'depends on details', 'need more info'] },
-                    { msg: 'do you believe in continuous learning?', answers: ['absolutely', 'yes definitely', 'of course'] },
-                    { msg: 'what are your long term goals?', answers: ['improve skills', 'grow professionally', 'make an impact'] },
-                    { msg: 'how do you handle challenges?', answers: ['face them head on', 'break them down', 'stay positive'] }
+                    { msg: 'what do you think about artificial intelligence?', example: 'Example: "its the future"', answers: ['the future', 'revolutionary', 'interesting', 'transforming'] },
+                    { msg: 'how would you approach solving complex problems?', example: 'Example: "break it down"', answers: ['break it down', 'step by step', 'analyze first', 'research'] },
+                    { msg: 'do you believe we have responsibility for our code?', example: 'Example: "absolutely"', answers: ['absolutely', 'yes', 'definitely', 'we do'] },
+                    { msg: 'what drives you to keep improving?', example: 'Example: "personal growth"', answers: ['growth', 'curiosity', 'challenge', 'passion'] },
+                    { msg: 'how do you handle failure and learn from it?', example: 'Example: "analyze and adapt"', answers: ['learn from it', 'analyze', 'adapt', 'improve'] },
+                    { msg: 'what role will tech play in the next decade?', example: 'Example: "very important"', answers: ['important', 'critical', 'everything', 'major'] },
+                    { msg: 'how do you stay motivated when stuck?', example: 'Example: "take a break"', answers: ['break', 'rest', 'ask for help', 'research'] }
                 ]
             };
 
@@ -1543,9 +1550,22 @@
         function runChatRound() {
             const msgDisplay = document.getElementById('chat-message');
             const inputBox = document.getElementById('chat-input');
+            const exampleDisplay = document.getElementById('chat-example');
+            
+            // Clean up previous handler first
+            if (state.chat.submitHandler) {
+                document.removeEventListener('keydown', state.chat.submitHandler);
+                state.chat.submitHandler = null;
+            }
+            if (state.chat.timeoutId) {
+                clearTimeout(state.chat.timeoutId);
+                state.chat.timeoutId = null;
+            }
             
             inputBox.value = '';
+            inputBox.disabled = false;
             msgDisplay.textContent = 'Waiting for message...';
+            if (exampleDisplay) exampleDisplay.textContent = '';
             
             const timeLimits = { easy: 15000, medium: 10000, hard: 6000 };
             const timeLimit = timeLimits[state.chat.diff];
@@ -1555,6 +1575,7 @@
                 state.chat.currentMessage = generateChatMessage();
                 msgDisplay.textContent = state.chat.currentMessage.msg;
                 msgDisplay.style.color = '#ff00ff';
+                if (exampleDisplay) exampleDisplay.textContent = state.chat.currentMessage.example;
                 
                 inputBox.focus();
                 state.chat.startTime = performance.now();
@@ -1571,6 +1592,8 @@
                 const handleChatSubmit = (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
+                        if (inputBox.disabled) return;
+                        
                         const userAnswer = inputBox.value.toLowerCase().trim();
                         const correct = state.chat.currentMessage.answers.some(ans => 
                             userAnswer.includes(ans) || ans.includes(userAnswer)
@@ -1601,23 +1624,22 @@
             
             document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
 
-            // Clean up handler
-            if (state.chat.submitHandler) {
-                document.removeEventListener('keydown', state.chat.submitHandler);
-                state.chat.submitHandler = null;
-            }
-
             state.chat.currentAttempt++;
             if (state.chat.currentAttempt <= 3) {
                 document.getElementById('chat-attempt').textContent = `ATTEMPT ${state.chat.currentAttempt} / 3`;
-                document.getElementById('chat-input').disabled = false;
                 setTimeout(runChatRound, 1500);
             } else {
                 // Save correct to localStorage
                 localStorage.setItem('reactions_chat_correct', state.chat.correct);
+                if (state.chat.results.length > 0) {
+                    localStorage.setItem('reactions_chat_best', Math.min(...state.chat.results));
+                }
                 document.getElementById('chat-input').disabled = true;
                 document.getElementById('chat-message').textContent = '✓ DONE!';
+                const exampleDisplay = document.getElementById('chat-example');
+                if (exampleDisplay) exampleDisplay.textContent = '';
                 
+                // Clean up handler
                 if (state.chat.submitHandler) {
                     document.removeEventListener('keydown', state.chat.submitHandler);
                     state.chat.submitHandler = null;
