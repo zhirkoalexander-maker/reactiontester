@@ -959,6 +959,16 @@
                 document.removeEventListener('keydown', state.classic.spaceHandler);
                 state.classic.spaceHandler = null;
             }
+            // Clean up keyboard handler for mental
+            if (type === 'mental' && state.mental.keyHandler) {
+                document.removeEventListener('keydown', state.mental.keyHandler);
+                state.mental.keyHandler = null;
+            }
+            // Clean up keyboard handler for memory
+            if (type === 'memory' && state.memory.keyHandler) {
+                document.removeEventListener('keydown', state.memory.keyHandler);
+                state.memory.keyHandler = null;
+            }
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
@@ -1262,10 +1272,12 @@
 
             state.mental.timeoutId = timeoutId;
 
-            answers.forEach(ans => {
+            answers.forEach((ans, index) => {
                 const btn = document.createElement('button');
                 btn.textContent = ans;
-                btn.onclick = () => {
+                btn.setAttribute('data-index', index + 1);
+                
+                const handleMentalResponse = () => {
                     clearTimeout(state.mental.timeoutId);
                     const time = Math.round(performance.now() - state.mental.startTime);
                     answersDiv.style.pointerEvents = 'none';
@@ -1277,8 +1289,23 @@
                         recordMentalResult(time, false);
                     }
                 };
+                
+                btn.onclick = handleMentalResponse;
                 answersDiv.appendChild(btn);
             });
+            
+            // Add keyboard support for MENTAL (1-4 keys)
+            state.mental.keyHandler = (e) => {
+                const key = parseInt(e.key);
+                if (key >= 1 && key <= 4 && !answersDiv.style.pointerEvents) {
+                    const btn = document.querySelector(`#answers button[data-index="${key}"]`);
+                    if (btn && !btn.disabled) {
+                        e.preventDefault();
+                        btn.click();
+                    }
+                }
+            };
+            document.addEventListener('keydown', state.mental.keyHandler);
         }
 
         function recordMentalResult(time, correct) {
@@ -1287,6 +1314,11 @@
 
             state.mental.currentAttempt++;
             if (state.mental.currentAttempt <= 3) {
+                // Clean up previous key handler
+                if (state.mental.keyHandler) {
+                    document.removeEventListener('keydown', state.mental.keyHandler);
+                    state.mental.keyHandler = null;
+                }
                 document.getElementById('mental-attempt').textContent = `ATTEMPT ${state.mental.currentAttempt} / 3`;
                 setTimeout(generateMentalProblem, 1500);
             } else {
@@ -1294,6 +1326,13 @@
                 localStorage.setItem('reactions_mental_correct', state.mental.correct);
                 document.getElementById('problem').textContent = '✓ DONE!';
                 document.getElementById('answers').innerHTML = '';
+                
+                // Clean up key handler on completion
+                if (state.mental.keyHandler) {
+                    document.removeEventListener('keydown', state.mental.keyHandler);
+                    state.mental.keyHandler = null;
+                }
+                
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('mental');
@@ -1334,7 +1373,9 @@
             for (let i = 1; i <= 9; i++) {
                 const btn = document.createElement('button');
                 btn.textContent = i;
-                btn.onclick = () => {
+                btn.setAttribute('data-digit', i);
+                
+                const handleMemoryInput = () => {
                     btn.disabled = true;
                     grid.style.pointerEvents = 'none';
                     state.memory.userSequence.push(i);
@@ -1351,8 +1392,23 @@
                         }, buttonDelay);
                     }
                 };
+                
+                btn.onclick = handleMemoryInput;
                 grid.appendChild(btn);
             }
+            
+            // Add keyboard support for MEMORY (1-9 keys)
+            state.memory.keyHandler = (e) => {
+                const digit = parseInt(e.key);
+                if (digit >= 1 && digit <= 9 && !grid.style.pointerEvents) {
+                    const btn = document.querySelector(`#button-grid button[data-digit="${digit}"]`);
+                    if (btn && !btn.disabled) {
+                        e.preventDefault();
+                        btn.click();
+                    }
+                }
+            };
+            document.addEventListener('keydown', state.memory.keyHandler);
 
             state.memory.startTime = performance.now();
         }
@@ -1368,6 +1424,11 @@
 
             state.memory.currentAttempt++;
             if (state.memory.currentAttempt <= 3) {
+                // Clean up previous key handler
+                if (state.memory.keyHandler) {
+                    document.removeEventListener('keydown', state.memory.keyHandler);
+                    state.memory.keyHandler = null;
+                }
                 document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt} / 3`;
                 setTimeout(generateMemorySequence, 1500);
             } else {
@@ -1375,6 +1436,13 @@
                 localStorage.setItem('reactions_memory_correct', state.memory.correct);
                 document.getElementById('sequence-display').textContent = '✓ DONE!';
                 document.getElementById('button-grid').innerHTML = '';
+                
+                // Clean up key handler on completion
+                if (state.memory.keyHandler) {
+                    document.removeEventListener('keydown', state.memory.keyHandler);
+                    state.memory.keyHandler = null;
+                }
+                
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('memory');
