@@ -11,8 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="ReactionTest">
-    <link rel="manifest" href="manifest.json">
-    <title>ReactionTester v2026</title>
+    <title>ReactionTester v2026 CYBERPUNK</title>
     <style>
         * {
             margin: 0;
@@ -20,16 +19,20 @@
             box-sizing: border-box;
         }
 
+        html {
+            background: #000000 !important;
+        }
+
         body {
-            font-family: 'Courier New', monospace;
-            background: #0a0a0a;
+            font-family: 'Courier New', monospace !important;
+            background: #000000 !important;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            color: #fff;
-            border: 2px solid #00ff88;
+            color: #00ff88 !important;
+            border: 2px solid #00ff88 !important;
         }
 
         .container {
@@ -50,8 +53,9 @@
             letter-spacing: 2px;
             margin-bottom: 12px;
             text-transform: uppercase;
-            color: #00ff88;
-            text-shadow: 0 0 20px #00ff88;
+            color: #00ff88 !important;
+            text-shadow: 0 0 20px #00ff88 !important;
+            background: #000000 !important;
         }
 
         .subtitle {
@@ -568,8 +572,8 @@
 <body>
     <div class="container">
         <div class="title-screen">
-            <div class="main-title">Speed Test</div>
-            <div class="subtitle">Test Your Reaction Time</div>
+            <div class="main-title">🔥 CYBERPUNK v2026 🔥</div>
+            <div class="subtitle">⚡ Test Your Reaction Time ⚡</div>
         </div>
 
         <div class="test-grid">
@@ -854,9 +858,22 @@
         </div>
     </div>
     <script>
-        // 🔥 FORCE UNREGISTER ALL SERVICE WORKERS & CLEAR CACHE
-        console.log('🔥 CYBERPUNK TESTER - CLEARING SERVICE WORKERS & CACHE');
+        // 🔥 FORCE REFRESH - CHECK IF NEW VERSION EXISTS
+        const VERSION = Date.now();
+        console.log('🔥 CYBERPUNK TESTER v' + VERSION);
+        console.log('🖥️ Current URL:', window.location.href);
         
+        // Check if we have old version cached - force reload with timestamp
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlVersion = urlParams.get('v');
+        
+        if (!urlVersion || urlVersion !== VERSION.toString()) {
+            console.log('⚠️ Old version detected, forcing refresh with new timestamp');
+            // Uncomment to force refresh:
+            // window.location.href = window.location.pathname + '?v=' + VERSION;
+        }
+        
+        // FORCE UNREGISTER ALL SERVICE WORKERS & CLEAR CACHE
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(registrations => {
                 registrations.forEach(registration => {
