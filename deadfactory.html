@@ -649,6 +649,23 @@
                 </div>
                 <button class="start-btn" onclick="startTest('memory')">START</button>
             </div>
+
+            <!-- CHAT -->
+            <div class="card">
+                <div class="card-num">06 / TEST</div>
+                <div class="card-title">CHAT</div>
+                <div class="card-desc">Type fast response to chat messages</div>
+                <div class="card-stats" id="stats-chat">0 / 3</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'chat')">▼</button>
+                    <div class="difficulty-menu" id="menu-chat">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'chat', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'chat', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'chat', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('chat')">START</button>
+            </div>
         </div>
     </div>
 
@@ -693,6 +710,12 @@
                     <td>—</td>
                     <td id="result-memory-correct">0/3</td>
                     <td id="result-memory-status">NO DATA</td>
+                </tr>
+                <tr id="result-chat">
+                    <td>CHAT</td>
+                    <td id="result-chat-best">—</td>
+                    <td id="result-chat-correct">0/3</td>
+                    <td id="result-chat-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -808,6 +831,28 @@
         </div>
     </div>
 
+    <!-- CHAT MODAL -->
+    <div class="modal" id="modal-chat">
+        <div class="modal-header">
+            <h2>CHAT RESPONSE</h2>
+            <button class="modal-close" onclick="closeModal('chat')">✕</button>
+        </div>
+        <div class="modal-content">
+            <div id="chat-message" style="font-size: 1.2em; color: #ff00ff; margin-bottom: 20px; min-height: 40px;">Waiting for message...</div>
+            <input type="text" id="chat-input" placeholder="Type your response..." style="width: 100%; padding: 10px; font-size: 1em; margin-bottom: 15px;">
+            <div class="stats">
+                <div class="stat">
+                    <span>Current:</span>
+                    <span class="stat-value" id="chat-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="chat-correct">0/3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- GUIDE MODAL -->
     <div class="guide-modal" id="guide-modal">
         <div class="guide-content">
@@ -880,7 +925,8 @@
             insane: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, movingPos: null, timeoutId: null },
             visual: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
             mental: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentProblem: null, startTime: null, timeoutId: null },
-            memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null }
+            memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null },
+            chat: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentMessage: null, startTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -896,13 +942,13 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultBest = document.getElementById(`result-${type}-best`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane') {
+                if (type === 'classic' || type === 'insane' || type === 'chat') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
                     if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
@@ -967,6 +1013,11 @@
                 document.removeEventListener('keydown', state.memory.keyHandler);
                 state.memory.keyHandler = null;
             }
+            // Clean up chat handler
+            if (type === 'chat' && state.chat.submitHandler) {
+                document.getElementById('chat-input').removeEventListener('keydown', state.chat.submitHandler);
+                state.chat.submitHandler = null;
+            }
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
@@ -993,6 +1044,8 @@
                 generateMentalProblem();
             } else if (type === 'memory') {
                 generateMemorySequence();
+            } else if (type === 'chat') {
+                runChatRound();
             }
         }
 
@@ -1116,6 +1169,15 @@
         }
 
         function recordInsaneResult(time) {
+            // If time is over 1200ms, give retry instead of counting as fail
+            if (time > 1200) {
+                document.getElementById('insane-current').textContent = '⏱ RETRY';
+                const area = document.getElementById('insane-area');
+                area.style.transform = 'translate(0, 0)';
+                setTimeout(runInsaneRound, 1500);
+                return;
+            }
+            
             state.insane.results.push(time);
             document.getElementById('insane-current').textContent = time + ' ms';
             const min = Math.min(...state.insane.results);
@@ -1444,6 +1506,119 @@
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('memory');
+                }, 1500);
+            }
+        }
+
+        function generateChatMessage() {
+            const messages = {
+                easy: [
+                    { msg: 'hello how are you?', answers: ['good thanks', 'good', 'fine'] },
+                    { msg: 'whats up?', answers: ['all good', 'not much', 'chilling'] },
+                    { msg: 'goodbye', answers: ['bye', 'see you', 'take care'] },
+                    { msg: 'how was your day?', answers: ['good', 'great', 'alright'] },
+                    { msg: 'nice to meet you', answers: ['you too', 'nice meeting you', 'likewise'] }
+                ],
+                medium: [
+                    { msg: 'im learning coding what do you think?', answers: ['thats cool', 'awesome', 'great idea'] },
+                    { msg: 'do you like games?', answers: ['yes i do', 'sure', 'sometimes'] },
+                    { msg: 'hows work treating you?', answers: ['pretty good', 'cant complain', 'busy'] },
+                    { msg: 'what are your plans for tomorrow?', answers: ['not sure yet', 'nothing special', 'relaxing'] },
+                    { msg: 'do you enjoy coding?', answers: ['absolutely', 'definitely', 'very much'] }
+                ],
+                hard: [
+                    { msg: 'what do you think about artificial intelligence?', answers: ['very interesting', 'its revolutionary', 'the future'] },
+                    { msg: 'how would you solve this problem?', answers: ['lets think about it', 'depends on details', 'need more info'] },
+                    { msg: 'what are your thoughts on technology?', answers: ['its transforming everything', 'pretty fascinating', 'constantly evolving'] },
+                    { msg: 'how do you approach learning new things?', answers: ['hands on practice', 'step by step', 'through experience'] },
+                    { msg: 'what drives you to keep improving?', answers: ['personal growth', 'curiosity', 'challenge'] }
+                ]
+            };
+            const msgList = messages[state.chat.diff];
+            return msgList[Math.floor(Math.random() * msgList.length)];
+        }
+
+        function runChatRound() {
+            document.getElementById('chat-input').value = '';
+            document.getElementById('chat-message').textContent = 'Waiting for message...';
+            document.getElementById('chat-current').textContent = '— ms';
+            
+            setTimeout(() => {
+                const msg = generateChatMessage();
+                state.chat.currentMessage = msg;
+                state.chat.startTime = performance.now();
+                
+                document.getElementById('chat-message').textContent = msg.msg;
+                document.getElementById('chat-input').disabled = false;
+                document.getElementById('chat-input').focus();
+                
+                const timeLimit = state.chat.diff === 'easy' ? 15000 : state.chat.diff === 'medium' ? 10000 : 6000;
+                
+                state.chat.submitHandler = (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (state.chat.timeoutId) clearTimeout(state.chat.timeoutId);
+                        
+                        const userAnswer = document.getElementById('chat-input').value.toLowerCase().trim();
+                        const correct = state.chat.currentMessage.answers.some(ans =>
+                            userAnswer.includes(ans) || ans.includes(userAnswer)
+                        );
+                        
+                        recordChatResult(correct, Math.round(performance.now() - state.chat.startTime));
+                    }
+                };
+                
+                document.getElementById('chat-input').addEventListener('keydown', state.chat.submitHandler);
+                
+                state.chat.timeoutId = setTimeout(() => {
+                    document.getElementById('chat-message').textContent = '✗ TIME\'S UP!';
+                    document.getElementById('chat-input').disabled = true;
+                    if (state.chat.submitHandler) {
+                        document.getElementById('chat-input').removeEventListener('keydown', state.chat.submitHandler);
+                        state.chat.submitHandler = null;
+                    }
+                    recordChatResult(false, timeLimit);
+                }, timeLimit);
+            }, 500);
+        }
+
+        function recordChatResult(correct, time) {
+            if (state.chat.submitHandler) {
+                document.getElementById('chat-input').removeEventListener('keydown', state.chat.submitHandler);
+                state.chat.submitHandler = null;
+            }
+            if (state.chat.timeoutId) clearTimeout(state.chat.timeoutId);
+
+            if (correct) {
+                state.chat.results.push(time);
+                state.chat.correct++;
+                document.getElementById('chat-input').value = '';
+                document.getElementById('chat-message').textContent = '✓ CORRECT!';
+                document.getElementById('chat-current').textContent = time + ' ms';
+            } else {
+                document.getElementById('chat-input').value = '';
+                document.getElementById('chat-current').textContent = '✗ WRONG';
+            }
+            
+            document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
+            state.chat.currentAttempt++;
+            
+            if (state.chat.currentAttempt <= 3) {
+                setTimeout(runChatRound, 1500);
+            } else {
+                // Save results to localStorage
+                localStorage.setItem('reactions_chat_correct', state.chat.correct);
+                if (state.chat.results.length > 0) {
+                    const bestTime = Math.min(...state.chat.results);
+                    localStorage.setItem('reactions_chat_best', bestTime);
+                }
+                
+                document.getElementById('chat-input').disabled = true;
+                document.getElementById('chat-message').textContent = '✓ SESSION COMPLETE!';
+                
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('chat');
                 }, 1500);
             }
         }
