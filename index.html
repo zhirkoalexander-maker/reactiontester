@@ -567,11 +567,11 @@
 
         // STATE
         const state = {
-            classic: { diff: 'easy', results: [], currentAttempt: 0, startTime: null },
-            insane: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, movingPos: null },
-            visual: { diff: 'easy', results: [], currentAttempt: 0, correct: 0 },
-            mental: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentProblem: null },
-            memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [] }
+            classic: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
+            insane: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, movingPos: null, timeoutId: null },
+            visual: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
+            mental: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentProblem: null, startTime: null, timeoutId: null },
+            memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null }
         };
 
         // ===== DROPDOWN MENUS =====
@@ -600,6 +600,11 @@
 
         // ===== MODAL MANAGEMENT =====
         function closeModal(type) {
+            // Clear any pending timeouts
+            if (state[type].timeoutId) {
+                clearTimeout(state[type].timeoutId);
+                state[type].timeoutId = null;
+            }
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
@@ -734,14 +739,29 @@
             const counts = { easy: 6, medium: 9, hard: 12 };
             const count = counts[state.visual.diff];
 
+            // Time limit depends on difficulty (EASY = 15s, MEDIUM = 10s, HARD = 6s)
+            const timeLimits = { easy: 15000, medium: 10000, hard: 6000 };
+            const timeLimit = timeLimits[state.visual.diff];
+
             let emojis = Array(count - 1).fill('⭕').concat('🔵');
             emojis = emojis.sort(() => Math.random() - 0.5);
 
             state.visual.startTime = performance.now();
+
+            // Auto-fail if time limit exceeded
+            const timeoutId = setTimeout(() => {
+                grid.style.pointerEvents = 'none';
+                document.querySelectorAll('#visual-grid button').forEach(b => b.disabled = true);
+                recordVisualResult(timeLimit, false);
+            }, timeLimit);
+
+            state.visual.timeoutId = timeoutId;
+
             emojis.forEach((emoji, i) => {
                 const btn = document.createElement('button');
                 btn.textContent = emoji;
                 btn.onclick = () => {
+                    clearTimeout(state.visual.timeoutId);
                     const time = Math.round(performance.now() - state.visual.startTime);
                     grid.style.pointerEvents = 'none';
                     document.querySelectorAll('#visual-grid button').forEach(b => b.disabled = true);
@@ -815,10 +835,25 @@
             answers.sort(() => Math.random() - 0.5);
 
             state.mental.startTime = performance.now();
+
+            // Time limit depends on difficulty (EASY = 20s, MEDIUM = 10s, HARD = 5s)
+            const timeLimits = { easy: 20000, medium: 10000, hard: 5000 };
+            const timeLimit = timeLimits[state.mental.diff];
+
+            // Auto-fail if time limit exceeded
+            const timeoutId = setTimeout(() => {
+                answersDiv.style.pointerEvents = 'none';
+                document.querySelectorAll('#answers button').forEach(b => b.disabled = true);
+                recordMentalResult(timeLimit, false);
+            }, timeLimit);
+
+            state.mental.timeoutId = timeoutId;
+
             answers.forEach(ans => {
                 const btn = document.createElement('button');
                 btn.textContent = ans;
                 btn.onclick = () => {
+                    clearTimeout(state.mental.timeoutId);
                     const time = Math.round(performance.now() - state.mental.startTime);
                     answersDiv.style.pointerEvents = 'none';
                     document.querySelectorAll('#answers button').forEach(b => b.disabled = true);
@@ -856,7 +891,24 @@
             state.memory.sequence = Array.from({ length: len }, () => Math.floor(Math.random() * 9) + 1);
             state.memory.userSequence = [];
 
+            // Display time depends on difficulty (EASY = longer, HARD = shorter)
+            const displayTimes = { easy: 3000, medium: 2000, hard: 1000 };
+            const displayTime = displayTimes[state.memory.diff];
+
             document.getElementById('sequence-display').textContent = state.memory.sequence.join(' ');
+            
+            // Hide sequence after delay based on difficulty
+            setTimeout(() => {
+                document.getElementById('sequence-display').textContent = '-';
+                renderMemoryButtons();
+            }, displayTime);
+        }
+
+        function renderMemoryButtons() {
+            // Button interaction delay depends on difficulty (EASY = longer, HARD = shorter)
+            const buttonDelays = { easy: 800, medium: 500, hard: 300 };
+            const buttonDelay = buttonDelays[state.memory.diff];
+
             const grid = document.getElementById('button-grid');
             grid.innerHTML = '';
 
@@ -877,7 +929,7 @@
                         setTimeout(() => {
                             grid.style.pointerEvents = 'auto';
                             document.querySelectorAll('#button-grid button').forEach(b => b.disabled = false);
-                        }, 500);
+                        }, buttonDelay);
                     }
                 };
                 grid.appendChild(btn);
