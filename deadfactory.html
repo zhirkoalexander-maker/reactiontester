@@ -953,6 +953,11 @@
                 clearTimeout(state[type].timeoutId);
                 state[type].timeoutId = null;
             }
+            // Clean up spacebar handler for classic
+            if (type === 'classic' && state.classic.spaceHandler) {
+                document.removeEventListener('keydown', state.classic.spaceHandler);
+                state.classic.spaceHandler = null;
+            }
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
@@ -1000,10 +1005,24 @@
                 area.textContent = '🟢 CLICK!';
                 area.classList.add('ready');
                 state.classic.startTime = performance.now();
-                area.onclick = () => {
+                
+                const handleClassicResponse = () => {
                     const time = Math.round(performance.now() - state.classic.startTime);
                     recordClassicResult(time);
                 };
+                
+                area.onclick = handleClassicResponse;
+                
+                // Add spacebar support
+                state.classic.spaceHandler = (e) => {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        if (area.classList.contains('ready')) {
+                            handleClassicResponse();
+                        }
+                    }
+                };
+                document.addEventListener('keydown', state.classic.spaceHandler);
             }, delay);
         }
 
@@ -1021,6 +1040,12 @@
             const area = document.getElementById('classic-area');
             area.onclick = null;
             area.classList.remove('ready');
+            
+            // Clean up spacebar handler
+            if (state.classic.spaceHandler) {
+                document.removeEventListener('keydown', state.classic.spaceHandler);
+                state.classic.spaceHandler = null;
+            }
 
             state.classic.currentAttempt++;
             if (state.classic.currentAttempt <= 3) {
