@@ -55,6 +55,116 @@
             font-size: 14px;
             letter-spacing: 2px;
             opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .guide-btn {
+            padding: 8px 16px;
+            border: 2px solid #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .guide-btn:hover {
+            background: #00ff88;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .guide-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.97);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .guide-modal.active {
+            display: flex;
+        }
+
+        .guide-content {
+            border: 3px solid #00ff88;
+            background: #0a0a0a;
+            padding: 40px;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            outline: 2px solid #004400;
+            outline-offset: -8px;
+            position: relative;
+        }
+
+        .guide-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            border: none;
+            background: #ff00ff;
+            color: #000;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .guide-close:hover {
+            transform: scale(1.1);
+        }
+
+        .guide-title {
+            font-size: 28px;
+            color: #00ff88;
+            text-shadow: 2px 2px 0 #ff00ff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .guide-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #003300;
+        }
+
+        .guide-section:last-child {
+            border-bottom: none;
+        }
+
+        .guide-mode-title {
+            font-size: 18px;
+            color: #ff00ff;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .guide-mode-desc {
+            font-size: 13px;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .guide-mode-info {
+            font-size: 12px;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+            padding: 10px;
+            border-left: 2px solid #00ff88;
+            margin-top: 8px;
         }
 
         .grid {
@@ -395,6 +505,7 @@
         <div class="header">
             <div class="title">⚡ REACTION TESTER ⚡</div>
             <div class="subtitle">CYBERPUNK • HARD DESIGN • SHARP LINES ONLY</div>
+            <button class="guide-btn" onclick="toggleGuide()">📖 GUIDE</button>
         </div>
 
         <div class="grid">
@@ -595,6 +706,64 @@
         </div>
     </div>
 
+    <!-- GUIDE MODAL -->
+    <div class="guide-modal" id="guide-modal">
+        <div class="guide-content">
+            <button class="guide-close" onclick="toggleGuide()">✕</button>
+            <div class="guide-title">⚡ REACTION TEST MODES ⚡</div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">01 // CLASSIC</div>
+                <div class="guide-mode-desc">The basics. Wait for the green signal to appear, then click. Simple reaction test.</div>
+                <div class="guide-mode-info">
+                    EASY: 1-2s wait • NORMAL: 1.5-2.5s wait • HARD: 2-3.5s wait
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">02 // INSANE</div>
+                <div class="guide-mode-desc">The green square moves. Click it before it jumps to a new position. Each wrong click = retrying.</div>
+                <div class="guide-mode-info">
+                    EASY: 0.8-1.5s delay • NORMAL: 0.6-1.2s delay • HARD: 0.4-1s delay
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">03 // VISUAL</div>
+                <div class="guide-mode-desc">Find the odd emoji (🔵) among the circles (⭕). Beat the time limit.</div>
+                <div class="guide-mode-info">
+                    EASY: 6 emojis, 15s limit • NORMAL: 9 emojis, 10s limit • HARD: 12 emojis, 6s limit
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">04 // MENTAL</div>
+                <div class="guide-mode-desc">Math problems. Pick the correct answer from 4 options. Beat the time limit.</div>
+                <div class="guide-mode-info">
+                    EASY: Basic math, 20s limit • NORMAL: Multiply & squares, 10s limit • HARD: Complex, 5s limit
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">05 // MEMORY</div>
+                <div class="guide-mode-desc">Remember the sequence, then repeat it. Longer sequences on harder difficulties.</div>
+                <div class="guide-mode-info">
+                    EASY: 3 digits, 3s display • NORMAL: 4 digits, 2s display • HARD: 5 digits, 1s display
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div style="font-size: 13px; color: #aaa; line-height: 1.8;">
+                    • Each test has 3 ATTEMPTS per session<br>
+                    • Results are saved automatically (localStorage)<br>
+                    • Change difficulty before starting<br>
+                    • Best scores show on main screen<br>
+                    • Correct/success rate is tracked<br>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const BUILD_TIME = '2026-03-20 HARD REDESIGN';
         console.log('🔥 CYBERPUNK REACTION v2026 - ' + BUILD_TIME);
@@ -672,6 +841,11 @@
                 state[type].timeoutId = null;
             }
             document.getElementById(`modal-${type}`).classList.remove('active');
+        }
+
+        function toggleGuide() {
+            const guideModal = document.getElementById('guide-modal');
+            guideModal.classList.toggle('active');
         }
 
         // ===== CLASSIC TEST =====
