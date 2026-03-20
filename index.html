@@ -35,8 +35,10 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 30px;
-            border: 3px solid #00ff88;
-            background: #111;
+            border: 4px solid #00ff88;
+            background: #000000;
+            outline: 2px solid #004400;
+            outline-offset: -10px;
         }
 
         .title {
@@ -44,8 +46,9 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 3px;
-            text-shadow: 0 0 20px #00ff88;
+            text-shadow: 3px 3px 0 #004400, 6px 6px 0 #ff00ff;
             margin-bottom: 10px;
+            color: #00ff88;
         }
 
         .subtitle {
@@ -62,15 +65,18 @@
         }
 
         .card {
-            border: 3px solid #ff00ff;
-            background: #0a0a0a;
+            border: 4px solid #ff00ff;
+            background: #000000;
             padding: 25px;
             position: relative;
+            outline: 2px solid #660066;
+            outline-offset: -8px;
         }
 
         .card:hover {
-            box-shadow: 0 0 30px #ff00ff;
-            background: #111;
+            border-color: #00ff88;
+            outline-color: #00ff88;
+            background: #0a0a0a;
         }
 
         .card-num {
@@ -85,8 +91,9 @@
             font-size: 20px;
             font-weight: bold;
             color: #ff00ff;
-            text-shadow: 0 0 10px #ff00ff;
+            text-shadow: 2px 2px 0 #660066, 4px 4px 0 #000;
             margin-bottom: 8px;
+            letter-spacing: 1px;
         }
 
         .card-desc {
@@ -119,7 +126,7 @@
         .dropdown-btn:hover {
             background: #00ff88;
             color: #000;
-            box-shadow: 0 0 15px #00ff88;
+            border-color: #00ff88;
         }
 
         .difficulty-menu {
@@ -175,7 +182,7 @@
         .start-btn:hover {
             background: #00ff88;
             color: #000;
-            box-shadow: 0 0 20px #00ff88;
+            border-color: #00ff88;
         }
 
         .modal {
@@ -196,13 +203,14 @@
         }
 
         .modal-content {
-            background: #0a0a0a;
-            border: 3px solid #00ff88;
+            background: #000000;
+            border: 4px solid #00ff88;
             padding: 50px;
             width: 90%;
             max-width: 700px;
             position: relative;
-            box-shadow: 0 0 50px rgba(0, 255, 136, 0.3);
+            outline: 2px solid #004400;
+            outline-offset: -12px;
             text-align: center;
             max-height: 90vh;
             overflow-y: auto;
@@ -224,15 +232,16 @@
         .close:hover {
             background: #ff00ff;
             color: #000;
-            box-shadow: 0 0 15px #ff00ff;
+            border-color: #ff00ff;
         }
 
         .modal-title {
             font-size: 32px;
             color: #00ff88;
-            text-shadow: 0 0 20px #00ff88;
+            text-shadow: 3px 3px 0 #004400, 6px 6px 0 #ff00ff;
             margin-bottom: 15px;
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .attempt-info {
@@ -243,22 +252,25 @@
         }
 
         .test-area {
-            border: 3px solid #ff00ff;
+            border: 4px solid #ff00ff;
             padding: 60px 20px;
             text-align: center;
             font-size: 80px;
             margin: 30px 0;
-            background: #111;
+            background: #000000;
             min-height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            outline: 2px solid #660066;
+            outline-offset: -10px;
         }
 
         .test-area.ready {
             border-color: #00ff88;
-            box-shadow: 0 0 50px #00ff88;
+            outline-color: #00ff88;
+            background: #051405;
         }
 
         .stats {
@@ -306,8 +318,10 @@
         }
 
         #visual-grid button:hover, #answers button:hover, #button-grid button:hover {
-            box-shadow: 0 0 20px #00ff88;
-            background: #1a1a1a;
+            background: #0a0a0a;
+            border-color: #00ff88;
+            outline: 1px solid #00ff88;
+            outline-offset: -3px;
         }
 
         #problem {
@@ -680,6 +694,7 @@
             state.insane.movingPos = { x, y };
 
             area.onclick = () => {
+                area.onclick = null;
                 const time = Math.round(performance.now() - state.insane.startTime);
                 recordInsaneResult(time);
             };
@@ -724,10 +739,16 @@
                 btn.textContent = emoji;
                 btn.onclick = () => {
                     const time = Math.round(performance.now() - state.visual.startTime);
+                    grid.style.pointerEvents = 'none';
+                    document.querySelectorAll('#visual-grid button').forEach(b => b.disabled = true);
                     if (emoji === '🔵') {
                         state.visual.correct++;
+                        btn.style.borderColor = '#00ff88';
+                        btn.style.background = '#051405';
                         recordVisualResult(time, true);
                     } else {
+                        btn.style.borderColor = '#ff0000';
+                        btn.style.background = '#330000';
                         recordVisualResult(time, false);
                     }
                 };
@@ -795,6 +816,8 @@
                 btn.textContent = ans;
                 btn.onclick = () => {
                     const time = Math.round(performance.now() - state.mental.startTime);
+                    answersDiv.style.pointerEvents = 'none';
+                    document.querySelectorAll('#answers button').forEach(b => b.disabled = true);
                     if (ans === state.mental.currentProblem.answer) {
                         state.mental.correct++;
                         recordMentalResult(time, true);
@@ -837,13 +860,20 @@
                 const btn = document.createElement('button');
                 btn.textContent = i;
                 btn.onclick = () => {
+                    btn.disabled = true;
+                    grid.style.pointerEvents = 'none';
                     state.memory.userSequence.push(i);
-                    if (state.memory.userSequence[state.memory.userSequence.length - 1] === state.memory.sequence[state.memory.userSequence.length - 1]) {
-                        if (state.memory.userSequence.length === state.memory.sequence.length) {
-                            recordMemoryResult(true);
-                        }
-                    } else {
+                    const isCorrect = state.memory.userSequence[state.memory.userSequence.length - 1] === state.memory.sequence[state.memory.userSequence.length - 1];
+                    
+                    if (!isCorrect) {
                         recordMemoryResult(false);
+                    } else if (state.memory.userSequence.length === state.memory.sequence.length) {
+                        recordMemoryResult(true);
+                    } else {
+                        setTimeout(() => {
+                            grid.style.pointerEvents = 'auto';
+                            document.querySelectorAll('#button-grid button').forEach(b => b.disabled = false);
+                        }, 500);
                     }
                 };
                 grid.appendChild(btn);
