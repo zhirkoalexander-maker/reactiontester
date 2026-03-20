@@ -1427,13 +1427,14 @@
             const buttonDelay = buttonDelays[state.memory.diff];
 
             const grid = document.getElementById('button-grid');
-            grid.style.pointerEvents = 'auto';  // Re-enable for new round
+            grid.style.pointerEvents = 'auto';
             grid.innerHTML = '';
 
             for (let i = 1; i <= 9; i++) {
                 const btn = document.createElement('button');
                 btn.textContent = i;
                 btn.setAttribute('data-digit', i);
+                btn.disabled = false;
                 
                 const handleMemoryInput = () => {
                     btn.disabled = true;
@@ -1458,9 +1459,14 @@
             }
             
             // Add keyboard support for MEMORY (1-9 keys)
+            // Clean up old handler first
+            if (state.memory.keyHandler) {
+                document.removeEventListener('keydown', state.memory.keyHandler);
+            }
+            
             state.memory.keyHandler = (e) => {
                 const digit = parseInt(e.key);
-                if (digit >= 1 && digit <= 9 && !grid.style.pointerEvents) {
+                if (digit >= 1 && digit <= 9 && grid.style.pointerEvents !== 'none') {
                     const btn = document.querySelector(`#button-grid button[data-digit="${digit}"]`);
                     if (btn && !btn.disabled) {
                         e.preventDefault();
