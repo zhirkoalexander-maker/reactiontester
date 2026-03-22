@@ -866,7 +866,7 @@
             <div class="stats">
                 <div class="stat">
                     <span>Current:</span>
-                    <span class="stat-value" id="memory-current">— ms</span>
+                    <span class="stat-value" id="memory-current">—</span>
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
@@ -1731,12 +1731,13 @@
         }
 
         function recordMemoryResult(correct) {
-            let time = '—';
+            // Memory test: only count correct sequences, NOT reaction time
             if (correct && state.memory.userSequence.length === state.memory.sequence.length) {
-                time = Math.round(performance.now() - state.memory.startTime) + ' ms';
                 state.memory.correct++;
             }
-            document.getElementById('memory-current').textContent = time;
+            
+            // Display only the count of correct sequences
+            document.getElementById('memory-current').textContent = state.memory.correct > 0 ? `${state.memory.correct} correct` : '—';
             document.getElementById('memory-correct').textContent = state.memory.correct;
 
             state.memory.currentAttempt++;
