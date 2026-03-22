@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>⚡ REACTION TESTER ⚡ | HARD CYBERPUNK DESIGN</title>
+    <title>Reaction Tester</title>
     <style>
         * {
             margin: 0;
@@ -14,66 +14,61 @@
             box-sizing: border-box;
         }
 
-        html {
-            background: #f8f9fa !important;
+        html, body {
+            background: #fafbfc;
+            color: #24292e;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background: #f8f9fa;
-            color: #2c3e50;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
             padding: 20px;
-            overflow-x: hidden;
-            user-select: none;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 980px;
             margin: 0 auto;
         }
 
         .header {
-            text-align: center;
             margin-bottom: 50px;
-            padding: 40px 30px;
-            background: white;
-            border: none;
-            border-bottom: 3px solid #7c3aed;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            text-align: left;
         }
 
         .title {
-            font-size: 42px;
+            font-size: 28px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            color: #2c3e50;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+            color: #1a1a1a;
         }
 
         .subtitle {
-            font-size: 14px;
-            letter-spacing: 2px;
-            opacity: 0.8;
-            margin-bottom: 15px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 400;
         }
 
         .guide-btn {
-            padding: 8px 16px;
-            border: 2px solid #0099ff;
-            background: rgba(0, 255, 136, 0.05);
-            color: #0099ff;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
+            padding: 5px 10px;
+            border: 1px solid #999;
+            background: #fff;
+            color: #333;
+            font-size: 11px;
             cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border-radius: 2px;
+            transition: all 0.1s;
+            font-family: inherit;
+            font-weight: 500;
         }
 
         .guide-btn:hover {
-            background: #0099ff;
-            color: #000;
-            transform: scale(1.05);
+            background: #f0f0f0;
+            border-color: #333;
         }
 
         .guide-modal {
@@ -83,7 +78,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.97);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -95,48 +90,51 @@
         }
 
         .guide-content {
-            border: 2px solid #0099ff;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-            padding: 40px;
-            max-width: 900px;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 30px;
+            max-width: 700px;
             max-height: 85vh;
             overflow-y: auto;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 3px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             position: relative;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
         }
 
         .guide-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            border: none;
-            background: #ff6b9d;
-            color: #000;
-            width: 35px;
-            height: 35px;
-            font-size: 20px;
+            top: 12px;
+            right: 12px;
+            border: 1px solid #ccc;
+            background: #f0f0f0;
+            color: #333;
+            width: 28px;
+            height: 28px;
+            font-size: 16px;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
+            font-weight: normal;
+            transition: all 0.1s;
+            border-radius: 2px;
         }
 
         .guide-close:hover {
-            transform: scale(1.1);
+            border-color: #333;
+            background: #e0e0e0;
         }
 
         .guide-title {
-            font-size: 28px;
-            color: #0099ff;
-            text-shadow: 2px 2px 0 #ff6b9d;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            font-size: 20px;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+            font-weight: 700;
         }
 
         .guide-section {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #003300;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
         }
 
         .guide-section:last-child {
@@ -144,187 +142,186 @@
         }
 
         .guide-mode-title {
-            font-size: 18px;
-            color: #ff6b9d;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            text-transform: uppercase;
         }
 
         .guide-mode-desc {
-            font-size: 13px;
-            color: #aaa;
+            font-size: 12px;
+            color: #666;
             line-height: 1.6;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .guide-mode-info {
-            font-size: 12px;
-            color: #0099ff;
-            background: rgba(0, 255, 136, 0.05);
-            padding: 10px;
-            border-left: 2px solid #0099ff;
-            margin-top: 8px;
+            font-size: 11px;
+            color: #999;
+            background: #f8f8f8;
+            padding: 8px;
+            border-left: 2px solid #ddd;
+            margin-top: 4px;
+            font-family: 'Courier New', monospace;
         }
 
         .results-section {
             margin-top: 50px;
-            padding-top: 30px;
-            border-top: 2px solid #0099ff;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
         }
 
         .results-title {
-            font-size: 24px;
-            color: #0099ff;
-            text-shadow: 2px 2px 0 #ff6b9d;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
+            font-size: 18px;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+            font-weight: 700;
         }
 
         .results-table {
             width: 100%;
             border-collapse: collapse;
-            border: 2px solid #0099ff;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 2px;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 153, 255, 0.1);
+            font-size: 12px;
         }
 
         .results-table th {
-            background: rgba(0, 255, 136, 0.1);
-            color: #0099ff;
-            padding: 15px;
+            background: #f5f5f5;
+            color: #333;
+            padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #0099ff;
-            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
         }
 
         .results-table td {
-            color: #aaa;
-            padding: 12px 15px;
-            border-bottom: 1px solid #222;
+            color: #666;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
         }
 
         .results-table tr:hover {
-            background: rgba(0, 255, 136, 0.05);
+            background: #f9f9f9;
         }
 
         .results-table tr:last-child td {
-            border-bottom: none;
+            border-bottom: 1px solid #ddd;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
             margin-bottom: 40px;
         }
 
         .card {
-            border: 2px solid #e0e0e0;
-            background: white;
-            padding: 25px;
-            position: relative;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            min-height: 280px;
+            border: 1px solid #ddd;
+            background: #fff;
+            padding: 16px;
+            border-radius: 2px;
+            transition: all 0.15s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            min-height: 200px;
             display: flex;
             flex-direction: column;
         }
 
         .card:hover {
-            border-color: #7c3aed;
-            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.12);
-            transform: translateY(-2px);
+            border-color: #999;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
         }
 
         .card-num {
-            font-size: 11px;
-            color: #7c3aed;
+            font-size: 10px;
+            color: #999;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            opacity: 0.8;
-            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+            font-weight: 500;
         }
 
         .card-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            letter-spacing: -0.2px;
         }
 
         .card-desc {
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 12px;
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 10px;
             line-height: 1.5;
             flex-grow: 1;
         }
 
         .card-stats {
-            font-size: 13px;
-            color: #7c3aed;
-            margin-bottom: 12px;
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            background: #f8f9fa;
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 10px;
+            padding: 6px;
+            border: 1px solid #eee;
+            background: #f9f9f9;
             text-align: center;
-            min-height: 32px;
+            min-height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
-            font-weight: 600;
+            border-radius: 2px;
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
         }
 
         .card-controls {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 10px;
             align-items: center;
             position: relative;
         }
 
         .dropdown-btn {
-            width: 44px;
-            height: 44px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            color: #7c3aed;
+            width: 36px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #333;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            transition: all 0.2s;
-            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.1s;
+            border-radius: 2px;
+            flex-shrink: 0;
         }
 
         .dropdown-btn:hover {
-            background: #f8f9fa;
-            border-color: #7c3aed;
-            color: #7c3aed;
+            background: #f0f0f0;
+            border-color: #999;
         }
 
         .difficulty-menu {
             position: absolute;
-            top: 50px;
+            top: 36px;
             left: 0;
-            background: white;
-            border: 2px solid #e0e0e0;
-            min-width: 150px;
+            background: #fff;
+            border: 1px solid #ddd;
+            min-width: 120px;
             display: none;
             z-index: 300;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
-        }
-            z-index: 300;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 2px;
         }
 
         .difficulty-menu.show {
@@ -332,49 +329,49 @@
         }
 
         .difficulty-option {
-            padding: 12px 14px;
+            padding: 6px 10px;
             cursor: pointer;
-            border-bottom: 1px solid #e5e5e5;
-            color: #2c3e50;
-            transition: all 0.2s;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            transition: all 0.1s;
+            font-size: 11px;
             font-weight: 500;
         }
 
+        .difficulty-option:last-child {
+            border-bottom: none;
+        }
+
         .difficulty-option:hover {
-            background: #f0f0f0;
-            color: #7c3aed;
+            background: #f5f5f5;
         }
 
         .difficulty-option.selected {
-            background: #7c3aed;
-            color: white;
+            background: #e0e0e0;
+            color: #000;
             font-weight: 600;
         }
 
         .start-btn {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #7c3aed;
-            background: white;
-            color: #7c3aed;
-            font-size: 14px;
+            padding: 8px;
+            border: 1px solid #999;
+            background: #fff;
+            color: #333;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.1s;
             font-family: inherit;
-            letter-spacing: 0.5px;
-            border-radius: 4px;
+            letter-spacing: 0.05em;
+            border-radius: 2px;
         }
 
         .start-btn:hover {
-            background: #7c3aed;
-            color: white;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-            transform: translateY(-1px);
+            background: #333;
+            color: #fff;
+            border-color: #333;
         }
 
         .start-btn:active {
@@ -384,8 +381,6 @@
         .start-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            color: #666;
-            border-color: #666;
         }
 
         .modal {
@@ -395,7 +390,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -406,14 +401,14 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-            border: 2px solid #0099ff;
-            padding: 50px;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 40px;
             width: 90%;
-            max-width: 700px;
+            max-width: 600px;
             position: relative;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 2px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             text-align: center;
             max-height: 90vh;
             overflow-y: auto;
@@ -421,85 +416,91 @@
 
         .close {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #ff6b9d;
-            background: transparent;
-            color: #ff6b9d;
-            font-size: 24px;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ccc;
+            background: #f0f0f0;
+            color: #333;
+            font-size: 16px;
             cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.1s;
         }
 
         .close:hover {
-            background: #ff6b9d;
-            color: #000;
-            border-color: #ff6b9d;
+            background: #e0e0e0;
+            border-color: #999;
         }
 
         .modal-title {
-            font-size: 32px;
-            color: #0099ff;
-            text-shadow: 3px 3px 0 #003366, 6px 6px 0 #ff6b9d;
-            margin-bottom: 15px;
+            font-size: 24px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: -0.3px;
+            font-weight: 700;
         }
 
         .attempt-info {
-            font-size: 12px;
-            color: #ff6b9d;
-            margin-bottom: 20px;
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 16px;
             text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.05em;
         }
 
         .test-area {
-            border: 4px solid #ff6b9d;
-            padding: 60px 20px;
+            border: 2px solid #ddd;
+            padding: 40px 20px;
             text-align: center;
-            font-size: 80px;
-            margin: 30px 0;
-            background: #000000;
-            min-height: 200px;
+            font-size: 60px;
+            margin: 20px 0;
+            background: #f9f9f9;
+            min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            outline: 2px solid #660066;
-            outline-offset: -10px;
+            outline: 1px solid #eee;
+            outline-offset: -6px;
             position: relative;
             overflow: hidden;
+            border-radius: 2px;
         }
 
         .square-inside {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             cursor: pointer;
             transition: none;
         }
 
         .test-area.ready {
-            border-color: #0099ff;
-            outline-color: #0099ff;
-            background: #0a1a2e;
+            border-color: #333;
+            outline-color: #ccc;
+            background: #f0f0f0;
         }
 
         .stats {
-            margin-top: 25px;
-            background: #111;
-            padding: 20px;
-            border: 1px solid #333;
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 2px;
+            font-size: 11px;
         }
 
         .stat {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            font-size: 13px;
-            color: #0099ff;
-            border-bottom: 1px solid #333;
+            padding: 6px 0;
+            font-size: 11px;
+            color: #333;
+            border-bottom: 1px solid #eee;
         }
 
         .stat:last-child {
@@ -507,66 +508,69 @@
         }
 
         .stat-value {
-            font-weight: bold;
-            text-shadow: 0 0 10px #0099ff;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            color: #000;
         }
 
         #visual-grid, #answers, #button-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin: 30px 0;
+            gap: 10px;
+            margin: 20px 0;
         }
 
         #visual-grid button, #answers button, #button-grid button {
-            border: 2px solid #0099ff;
-            background: #111;
-            color: #0099ff;
-            padding: 25px;
-            font-size: 20px;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
+            transition: all 0.1s;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            font-weight: 500;
+            border-radius: 2px;
         }
 
         #visual-grid button:hover, #answers button:hover, #button-grid button:hover {
-            background: #1a1a2e;
-            border-color: #0099ff;
-            outline: 1px solid #0099ff;
-            outline-offset: -3px;
+            background: #f0f0f0;
+            border-color: #999;
         }
 
         #problem {
-            font-size: 48px;
-            margin: 30px 0;
-            color: #ff6b9d;
-            text-shadow: 0 0 15px #ff6b9d;
-            font-weight: bold;
+            font-size: 36px;
+            margin: 20px 0;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
         }
 
         #mental-input {
-            font-size: 24px;
-            padding: 15px;
-            background: #111;
-            border: 2px solid #0099ff;
-            color: #0099ff;
-            font-family: 'Courier New', monospace;
-            margin: 20px 0;
+            font-size: 18px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            color: #333;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
+            margin: 15px 0;
             text-align: center;
+            border-radius: 2px;
         }
 
         .result-message {
-            font-size: 20px;
-            padding: 15px;
-            margin-top: 20px;
-            border: 2px solid #ff6b9d;
-            color: #ff6b9d;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            color: #666;
+            border-radius: 2px;
         }
 
         .result-message.correct {
-            border-color: #0099ff;
-            color: #0099ff;
+            border-color: #28a745;
+            color: #28a745;
+            background: #f0fff4;
         }
     </style>
 </head>
@@ -876,80 +880,74 @@
         <div class="guide-content">
             <button class="guide-close" onclick="toggleGuide()">✕</button>
             
-            <div class="guide-section" style="border: 2px solid #ff6b9d; padding: 15px; margin-bottom: 20px; background: rgba(255, 0, 255, 0.05);">
-                <div style="font-size: 16px; color: #ff6b9d; font-weight: bold; margin-bottom: 10px;">
+            <div class="guide-section" style="border-left: 3px solid #333; padding: 12px; margin-bottom: 16px; background: #f9f9f9;">
+                <div style="font-size: 13px; color: #1a1a1a; font-weight: 600; margin-bottom: 8px;">
                     A Beginner's Project
                 </div>
-                <div style="font-size: 13px; color: #0099ff; line-height: 1.8;">
-                    I'm learning web development and created this reaction test as a practice project. 
-                    This is my journey in JavaScript and cyberpunk UI design!
+                <div style="font-size: 11px; color: #666; line-height: 1.6;">
+                    Learning web development with JavaScript. This is a practice project built from scratch.
                     <br><br>
-                    Have fun with the tests, and if you spot bugs or have cool ideas - I'd love to hear them! 
-                    That's how I grow as a dev. Thanks for checking out my project!
+                    All tests use keyboard &amp; mouse. Tests track scores locally. Each test = 3 attempts.
                 </div>
             </div>
             
-            <div class="guide-title">>> REACTION TEST MODES <<<</div>
+            <div class="guide-title">Test Modes</div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">01 // CLASSIC</div>
-                <div class="guide-mode-desc">The basics. Wait for the green signal to appear, then click. Simple reaction test.</div>
+                <div class="guide-mode-title">01 Classic</div>
+                <div class="guide-mode-desc">Wait for green signal. Click as fast as you can.</div>
                 <div class="guide-mode-info">
-                    EASY: 1-2s wait • NORMAL: 1.5-2.5s wait • HARD: 2-3.5s wait
+                    Easy: 1-2s wait | Normal: 1.5-2.5s wait | Hard: 2-3.5s wait
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">02 // INSANE</div>
-                <div class="guide-mode-desc">The green square moves. Click it before it jumps to a new position. Each wrong click = retrying.</div>
+                <div class="guide-mode-title">02 Insane</div>
+                <div class="guide-mode-desc">Click the moving green square before it jumps.</div>
                 <div class="guide-mode-info">
-                    EASY: 0.8-1.5s delay • NORMAL: 0.6-1.2s delay • HARD: 0.4-1s delay
+                    Easy: 0.8-1.5s delay | Normal: 0.6-1.2s delay | Hard: 0.4-1s delay
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">03 // VISUAL</div>
-                <div class="guide-mode-desc">Find the odd emoji (🔵) among the circles (⭕). Beat the time limit.</div>
+                <div class="guide-mode-title">03 Visual</div>
+                <div class="guide-mode-desc">Find 🔵 among ⭕ circles. Beat the time limit.</div>
                 <div class="guide-mode-info">
-                    EASY: 6 emojis, 15s limit • NORMAL: 9 emojis, 10s limit • HARD: 12 emojis, 6s limit
+                    Easy: 6 items, 15s | Normal: 9 items, 10s | Hard: 12 items, 6s
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">04 // MENTAL</div>
-                <div class="guide-mode-desc">Math problems. Pick the correct answer from 4 options. Beat the time limit.</div>
+                <div class="guide-mode-title">04 Mental</div>
+                <div class="guide-mode-desc">Solve math problems from 4 answer options.</div>
                 <div class="guide-mode-info">
-                    EASY: Basic math, 20s limit • NORMAL: Multiply & squares, 10s limit • HARD: Complex, 5s limit
+                    Easy: Basic math, 20s | Normal: Multiply/squares, 10s | Hard: Complex, 5s
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">05 // MEMORY</div>
-                <div class="guide-mode-desc">Remember the sequence, then repeat it. Longer sequences on harder difficulties.</div>
+                <div class="guide-mode-title">05 Memory</div>
+                <div class="guide-mode-desc">Remember sequence and repeat it. Use 1-9 keys.</div>
                 <div class="guide-mode-info">
-                    EASY: 3 digits, 3s display • NORMAL: 4 digits, 2s display • HARD: 5 digits, 1s display
+                    Easy: 3 digits, 3s display | Normal: 4 digits, 2s | Hard: 5 digits, 1s
                 </div>
             </div>
 
             <div class="guide-section">
-                <div style="font-size: 13px; color: #aaa; line-height: 1.8;">
-                    • Each test has 3 ATTEMPTS per session<br>
-                    • Results are saved automatically (localStorage)<br>
-                    • Change difficulty before starting<br>
-                    • Best scores show on main screen<br>
-                    • Correct/success rate is tracked<br>
+                <div style="font-size: 11px; color: #666; line-height: 1.6;">
+                    • Keyboard: Space (Classic), 1-9 (Memory), Enter (Chat)<br>
+                    • Scores saved to browser storage<br>
+                    • ESC closes any test window<br>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const BUILD_TIME = '2026-03-20 HARD REDESIGN';
-        console.log('>>> CYBERPUNK REACTION v2026 - ' + BUILD_TIME);
-        console.log('--- DESIGN: Hard lines, outline, NO glow');
-        console.log('--- BUGS: Memory/Mental/Visual/Insane - ALL FIXED');
-        console.log('--- Not seeing changes? Open PRIVATE WINDOW (Ctrl+Shift+P)');
-        document.body.style.backgroundColor = '#000000';
+        const BUILD_TIME = '2026-03 HUMAN DESIGN';
+        console.log('>>> Reaction Tester - ' + BUILD_TIME);
+        console.log('--- Real developer aesthetic');
+        console.log('--- All tests working with keyboard support');
 
         // GLOBAL TEST GUARD - Prevent multiple simultaneous tests
         let testInProgress = false;
