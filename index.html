@@ -1601,7 +1601,7 @@
             // Add keyboard support for MENTAL (1-4 keys)
             state.mental.keyHandler = (e) => {
                 const key = parseInt(e.key);
-                if (key >= 1 && key <= 4) {
+                if (key >= 1 && key <= 4 && document.getElementById('modal-mental').classList.contains('active')) {
                     const btn = document.querySelector(`#answers button[data-index="${key}"]`);
                     if (btn && !btn.disabled) {
                         e.preventDefault();
@@ -1747,20 +1747,40 @@
                 state.memory.keyHandler = null;
             }
             
-            // Always show Continue button for endless mode
-            const grid = document.getElementById('button-grid');
-            grid.style.pointerEvents = 'auto';  // Enable clicking on the button!
-            grid.style.display = 'block';  // Exit grid layout, make it full width
-            grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #c8e6c9; border: 1px solid #4CAF50; color: #2e7d32; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit;" id="memory-continue-btn" onclick="generateMemorySequence()">▶ CONTINUE</button>';
-            
-            // Add Enter key support for CONTINUE button
-            state.memory.continueHandler = (e) => {
-                if ((e.code === 'Enter' || e.key === 'Enter') && document.getElementById('modal-memory').classList.contains('active')) {
-                    e.preventDefault();
-                    document.getElementById('memory-continue-btn')?.click();
-                }
-            };
-            document.addEventListener('keydown', state.memory.continueHandler);
+            // Memory test: 3 attempts only
+            if (state.memory.currentAttempt <= 3) {
+                // Show Continue button for next attempt (if not last)
+                const grid = document.getElementById('button-grid');
+                grid.style.pointerEvents = 'auto';  // Enable clicking on the button!
+                grid.style.display = 'block';  // Exit grid layout, make it full width
+                grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #c8e6c9; border: 1px solid #4CAF50; color: #2e7d32; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit;" id="memory-continue-btn" onclick="generateMemorySequence()">▶ CONTINUE</button>';
+                
+                // Update attempt display
+                document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt + 1} / 3`;
+                
+                // Add Enter key support for CONTINUE button
+                state.memory.continueHandler = (e) => {
+                    if ((e.code === 'Enter' || e.key === 'Enter') && document.getElementById('modal-memory').classList.contains('active')) {
+                        e.preventDefault();
+                        document.getElementById('memory-continue-btn')?.click();
+                    }
+                };
+                document.addEventListener('keydown', state.memory.continueHandler);
+            } else {
+                // All 3 attempts done - show DONE and close
+                const grid = document.getElementById('button-grid');
+                grid.style.display = 'block';
+                grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #4CAF50; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit; border: none;" disabled>✓ DONE!</button>';
+                
+                // Save to localStorage
+                localStorage.setItem('reactions_memory_correct', state.memory.correct);
+                
+                // Close after delay
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('memory');
+                }, 1500);
+            }
         }
 
         // ===== CHAT RESPONSE TEST =====
