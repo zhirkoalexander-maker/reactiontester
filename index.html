@@ -1672,6 +1672,7 @@
             const buttonDelay = buttonDelays[state.memory.diff];
 
             const grid = document.getElementById('button-grid');
+            grid.style.display = 'grid';  // Reset from 'block' if it was changed
             grid.style.pointerEvents = 'auto';
             grid.innerHTML = '';
 
@@ -1741,10 +1742,11 @@
                 state.memory.keyHandler = null;
             }
             
-            
             // Always show Continue button for endless mode
             const grid = document.getElementById('button-grid');
-            grid.innerHTML = '<button class="retry-btn" style="width: 100%; padding: 15px; margin: 0;" onclick="generateMemorySequence()">▶ CONTINUE</button>';
+            grid.style.pointerEvents = 'auto';  // Enable clicking on the button!
+            grid.style.display = 'block';  // Exit grid layout, make it full width
+            grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #c8e6c9; border: 1px solid #4CAF50; color: #2e7d32; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit;" onclick="generateMemorySequence()">▶ CONTINUE</button>';
         }
 
         // ===== CHAT RESPONSE TEST =====
