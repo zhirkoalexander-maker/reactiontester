@@ -564,79 +564,6 @@
             border-color: #00ff88;
             color: #00ff88;
         }
-
-        .performance-rating {
-            font-size: 18px;
-            color: #ff00ff;
-            margin: 15px 0;
-            padding: 12px;
-            border: 2px solid #ff00ff;
-            text-shadow: 0 0 10px #ff00ff;
-            font-weight: bold;
-        }
-
-        .progress-bar {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 15px 0;
-        }
-
-        .progress-dot {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #00ff88;
-            border-radius: 50%;
-            background: transparent;
-        }
-
-        .progress-dot.done {
-            background: #00ff88;
-        }
-
-        .progress-dot.current {
-            background: #ff00ff;
-            border-color: #ff00ff;
-        }
-
-        .retry-btn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            border: 2px solid #ff00ff;
-            background: rgba(255, 0, 255, 0.1);
-            color: #ff00ff;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Courier New', monospace;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .retry-btn:hover {
-            background: #ff00ff;
-            color: #000;
-        }
-
-        .shortcuts-hint {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid #00ff88;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 11px;
-            color: #00ff88;
-            z-index: 500;
-            max-width: 200px;
-            line-height: 1.8;
-        }
-
-        .shortcuts-hint strong {
-            color: #ff00ff;
-        }
     </style>
 </head>
 <body>
@@ -828,9 +755,6 @@
                     <span class="stat-value" id="classic-avg">— ms</span>
                 </div>
             </div>
-            <div id="classic-rating" class="performance-rating"></div>
-            <div class="progress-bar" id="classic-progress"></div>
-            <button class="retry-btn" onclick="retryTest('classic')">⟲ RETRY</button>
         </div>
     </div>
 
@@ -855,9 +779,6 @@
                     <span class="stat-value" id="insane-avg">— ms</span>
                 </div>
             </div>
-            <div id="insane-rating" class="performance-rating"></div>
-            <div class="progress-bar" id="insane-progress"></div>
-            <button class="retry-btn" onclick="retryTest('insane')">⟲ RETRY</button>
         </div>
     </div>
 
@@ -878,8 +799,6 @@
                     <span class="stat-value" id="visual-correct">0/3</span>
                 </div>
             </div>
-            <div class="progress-bar" id="visual-progress"></div>
-            <button class="retry-btn" onclick="retryTest('visual')">⟲ RETRY</button>
         </div>
     </div>
 
@@ -901,8 +820,6 @@
                     <span class="stat-value" id="mental-correct">0/3</span>
                 </div>
             </div>
-            <div class="progress-bar" id="mental-progress"></div>
-            <button class="retry-btn" onclick="retryTest('mental')">⟲ RETRY</button>
         </div>
     </div>
 
@@ -924,8 +841,6 @@
                     <span class="stat-value" id="memory-correct">0/3</span>
                 </div>
             </div>
-            <div class="progress-bar" id="memory-progress"></div>
-            <button class="retry-btn" onclick="retryTest('memory')">⟲ RETRY</button>
         </div>
     </div>
 
@@ -948,8 +863,6 @@
                     <span class="stat-value" id="chat-correct">0/3</span>
                 </div>
             </div>
-            <div class="progress-bar" id="chat-progress"></div>
-            <button class="retry-btn" onclick="retryTest('chat')">⟲ RETRY</button>
         </div>
     </div>
 
@@ -1006,8 +919,6 @@
                     • Change difficulty before starting<br>
                     • Best scores show on main screen<br>
                     • Correct/success rate is tracked<br>
-                    • Press ESC to close any modal<br>
-                    • Click RETRY button to try again<br>
                 </div>
             </div>
         </div>
@@ -1023,21 +934,6 @@
 
         // GLOBAL TEST GUARD - Prevent multiple simultaneous tests
         let testInProgress = false;
-
-        // ESC key to close modals
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const activeModal = document.querySelector('.modal.active');
-                if (activeModal) {
-                    const type = activeModal.id.replace('modal-', '');
-                    closeModal(type);
-                }
-                const guideModal = document.getElementById('guide-modal');
-                if (guideModal.classList.contains('active')) {
-                    toggleGuide();
-                }
-            }
-        });
 
         // STATE
         const state = {
@@ -1187,72 +1083,6 @@
             alert('All stats cleared!');
         }
 
-        function getPerformanceRating(time, testType) {
-            // Rating based on reaction time
-            if (time < 150) return '🔥 GODLIKE!';
-            if (time < 250) return '⭐ EXCELLENT!';
-            if (time < 350) return '👍 GOOD';
-            if (time < 500) return '✓ OK';
-            return '💤 SLOW';
-        }
-
-        function updateProgressBar(type) {
-            const container = document.getElementById(`${type}-progress`);
-            if (!container) return;
-            
-            container.innerHTML = '';
-            for (let i = 1; i <= 3; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'progress-dot';
-                if (i < state[type].currentAttempt) {
-                    dot.classList.add('done');
-                } else if (i === state[type].currentAttempt) {
-                    dot.classList.add('current');
-                }
-                container.appendChild(dot);
-            }
-        }
-
-        function retryTest(type) {
-            state[type].currentAttempt = 1;
-            state[type].results = [];
-            state[type].correct = 0;
-            state[type].sequence = [];
-            state[type].userSequence = [];
-            
-            document.getElementById(`${type}-attempt`).textContent = `ATTEMPT 1 / 3`;
-            const ratingEl = document.getElementById(`${type}-rating`);
-            if (ratingEl) ratingEl.textContent = '';
-            
-            // Reset display fields
-            document.getElementById(`${type}-current`).textContent = '— ms';
-            
-            if (type === 'classic' || type === 'insane') {
-                document.getElementById(`${type}-best`).textContent = '— ms';
-                document.getElementById(`${type}-avg`).textContent = '— ms';
-            } else if (type === 'visual' || type === 'mental' || type === 'memory' || type === 'chat') {
-                document.getElementById(`${type}-correct`).textContent = '0/3';
-            }
-            
-            updateProgressBar(type);
-            
-            // Clear grid/input
-            const grid = document.getElementById('visual-grid') || document.getElementById('button-grid');
-            if (grid) grid.innerHTML = '';
-            const input = document.getElementById(`${type}-input`);
-            if (input) input.value = '';
-            
-            const messageEl = document.getElementById(`${type}-message`);
-            if (messageEl) messageEl.textContent = 'Starting...';
-            
-            if (type === 'classic') runClassicRound();
-            else if (type === 'insane') runInsaneRound();
-            else if (type === 'visual') runVisualRound();
-            else if (type === 'mental') generateMentalProblem();
-            else if (type === 'memory') generateMemorySequence();
-            else if (type === 'chat') runChatRound();
-        }
-
         // ===== CLASSIC TEST =====
         function startTest(type) {
             // Prevent multiple simultaneous tests
@@ -1369,13 +1199,10 @@
         function recordClassicResult(time) {
             state.classic.results.push(time);
             document.getElementById('classic-current').textContent = time + ' ms';
-            document.getElementById('classic-rating').textContent = getPerformanceRating(time, 'classic');
-            
             const min = Math.min(...state.classic.results);
             const avg = Math.round(state.classic.results.reduce((a, b) => a + b) / state.classic.results.length);
             document.getElementById('classic-best').textContent = min + ' ms';
             document.getElementById('classic-avg').textContent = avg + ' ms';
-            updateProgressBar('classic');
 
             // Save to localStorage
             saveResults('classic');
@@ -1454,13 +1281,10 @@
             
             state.insane.results.push(time);
             document.getElementById('insane-current').textContent = time + ' ms';
-            document.getElementById('insane-rating').textContent = getPerformanceRating(time, 'insane');
-            
             const min = Math.min(...state.insane.results);
             const avg = Math.round(state.insane.results.reduce((a, b) => a + b) / state.insane.results.length);
             document.getElementById('insane-best').textContent = min + ' ms';
             document.getElementById('insane-avg').textContent = avg + ' ms';
-            updateProgressBar('insane');
 
             // Save to localStorage
             saveResults('insane');
@@ -1535,7 +1359,6 @@
         function recordVisualResult(time, correct) {
             document.getElementById('visual-current').textContent = time + ' ms';
             document.getElementById('visual-correct').textContent = state.visual.correct + '/3';
-            updateProgressBar('visual');
 
             state.visual.currentAttempt++;
             if (state.visual.currentAttempt <= 3) {
@@ -1649,7 +1472,6 @@
         function recordMentalResult(time, correct) {
             document.getElementById('mental-current').textContent = correct ? time + ' ms' : '✗';
             document.getElementById('mental-correct').textContent = state.mental.correct + '/3';
-            updateProgressBar('mental');
 
             state.mental.currentAttempt++;
             if (state.mental.currentAttempt <= 3) {
@@ -1766,7 +1588,6 @@
             }
             document.getElementById('memory-current').textContent = time;
             document.getElementById('memory-correct').textContent = state.memory.correct + '/3';
-            updateProgressBar('memory');
 
             state.memory.currentAttempt++;
             if (state.memory.currentAttempt <= 3) {
@@ -1908,9 +1729,8 @@
             }
             
             document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
-            updateProgressBar('chat');
 
-            state.chat.currentAttempt++;}
+            state.chat.currentAttempt++;
             if (state.chat.currentAttempt <= 3) {
                 document.getElementById('chat-attempt').textContent = `ATTEMPT ${state.chat.currentAttempt} / 3`;
                 setTimeout(runChatRound, 1500);
