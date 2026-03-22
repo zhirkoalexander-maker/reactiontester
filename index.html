@@ -1143,10 +1143,12 @@
                     document.removeEventListener('keydown', state.focus.reactionSpaceHandler);
                     state.focus.reactionSpaceHandler = null;
                 }
+                // Also clear any active timers
                 if (state.focus.timerInterval) {
                     clearInterval(state.focus.timerInterval);
                     state.focus.timerInterval = null;
                 }
+                state.focus.roundActive = false;
             }
             // Reset input fields
             const inputField = document.getElementById(`${type}-input`);
@@ -1254,8 +1256,9 @@
             const showFalseStart = () => {
                 area.style.background = '#ffcdd2';
                 area.textContent = '✗ FALSE START';
+                // Always restart after showing false start message
                 setTimeout(() => {
-                    if (roundActive) runClassicRound(); // restart round
+                    runClassicRound();
                 }, 1200);
             };
             
@@ -1922,25 +1925,28 @@
                     showFocusReactionScreen();
                 }
             }, 1000);
+            
+            // Store timer interval for cleanup
+            state.focus.timerInterval = timerInterval;
 
             // Detect false starts during red phase
-            let focusRoundActive = true;
+            state.focus.roundActive = true;
+            
             const focusClickHandler = () => {
-                if (focusRoundActive) {
-                    focusRoundActive = false;
+                if (state.focus.roundActive) {
+                    state.focus.roundActive = false;
                     clearInterval(timerInterval);
                     area.style.background = '#ffcdd2';
                     area.textContent = '✗ FALSE START';
                     area.style.color = '#d32f2f';
                     setTimeout(() => {
-                        focusRoundActive = true;
                         runFocusRound();
                     }, 1200);
                 }
             };
 
             const focusSpaceHandler = (e) => {
-                if ((e.code === 'Space' || e.key === ' ') && focusRoundActive) {
+                if ((e.code === 'Space' || e.key === ' ') && state.focus.roundActive) {
                     e.preventDefault();
                     focusClickHandler();
                 }
@@ -1949,11 +1955,6 @@
             area.onclick = focusClickHandler;
             state.focus.spaceHandler = focusSpaceHandler;
             document.addEventListener('keydown', focusSpaceHandler);
-            
-            // Store handlers for cleanup
-            state.focus.clickHandler = focusClickHandler;
-            state.focus.timerInterval = timerInterval;
-            state.focus.focusRoundActive = focusRoundActive;
         }
 
         function showFocusReactionScreen() {
@@ -1996,6 +1997,7 @@
             if (!area) return;
 
             // Disable further interaction
+            state.focus.roundActive = false;
             area.onclick = null;
             if (state.focus.reactionSpaceHandler) {
                 document.removeEventListener('keydown', state.focus.reactionSpaceHandler);
