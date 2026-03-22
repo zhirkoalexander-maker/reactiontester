@@ -828,8 +828,9 @@
         <div class="modal-content">
             <button class="close" onclick="closeModal('memory')">✕</button>
             <div class="modal-title">MEMORY</div>
-            <div class="attempt-info" id="memory-attempt">ATTEMPT 1 / 3</div>
+            <div class="attempt-info" id="memory-attempt">ATTEMPT 1</div>
             <div style="font-size: 16px; margin: 20px 0; color: #ff00ff;">Sequence: <span id="sequence-display" style="font-size: 20px; font-weight: bold;">-</span></div>
+            <div style="font-size: 12px; color: #00ff88; margin: 10px 0;">Tip: Click buttons or press 1-9 on keyboard!</div>
             <div id="button-grid"></div>
             <div class="stats">
                 <div class="stat">
@@ -838,7 +839,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="memory-correct">0/3</span>
+                    <span class="stat-value" id="memory-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1596,34 +1597,19 @@
                 state.memory.correct++;
             }
             document.getElementById('memory-current').textContent = time;
-            document.getElementById('memory-correct').textContent = state.memory.correct + '/3';
+            document.getElementById('memory-correct').textContent = state.memory.correct;
 
             state.memory.currentAttempt++;
-            if (state.memory.currentAttempt <= 3) {
-                // Clean up previous key handler
-                if (state.memory.keyHandler) {
-                    document.removeEventListener('keydown', state.memory.keyHandler);
-                    state.memory.keyHandler = null;
-                }
-                document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt} / 3`;
-                setTimeout(generateMemorySequence, 1500);
-            } else {
-                // Save correct to localStorage
-                localStorage.setItem('reactions_memory_correct', state.memory.correct);
-                document.getElementById('sequence-display').textContent = '✓ DONE!';
-                document.getElementById('button-grid').innerHTML = '';
-                
-                // Clean up key handler on completion
-                if (state.memory.keyHandler) {
-                    document.removeEventListener('keydown', state.memory.keyHandler);
-                    state.memory.keyHandler = null;
-                }
-                
-                setTimeout(() => {
-                    loadAndDisplayStats();
-                    closeModal('memory');
-                }, 1500);
+            // Clean up previous key handler
+            if (state.memory.keyHandler) {
+                document.removeEventListener('keydown', state.memory.keyHandler);
+                state.memory.keyHandler = null;
             }
+            document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt}`;
+            
+            // Show Continue button instead of auto-continuing
+            const grid = document.getElementById('button-grid');
+            grid.innerHTML = '<button onclick="generateMemorySequence()" style="padding: 15px 30px; font-size: 18px; background: #00ff88; color: #000; border: 2px solid #00ff88; cursor: pointer;">CONTINUE</button>';
         }
 
         // ===== CHAT RESPONSE TEST =====
