@@ -1170,12 +1170,12 @@
             let clickBlocked = true;
             area.onclick = () => {
                 if (clickBlocked) {
-                    area.style.background = '#ffebee';
-                    area.textContent = '✗ TOO EARLY!';
+                    area.style.background = '#ffcdd2';
+                    area.textContent = '✗ FALSE START';
                     setTimeout(() => {
                         area.style.background = '#f9f9f9';
                         area.textContent = '⏳';
-                    }, 500);
+                    }, 800);
                 }
             };
 
@@ -1248,8 +1248,21 @@
         // ===== INSANE TEST =====
         function runInsaneRound() {
             const area = document.getElementById('insane-area');
-            area.onclick = null;
+            const square = document.getElementById('square-sprite');
             area.style.position = 'relative';
+            
+            // Show feedback for false starts before square appears
+            let roundStarted = false;
+            area.onclick = () => {
+                if (!roundStarted) {
+                    area.style.background = '#ffcdd2';
+                    square.textContent = '✗ FALSE START';
+                    setTimeout(() => {
+                        area.style.background = '#f9f9f9';
+                        square.textContent = '🟩';
+                    }, 800);
+                }
+            };
 
             const delays = {
                 easy: [800, 1500],
@@ -1260,6 +1273,7 @@
             const delay = Math.random() * (max - min) + min;
 
             setTimeout(() => {
+                roundStarted = true;
                 state.insane.startTime = performance.now();
                 moveSquare(area);
             }, delay);
