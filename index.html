@@ -1479,7 +1479,7 @@
             // Add keyboard support for MENTAL (1-4 keys)
             state.mental.keyHandler = (e) => {
                 const key = parseInt(e.key);
-                if (key >= 1 && key <= 4 && !answersDiv.style.pointerEvents) {
+                if (key >= 1 && key <= 4) {
                     const btn = document.querySelector(`#answers button[data-index="${key}"]`);
                     if (btn && !btn.disabled) {
                         e.preventDefault();
@@ -1596,7 +1596,7 @@
                 const digit = parseInt(e.key);
                 if (digit >= 1 && digit <= 9) {
                     const btn = document.querySelector(`#button-grid button[data-digit="${digit}"]`);
-                    if (btn && !btn.disabled) {
+                    if (btn && !btn.disabled && document.getElementById('modal-memory').classList.contains('active')) {
                         e.preventDefault();
                         btn.click();
                     }
