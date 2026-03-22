@@ -837,8 +837,8 @@
             <button class="close" onclick="closeModal('memory')">✕</button>
             <div class="modal-title">MEMORY</div>
             <div class="attempt-info" id="memory-attempt">ATTEMPT 1</div>
-            <div style="font-size: 16px; margin: 20px 0; color: #ff6b9d;">Sequence: <span id="sequence-display" style="font-size: 20px; font-weight: bold;">-</span></div>
-            <div style="font-size: 12px; color: #0099ff; margin: 10px 0;">Tip: Click buttons or press 1-9 on keyboard!</div>
+            <div style="font-size: 14px; margin: 20px 0; color: #333;">Sequence: <span id="sequence-display" style="font-size: 18px; font-weight: bold;">-</span></div>
+            <div style="font-size: 11px; color: #666; margin: 10px 0;">Tip: Use 1-9 keys or click buttons</div>
             <div id="button-grid"></div>
             <div class="stats">
                 <div class="stat">
@@ -859,9 +859,9 @@
             <button class="close" onclick="closeModal('chat')">✕</button>
             <div class="modal-title">CHAT RESPONSE</div>
             <div class="attempt-info" id="chat-attempt">ATTEMPT 1 / 3</div>
-            <div id="chat-message" style="font-size: 18px; margin: 20px 0; color: #ff6b9d; min-height: 30px;">Waiting...</div>
-            <div id="chat-example" style="font-size: 14px; color: #0099ff; margin: 10px 0; min-height: 20px;"></div>
-            <input type="text" id="chat-input" placeholder="Type your response and press ENTER..." style="width: 100%; padding: 10px; background: #000; border: 2px solid #ff6b9d; color: #0099ff; font-size: 14px; margin: 15px 0;">
+            <div id="chat-message" style="font-size: 16px; margin: 20px 0; color: #333; min-height: 30px;">Waiting...</div>
+            <div id="chat-example" style="font-size: 12px; color: #666; margin: 10px 0; min-height: 20px;"></div>
+            <input type="text" id="chat-input" placeholder="Type your response and press ENTER..." style="width: 100%; padding: 10px; background: #f9f9f9; border: 1px solid #ddd; color: #333; font-size: 13px; margin: 15px 0; border-radius: 2px; font-family: 'SF Mono', Monaco, monospace;">
             <div class="stats">
                 <div class="stat">
                     <span>Current:</span>
@@ -1156,7 +1156,7 @@
             area.textContent = '⏳';
             area.classList.remove('ready');
             area.onclick = null;
-            area.style.background = '#0a1a2e';
+            area.style.background = '#f9f9f9';
 
             const delays = {
                 easy: [1000, 2000],
@@ -1170,10 +1170,10 @@
             let clickBlocked = true;
             area.onclick = () => {
                 if (clickBlocked) {
-                    area.style.background = '#ff0000';
+                    area.style.background = '#ffebee';
                     area.textContent = '✗ TOO EARLY!';
                     setTimeout(() => {
-                        area.style.background = '#0a1a2e';
+                        area.style.background = '#f9f9f9';
                         area.textContent = '⏳';
                     }, 500);
                 }
@@ -1183,7 +1183,7 @@
                 clickBlocked = false;
                 area.textContent = '🟢 CLICK!';
                 area.classList.add('ready');
-                area.style.background = '#05ff05';
+                area.style.background = '#c8e6c9';
                 state.classic.startTime = performance.now();
                 
                 const handleClassicResponse = () => {
@@ -1199,9 +1199,9 @@
                         e.preventDefault();
                         e.stopPropagation();
                         if (area.classList.contains('ready')) {
-                            area.style.background = '#0099ff';
+                            area.style.background = '#e8f5e9';
                             setTimeout(() => {
-                                area.style.background = '#05ff05';
+                                area.style.background = '#c8e6c9';
                             }, 100);
                             handleClassicResponse();
                         }
@@ -1358,12 +1358,12 @@
                     document.querySelectorAll('#visual-grid button').forEach(b => b.disabled = true);
                     if (emoji === '🔵') {
                         state.visual.correct++;
-                        btn.style.borderColor = '#0099ff';
-                        btn.style.background = '#0a1a2e';
+                        btn.style.borderColor = '#28a745';
+                        btn.style.background = '#f0fff4';
                         recordVisualResult(time, true);
                     } else {
-                        btn.style.borderColor = '#ff0000';
-                        btn.style.background = '#330000';
+                        btn.style.borderColor = '#d73a49';
+                        btn.style.background = '#fff5f5';
                         recordVisualResult(time, false);
                     }
                 };
@@ -1693,7 +1693,7 @@
             setTimeout(() => {
                 state.chat.currentMessage = generateChatMessage();
                 msgDisplay.textContent = state.chat.currentMessage.msg;
-                msgDisplay.style.color = '#ff6b9d';
+                msgDisplay.style.color = '#333';
                 if (exampleDisplay) exampleDisplay.textContent = state.chat.currentMessage.example;
                 
                 inputBox.focus();
