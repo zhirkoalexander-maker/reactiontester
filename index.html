@@ -19,9 +19,9 @@
         }
 
         body {
-            font-family: 'Courier New', monospace !important;
-            background: #000000 !important;
-            color: #00ff88 !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%) !important;
+            color: #0099ff !important;
             padding: 20px;
             overflow-x: hidden;
             user-select: none;
@@ -35,21 +35,25 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 30px;
-            border: 4px solid #00ff88;
-            background: #000000;
-            outline: 2px solid #004400;
-            outline-offset: -10px;
+            padding: 40px;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            border: 2px solid #0099ff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 153, 255, 0.15);
         }
 
         .title {
             font-size: 48px;
-            font-weight: bold;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 3px 3px 0 #004400, 6px 6px 0 #ff00ff;
+            letter-spacing: 4px;
+            text-shadow: 0 4px 20px rgba(0, 153, 255, 0.4);
             margin-bottom: 10px;
-            color: #00ff88;
+            color: #0099ff;
+            background: linear-gradient(135deg, #0099ff 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .subtitle {
@@ -61,9 +65,9 @@
 
         .guide-btn {
             padding: 8px 16px;
-            border: 2px solid #00ff88;
+            border: 2px solid #0099ff;
             background: rgba(0, 255, 136, 0.05);
-            color: #00ff88;
+            color: #0099ff;
             font-family: 'Courier New', monospace;
             font-size: 12px;
             cursor: pointer;
@@ -73,7 +77,7 @@
         }
 
         .guide-btn:hover {
-            background: #00ff88;
+            background: #0099ff;
             color: #000;
             transform: scale(1.05);
         }
@@ -97,14 +101,14 @@
         }
 
         .guide-content {
-            border: 3px solid #00ff88;
-            background: #0a0a0a;
+            border: 2px solid #0099ff;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
             padding: 40px;
             max-width: 900px;
             max-height: 85vh;
             overflow-y: auto;
-            outline: 2px solid #004400;
-            outline-offset: -8px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             position: relative;
         }
 
@@ -113,7 +117,7 @@
             top: 15px;
             right: 15px;
             border: none;
-            background: #ff00ff;
+            background: #ff6b9d;
             color: #000;
             width: 35px;
             height: 35px;
@@ -129,8 +133,8 @@
 
         .guide-title {
             font-size: 28px;
-            color: #00ff88;
-            text-shadow: 2px 2px 0 #ff00ff;
+            color: #0099ff;
+            text-shadow: 2px 2px 0 #ff6b9d;
             margin-bottom: 20px;
             letter-spacing: 2px;
         }
@@ -147,7 +151,7 @@
 
         .guide-mode-title {
             font-size: 18px;
-            color: #ff00ff;
+            color: #ff6b9d;
             margin-bottom: 8px;
             letter-spacing: 1px;
         }
@@ -161,23 +165,23 @@
 
         .guide-mode-info {
             font-size: 12px;
-            color: #00ff88;
+            color: #0099ff;
             background: rgba(0, 255, 136, 0.05);
             padding: 10px;
-            border-left: 2px solid #00ff88;
+            border-left: 2px solid #0099ff;
             margin-top: 8px;
         }
 
         .results-section {
             margin-top: 50px;
             padding-top: 30px;
-            border-top: 2px solid #00ff88;
+            border-top: 2px solid #0099ff;
         }
 
         .results-title {
             font-size: 24px;
-            color: #00ff88;
-            text-shadow: 2px 2px 0 #ff00ff;
+            color: #0099ff;
+            text-shadow: 2px 2px 0 #ff6b9d;
             margin-bottom: 20px;
             letter-spacing: 2px;
         }
@@ -185,16 +189,19 @@
         .results-table {
             width: 100%;
             border-collapse: collapse;
-            border: 2px solid #00ff88;
-            background: #0a0a0a;
+            border: 2px solid #0099ff;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 153, 255, 0.1);
         }
 
         .results-table th {
             background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
+            color: #0099ff;
             padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #00ff88;
+            border-bottom: 1px solid #0099ff;
             font-weight: bold;
             text-transform: uppercase;
             font-size: 12px;
@@ -223,30 +230,28 @@
         }
 
         .card {
-            border: 3px solid #ff00ff;
-            background: linear-gradient(135deg, #0a0000 0%, #000000 100%);
+            border: 2px solid #0099ff;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 30px;
             position: relative;
-            outline: 2px solid #660066;
-            outline-offset: -10px;
+            border-radius: 12px;
             transition: all 0.3s ease;
-            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1), 0 0 20px rgba(0, 255, 136, 0);
+            box-shadow: 0 8px 32px rgba(0, 153, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             min-height: 280px;
             display: flex;
             flex-direction: column;
         }
 
         .card:hover {
-            border-color: #00ff88;
-            outline-color: #00ff88;
-            background: linear-gradient(135deg, #0a2a0a 0%, #0a0a0a 100%);
-            box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.15), 0 0 30px rgba(0, 255, 136, 0.3);
-            transform: translateY(-5px);
+            border-color: #ff6b9d;
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            box-shadow: 0 12px 40px rgba(255, 107, 157, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: translateY(-8px);
         }
 
         .card-num {
             font-size: 10px;
-            color: #00ff88;
+            color: #0099ff;
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 8px;
@@ -256,8 +261,8 @@
         .card-title {
             font-size: 24px;
             font-weight: bold;
-            color: #00ff88;
-            text-shadow: 3px 3px 0 #ff00ff, 6px 6px 0 rgba(255, 0, 255, 0.3);
+            color: #0099ff;
+            text-shadow: 3px 3px 0 #ff6b9d, 6px 6px 0 rgba(255, 0, 255, 0.3);
             margin-bottom: 12px;
             letter-spacing: 2px;
         }
@@ -272,10 +277,10 @@
 
         .card-stats {
             font-size: 11px;
-            color: #00ff88;
+            color: #0099ff;
             margin-bottom: 12px;
             padding: 8px;
-            border: 1px solid #00ff8833;
+            border: 1px solid #0099ff33;
             background: rgba(0, 255, 136, 0.05);
             text-align: center;
             min-height: 32px;
@@ -295,9 +300,9 @@
         .dropdown-btn {
             width: 44px;
             height: 44px;
-            border: 2px solid #00ff88;
+            border: 2px solid #0099ff;
             background: rgba(0, 255, 136, 0.05);
-            color: #00ff88;
+            color: #0099ff;
             cursor: pointer;
             font-size: 12px;
             font-weight: bold;
@@ -305,17 +310,17 @@
         }
 
         .dropdown-btn:hover {
-            background: #00ff88;
+            background: #0099ff;
             color: #000;
-            border-color: #ff00ff;
+            border-color: #ff6b9d;
         }
 
         .difficulty-menu {
             position: absolute;
             top: 50px;
             left: 0;
-            background: #0a0a0a;
-            border: 2px solid #00ff88;
+            background: #1a1a2e;
+            border: 2px solid #0099ff;
             min-width: 150px;
             display: none;
             z-index: 300;
@@ -330,7 +335,7 @@
             padding: 12px 14px;
             cursor: pointer;
             border-bottom: 1px solid #2a2a2a;
-            color: #00ff88;
+            color: #0099ff;
             transition: all 0.2s;
             font-size: 12px;
             text-transform: uppercase;
@@ -342,7 +347,7 @@
         }
 
         .difficulty-option.selected {
-            background: #00ff88;
+            background: #0099ff;
             color: #000;
             font-weight: bold;
             text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
@@ -351,9 +356,9 @@
         .start-btn {
             width: 100%;
             padding: 14px;
-            border: 2px solid #00ff88;
+            border: 2px solid #0099ff;
             background: rgba(0, 255, 136, 0.05);
-            color: #00ff88;
+            color: #0099ff;
             font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
@@ -366,9 +371,9 @@
         }
 
         .start-btn:hover {
-            background: #00ff88;
+            background: #0099ff;
             color: #000;
-            border-color: #ff00ff;
+            border-color: #ff6b9d;
             box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.3), 0 0 20px rgba(0, 255, 136, 0.5);
             transform: scale(1.02);
         }
@@ -402,14 +407,14 @@
         }
 
         .modal-content {
-            background: #000000;
-            border: 4px solid #00ff88;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            border: 2px solid #0099ff;
             padding: 50px;
             width: 90%;
             max-width: 700px;
             position: relative;
-            outline: 2px solid #004400;
-            outline-offset: -12px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             text-align: center;
             max-height: 90vh;
             overflow-y: auto;
@@ -421,23 +426,23 @@
             right: 15px;
             width: 40px;
             height: 40px;
-            border: 2px solid #ff00ff;
+            border: 2px solid #ff6b9d;
             background: transparent;
-            color: #ff00ff;
+            color: #ff6b9d;
             font-size: 24px;
             cursor: pointer;
         }
 
         .close:hover {
-            background: #ff00ff;
+            background: #ff6b9d;
             color: #000;
-            border-color: #ff00ff;
+            border-color: #ff6b9d;
         }
 
         .modal-title {
             font-size: 32px;
-            color: #00ff88;
-            text-shadow: 3px 3px 0 #004400, 6px 6px 0 #ff00ff;
+            color: #0099ff;
+            text-shadow: 3px 3px 0 #003366, 6px 6px 0 #ff6b9d;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -445,13 +450,13 @@
 
         .attempt-info {
             font-size: 12px;
-            color: #ff00ff;
+            color: #ff6b9d;
             margin-bottom: 20px;
             text-transform: uppercase;
         }
 
         .test-area {
-            border: 4px solid #ff00ff;
+            border: 4px solid #ff6b9d;
             padding: 60px 20px;
             text-align: center;
             font-size: 80px;
@@ -477,9 +482,9 @@
         }
 
         .test-area.ready {
-            border-color: #00ff88;
-            outline-color: #00ff88;
-            background: #051405;
+            border-color: #0099ff;
+            outline-color: #0099ff;
+            background: #0a1a2e;
         }
 
         .stats {
@@ -494,7 +499,7 @@
             justify-content: space-between;
             padding: 8px 0;
             font-size: 13px;
-            color: #00ff88;
+            color: #0099ff;
             border-bottom: 1px solid #333;
         }
 
@@ -504,7 +509,7 @@
 
         .stat-value {
             font-weight: bold;
-            text-shadow: 0 0 10px #00ff88;
+            text-shadow: 0 0 10px #0099ff;
         }
 
         #visual-grid, #answers, #button-grid {
@@ -515,9 +520,9 @@
         }
 
         #visual-grid button, #answers button, #button-grid button {
-            border: 2px solid #00ff88;
+            border: 2px solid #0099ff;
             background: #111;
-            color: #00ff88;
+            color: #0099ff;
             padding: 25px;
             font-size: 20px;
             cursor: pointer;
@@ -527,17 +532,17 @@
         }
 
         #visual-grid button:hover, #answers button:hover, #button-grid button:hover {
-            background: #0a0a0a;
-            border-color: #00ff88;
-            outline: 1px solid #00ff88;
+            background: #1a1a2e;
+            border-color: #0099ff;
+            outline: 1px solid #0099ff;
             outline-offset: -3px;
         }
 
         #problem {
             font-size: 48px;
             margin: 30px 0;
-            color: #ff00ff;
-            text-shadow: 0 0 15px #ff00ff;
+            color: #ff6b9d;
+            text-shadow: 0 0 15px #ff6b9d;
             font-weight: bold;
         }
 
@@ -545,8 +550,8 @@
             font-size: 24px;
             padding: 15px;
             background: #111;
-            border: 2px solid #00ff88;
-            color: #00ff88;
+            border: 2px solid #0099ff;
+            color: #0099ff;
             font-family: 'Courier New', monospace;
             margin: 20px 0;
             text-align: center;
@@ -556,13 +561,13 @@
             font-size: 20px;
             padding: 15px;
             margin-top: 20px;
-            border: 2px solid #ff00ff;
-            color: #ff00ff;
+            border: 2px solid #ff6b9d;
+            color: #ff6b9d;
         }
 
         .result-message.correct {
-            border-color: #00ff88;
-            color: #00ff88;
+            border-color: #0099ff;
+            color: #0099ff;
         }
     </style>
 </head>
@@ -829,8 +834,8 @@
             <button class="close" onclick="closeModal('memory')">✕</button>
             <div class="modal-title">MEMORY</div>
             <div class="attempt-info" id="memory-attempt">ATTEMPT 1</div>
-            <div style="font-size: 16px; margin: 20px 0; color: #ff00ff;">Sequence: <span id="sequence-display" style="font-size: 20px; font-weight: bold;">-</span></div>
-            <div style="font-size: 12px; color: #00ff88; margin: 10px 0;">Tip: Click buttons or press 1-9 on keyboard!</div>
+            <div style="font-size: 16px; margin: 20px 0; color: #ff6b9d;">Sequence: <span id="sequence-display" style="font-size: 20px; font-weight: bold;">-</span></div>
+            <div style="font-size: 12px; color: #0099ff; margin: 10px 0;">Tip: Click buttons or press 1-9 on keyboard!</div>
             <div id="button-grid"></div>
             <div class="stats">
                 <div class="stat">
@@ -851,9 +856,9 @@
             <button class="close" onclick="closeModal('chat')">✕</button>
             <div class="modal-title">CHAT RESPONSE</div>
             <div class="attempt-info" id="chat-attempt">ATTEMPT 1 / 3</div>
-            <div id="chat-message" style="font-size: 18px; margin: 20px 0; color: #ff00ff; min-height: 30px;">Waiting...</div>
-            <div id="chat-example" style="font-size: 14px; color: #00ff88; margin: 10px 0; min-height: 20px;"></div>
-            <input type="text" id="chat-input" placeholder="Type your response and press ENTER..." style="width: 100%; padding: 10px; background: #000; border: 2px solid #ff00ff; color: #00ff88; font-size: 14px; margin: 15px 0;">
+            <div id="chat-message" style="font-size: 18px; margin: 20px 0; color: #ff6b9d; min-height: 30px;">Waiting...</div>
+            <div id="chat-example" style="font-size: 14px; color: #0099ff; margin: 10px 0; min-height: 20px;"></div>
+            <input type="text" id="chat-input" placeholder="Type your response and press ENTER..." style="width: 100%; padding: 10px; background: #000; border: 2px solid #ff6b9d; color: #0099ff; font-size: 14px; margin: 15px 0;">
             <div class="stats">
                 <div class="stat">
                     <span>Current:</span>
@@ -872,11 +877,11 @@
         <div class="guide-content">
             <button class="guide-close" onclick="toggleGuide()">✕</button>
             
-            <div class="guide-section" style="border: 2px solid #ff00ff; padding: 15px; margin-bottom: 20px; background: rgba(255, 0, 255, 0.05);">
-                <div style="font-size: 16px; color: #ff00ff; font-weight: bold; margin-bottom: 10px;">
+            <div class="guide-section" style="border: 2px solid #ff6b9d; padding: 15px; margin-bottom: 20px; background: rgba(255, 0, 255, 0.05);">
+                <div style="font-size: 16px; color: #ff6b9d; font-weight: bold; margin-bottom: 10px;">
                     A Beginner's Project
                 </div>
-                <div style="font-size: 13px; color: #00ff88; line-height: 1.8;">
+                <div style="font-size: 13px; color: #0099ff; line-height: 1.8;">
                     I'm learning web development and created this reaction test as a practice project. 
                     This is my journey in JavaScript and cyberpunk UI design!
                     <br><br>
@@ -1154,7 +1159,7 @@
             area.textContent = '⏳';
             area.classList.remove('ready');
             area.onclick = null;
-            area.style.background = '#051405';
+            area.style.background = '#0a1a2e';
 
             const delays = {
                 easy: [1000, 2000],
@@ -1171,7 +1176,7 @@
                     area.style.background = '#ff0000';
                     area.textContent = '✗ TOO EARLY!';
                     setTimeout(() => {
-                        area.style.background = '#051405';
+                        area.style.background = '#0a1a2e';
                         area.textContent = '⏳';
                     }, 500);
                 }
@@ -1197,7 +1202,7 @@
                         e.preventDefault();
                         e.stopPropagation();
                         if (area.classList.contains('ready')) {
-                            area.style.background = '#00ff88';
+                            area.style.background = '#0099ff';
                             setTimeout(() => {
                                 area.style.background = '#05ff05';
                             }, 100);
@@ -1356,8 +1361,8 @@
                     document.querySelectorAll('#visual-grid button').forEach(b => b.disabled = true);
                     if (emoji === '🔵') {
                         state.visual.correct++;
-                        btn.style.borderColor = '#00ff88';
-                        btn.style.background = '#051405';
+                        btn.style.borderColor = '#0099ff';
+                        btn.style.background = '#0a1a2e';
                         recordVisualResult(time, true);
                     } else {
                         btn.style.borderColor = '#ff0000';
@@ -1700,7 +1705,7 @@
             setTimeout(() => {
                 state.chat.currentMessage = generateChatMessage();
                 msgDisplay.textContent = state.chat.currentMessage.msg;
-                msgDisplay.style.color = '#ff00ff';
+                msgDisplay.style.color = '#ff6b9d';
                 if (exampleDisplay) exampleDisplay.textContent = state.chat.currentMessage.example;
                 
                 inputBox.focus();
