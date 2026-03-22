@@ -630,7 +630,7 @@
                 <div class="card-num">04 / TEST</div>
                 <div class="card-title">MENTAL</div>
                 <div class="card-desc">Solve math: from basic to squares and roots</div>
-                <div class="card-stats" id="stats-mental">0</div>
+                <div class="card-stats" id="stats-mental">0 / 3</div>
                 <div class="card-controls">
                     <button class="dropdown-btn" onclick="toggleMenu(event, 'mental')">▼</button>
                     <div class="difficulty-menu" id="menu-mental">
@@ -807,7 +807,7 @@
         <div class="modal-content">
             <button class="close" onclick="closeModal('mental')">✕</button>
             <div class="modal-title">MENTAL</div>
-            <div class="attempt-info" id="mental-attempt">ATTEMPT 1</div>
+            <div class="attempt-info" id="mental-attempt">ATTEMPT 1 / 3</div>
             <div id="problem">2 + 2 = ?</div>
             <div id="answers"></div>
             <div class="stats">
@@ -1108,14 +1108,17 @@
             testInProgress = true;
             
             // Reset state for this test
-            state[type].currentAttempt = 1;
+            state[type].currentAttempt = 0;
             state[type].results = [];
             state[type].correct = 0;
             state[type].sequence = [];
             state[type].userSequence = [];
             
-            // Reset display
-            document.getElementById(`${type}-attempt`).textContent = `ATTEMPT 1 / 3`;
+            // Reset display - Memory and Mental show different format
+            let attemptDisplay = `ATTEMPT 1 / 3`;
+            if (type === 'mental') attemptDisplay = `ATTEMPT 1`;
+            if (type === 'memory') attemptDisplay = `ATTEMPT 1`;
+            document.getElementById(`${type}-attempt`).textContent = attemptDisplay;
             
             // Clear all input fields and grids
             const modal = document.getElementById(`modal-${type}`);
@@ -1390,7 +1393,13 @@
             const answersDiv = document.getElementById('answers');
             answersDiv.style.pointerEvents = 'auto';  // Re-enable for new round
             
-            const ranges = { easy: 20, medium: 100, hard: 200 };
+            // Difficulty increases with each attempt (higher numbers = harder problems)
+            const attemptMultiplier = state.mental.currentAttempt;
+            const ranges = { 
+                easy: 20 + (attemptMultiplier * 5), 
+                medium: 50 + (attemptMultiplier * 15), 
+                hard: 100 + (attemptMultiplier * 30) 
+            };
             const max = ranges[state.mental.diff];
             const a = Math.floor(Math.random() * max) + 1;
             const b = Math.floor(Math.random() * max) + 1;
@@ -1480,17 +1489,20 @@
         }
 
         function recordMentalResult(time, correct) {
-            document.getElementById('mental-current').textContent = correct ? time + ' ms' : '✗';
+            // Display memory (digits remembered) instead of reaction time
+            const memoryDisplay = `${state.mental.correct}`;
+            document.getElementById('mental-current').textContent = memoryDisplay;
             document.getElementById('mental-correct').textContent = state.mental.correct;
+            if (correct) state.mental.correct++;
 
             state.mental.currentAttempt++;
-            if (state.mental.currentAttempt <= 1) {
+            if (state.mental.currentAttempt <= 3) {
                 // Clean up previous key handler
                 if (state.mental.keyHandler) {
                     document.removeEventListener('keydown', state.mental.keyHandler);
                     state.mental.keyHandler = null;
                 }
-                document.getElementById('mental-attempt').textContent = `ATTEMPT ${state.mental.currentAttempt}`;
+                document.getElementById('mental-attempt').textContent = `ATTEMPT ${state.mental.currentAttempt} / 3`;
                 setTimeout(generateMentalProblem, 1500);
             } else {
                 // Save correct to localStorage
@@ -1513,6 +1525,11 @@
 
         // ===== MEMORY TEST =====
         function generateMemorySequence() {
+            // Only increment if not first attempt
+            if (state.memory.currentAttempt > 0) {
+                document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt + 1}`;
+            }
+            
             const lengths = { easy: 3, medium: 4, hard: 5 };
             const len = lengths[state.memory.diff];
 
@@ -1600,16 +1617,24 @@
             document.getElementById('memory-correct').textContent = state.memory.correct;
 
             state.memory.currentAttempt++;
+            
             // Clean up previous key handler
             if (state.memory.keyHandler) {
                 document.removeEventListener('keydown', state.memory.keyHandler);
                 state.memory.keyHandler = null;
             }
-            document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt}`;
             
-            // Show Continue button instead of auto-continuing
-            const grid = document.getElementById('button-grid');
-            grid.innerHTML = '<button onclick="generateMemorySequence()" style="padding: 15px 30px; font-size: 18px; background: #00ff88; color: #000; border: 2px solid #00ff88; cursor: pointer;">CONTINUE</button>';
+            // Check if we should continue or end
+            if (state.memory.currentAttempt >= 3) {
+                // Endless mode - show quit button
+                const grid = document.getElementById('button-grid');
+                grid.innerHTML = '<button class="retry-btn" style="width: 100%; padding: 15px; margin: 0;" onclick="closeModal(\'memory\')">✓ EXIT</button>';
+            } else {
+                // Show Continue button
+                const grid = document.getElementById('button-grid');
+                grid.innerHTML = '<button class="retry-btn" style="width: 100%; padding: 15px; margin: 0;" onclick="generateMemorySequence()">▶ CONTINUE</button>';
+            }
+        }
         }
 
         // ===== CHAT RESPONSE TEST =====
