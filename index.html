@@ -683,6 +683,23 @@
                 </div>
                 <button class="start-btn" onclick="startTest('chat')">START</button>
             </div>
+
+            <!-- FOCUS -->
+            <div class="card">
+                <div class="card-num">07 / TEST</div>
+                <div class="card-title">FOCUS</div>
+                <div class="card-desc">Wait then react - concentration challenge</div>
+                <div class="card-stats" id="stats-focus">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'focus')">▼</button>
+                    <div class="difficulty-menu" id="menu-focus">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'focus', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'focus', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'focus', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('focus')">START</button>
+            </div>
         </div>
     </div>
 
@@ -737,6 +754,12 @@
                     <td id="result-chat-best">—</td>
                     <td>—</td>
                     <td id="result-chat-status">NO DATA</td>
+                </tr>
+                <tr id="result-focus">
+                    <td>FOCUS</td>
+                    <td id="result-focus-best">—</td>
+                    <td>—</td>
+                    <td id="result-focus-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -875,6 +898,30 @@
         </div>
     </div>
 
+    <!-- FOCUS MODAL -->
+    <div class="modal" id="modal-focus">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('focus')">✕</button>
+            <div class="modal-title">FOCUS TEST</div>
+            <div class="attempt-info" id="focus-attempt">ONLY 1 ATTEMPT</div>
+            <div id="focus-area" class="test-area" style="font-size: 48px; background: #ffebee; color: #d32f2f; border-color: #d32f2f;">WAIT...</div>
+            <div style="font-size: 12px; color: #666; margin: 10px 0; text-align: center;">
+                <div id="focus-wait-display" style="font-size: 24px; font-weight: bold; color: #d32f2f; margin: 15px 0;">00:00</div>
+                Prepare yourself. Stay focused.
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Wait time:</span>
+                    <span class="stat-value" id="focus-wait">— sec</span>
+                </div>
+                <div class="stat">
+                    <span>Reaction:</span>
+                    <span class="stat-value" id="focus-reaction">— ms</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- GUIDE MODAL -->
     <div class="guide-modal" id="guide-modal">
         <div class="guide-content">
@@ -972,7 +1019,8 @@
             visual: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
             mental: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentProblem: null, startTime: null, timeoutId: null },
             memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null },
-            chat: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentMessage: null, startTime: null, timeoutId: null }
+            chat: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentMessage: null, startTime: null, timeoutId: null },
+            focus: { diff: 'easy', results: [], currentAttempt: 0, waitTime: null, startTime: null, reactionTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -988,13 +1036,13 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultBest = document.getElementById(`result-${type}-best`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane' || type === 'chat') {
+                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
                     if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
@@ -1081,6 +1129,25 @@
                     area.textContent = '⏳';
                 }
             }
+            // Clean up focus handlers
+            if (type === 'focus') {
+                const area = document.getElementById('focus-area');
+                if (area) {
+                    area.onclick = null;
+                }
+                if (state.focus.spaceHandler) {
+                    document.removeEventListener('keydown', state.focus.spaceHandler);
+                    state.focus.spaceHandler = null;
+                }
+                if (state.focus.reactionSpaceHandler) {
+                    document.removeEventListener('keydown', state.focus.reactionSpaceHandler);
+                    state.focus.reactionSpaceHandler = null;
+                }
+                if (state.focus.timerInterval) {
+                    clearInterval(state.focus.timerInterval);
+                    state.focus.timerInterval = null;
+                }
+            }
             // Reset input fields
             const inputField = document.getElementById(`${type}-input`);
             if (inputField) {
@@ -1104,7 +1171,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1161,6 +1228,8 @@
                 generateMemorySequence();
             } else if (type === 'chat') {
                 runChatRound();
+            } else if (type === 'focus') {
+                runFocusRound();
             }
         }
 
@@ -1179,47 +1248,61 @@
             const [min, max] = delays[state.classic.diff];
             const delay = Math.random() * (max - min) + min;
 
-            // Prevent false starts - block clicks before ready
-            let clickBlocked = true;
+            // Prevent false starts - block clicks and space before ready
+            let roundActive = false;
+            
+            const showFalseStart = () => {
+                area.style.background = '#ffcdd2';
+                area.textContent = '✗ FALSE START';
+                setTimeout(() => {
+                    if (roundActive) runClassicRound(); // restart round
+                }, 1200);
+            };
+            
             area.onclick = () => {
-                if (clickBlocked) {
-                    area.style.background = '#ffcdd2';
-                    area.textContent = '✗ FALSE START';
-                    setTimeout(() => {
-                        area.style.background = '#f9f9f9';
-                        area.textContent = '⏳';
-                    }, 800);
+                if (!roundActive) {
+                    showFalseStart();
                 }
             };
+            
+            // Space bar false start detection
+            state.classic.spaceHandler = (e) => {
+                if ((e.code === 'Space' || e.key === ' ') && !roundActive) {
+                    e.preventDefault();
+                    showFalseStart();
+                }
+            };
+            document.addEventListener('keydown', state.classic.spaceHandler);
 
             setTimeout(() => {
-                clickBlocked = false;
+                roundActive = true;
                 area.textContent = '🟢 CLICK!';
                 area.classList.add('ready');
                 area.style.background = '#c8e6c9';
                 state.classic.startTime = performance.now();
                 
                 const handleClassicResponse = () => {
+                    roundActive = false;
                     const time = Math.round(performance.now() - state.classic.startTime);
                     recordClassicResult(time);
                 };
                 
                 area.onclick = handleClassicResponse;
                 
-                // Add spacebar support with visual feedback
-                state.classic.spaceHandler = (e) => {
-                    if (e.code === 'Space' || e.key === ' ') {
+                // Add spacebar support with visual feedback when ready
+                const spaceHandler = (e) => {
+                    if ((e.code === 'Space' || e.key === ' ') && roundActive) {
                         e.preventDefault();
                         e.stopPropagation();
-                        if (area.classList.contains('ready')) {
-                            area.style.background = '#e8f5e9';
-                            setTimeout(() => {
-                                area.style.background = '#c8e6c9';
-                            }, 100);
-                            handleClassicResponse();
-                        }
+                        area.style.background = '#e8f5e9';
+                        setTimeout(() => {
+                            area.style.background = '#c8e6c9';
+                        }, 100);
+                        handleClassicResponse();
                     }
                 };
+                document.removeEventListener('keydown', state.classic.spaceHandler);
+                state.classic.spaceHandler = spaceHandler;
                 document.addEventListener('keydown', state.classic.spaceHandler);
             }, delay);
         }
@@ -1265,15 +1348,19 @@
             area.style.position = 'relative';
             
             // Show feedback for false starts before square appears
-            let roundStarted = false;
+            let roundActive = false;
+            
+            const showFalseStart = () => {
+                area.style.background = '#ffcdd2';
+                square.textContent = '✗ FALSE START';
+                setTimeout(() => {
+                    if (roundActive) runInsaneRound(); // restart round
+                }, 1200);
+            };
+            
             area.onclick = () => {
-                if (!roundStarted) {
-                    area.style.background = '#ffcdd2';
-                    square.textContent = '✗ FALSE START';
-                    setTimeout(() => {
-                        area.style.background = '#f9f9f9';
-                        square.textContent = '🟩';
-                    }, 800);
+                if (!roundActive) {
+                    showFalseStart();
                 }
             };
 
@@ -1286,7 +1373,7 @@
             const delay = Math.random() * (max - min) + min;
 
             setTimeout(() => {
-                roundStarted = true;
+                roundActive = true;
                 state.insane.startTime = performance.now();
                 moveSquare(area);
             }, delay);
@@ -1796,6 +1883,157 @@
                     closeModal('chat');
                 }, 1500);
             }
+        }
+
+        // ===== FOCUS TEST =====
+        function runFocusRound() {
+            const area = document.getElementById('focus-area');
+            if (!area) return;
+
+            // Generate random wait time based on difficulty
+            const diffRanges = {
+                easy: [600000, 1200000],      // 10-20 minutes
+                medium: [1200000, 2400000],   // 20-40 minutes
+                hard: [2400000, 3600000]      // 40-60 minutes
+            };
+
+            const range = diffRanges[state.focus.diff] || diffRanges.easy;
+            const waitTimeMs = Math.random() * (range[1] - range[0]) + range[0];
+            const waitTimeSec = Math.round(waitTimeMs / 1000);
+            state.focus.waitTime = waitTimeSec;
+
+            // Show red screen with countdown
+            area.style.background = '#ffebee';
+            area.style.color = '#d32f2f';
+            area.textContent = 'FOCUS';
+            area.style.fontSize = '48px';
+            area.style.fontWeight = 'bold';
+
+            let remaining = waitTimeSec;
+            const displayTimer = document.getElementById('focus-wait-display');
+            if (displayTimer) displayTimer.textContent = formatTime(remaining);
+
+            // Update timer every second
+            const timerInterval = setInterval(() => {
+                remaining--;
+                if (displayTimer) displayTimer.textContent = formatTime(remaining);
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    showFocusReactionScreen();
+                }
+            }, 1000);
+
+            // Detect false starts during red phase
+            let focusRoundActive = true;
+            const focusClickHandler = () => {
+                if (focusRoundActive) {
+                    focusRoundActive = false;
+                    clearInterval(timerInterval);
+                    area.style.background = '#ffcdd2';
+                    area.textContent = '✗ FALSE START';
+                    area.style.color = '#d32f2f';
+                    setTimeout(() => {
+                        focusRoundActive = true;
+                        runFocusRound();
+                    }, 1200);
+                }
+            };
+
+            const focusSpaceHandler = (e) => {
+                if ((e.code === 'Space' || e.key === ' ') && focusRoundActive) {
+                    e.preventDefault();
+                    focusClickHandler();
+                }
+            };
+
+            area.onclick = focusClickHandler;
+            state.focus.spaceHandler = focusSpaceHandler;
+            document.addEventListener('keydown', focusSpaceHandler);
+            
+            // Store handlers for cleanup
+            state.focus.clickHandler = focusClickHandler;
+            state.focus.timerInterval = timerInterval;
+            state.focus.focusRoundActive = focusRoundActive;
+        }
+
+        function showFocusReactionScreen() {
+            const area = document.getElementById('focus-area');
+            if (!area) return;
+
+            // Switch to green screen
+            area.style.background = '#90EE90';
+            area.style.color = '#2e7d32';
+            area.textContent = 'REACT!';
+            area.style.fontSize = '48px';
+            area.style.fontWeight = 'bold';
+
+            const displayTimer = document.getElementById('focus-wait-display');
+            if (displayTimer) displayTimer.textContent = '▶ REACT';
+
+            state.focus.startTime = performance.now();
+
+            // Listen for click or space to record reaction
+            const handleReaction = () => {
+                const time = Math.round(performance.now() - state.focus.startTime);
+                recordFocusResult(true, time);
+            };
+
+            area.onclick = handleReaction;
+
+            const reactionSpaceHandler = (e) => {
+                if (e.code === 'Space' || e.key === ' ') {
+                    e.preventDefault();
+                    handleReaction();
+                }
+            };
+
+            document.addEventListener('keydown', reactionSpaceHandler);
+            state.focus.reactionSpaceHandler = reactionSpaceHandler;
+        }
+
+        function recordFocusResult(correct, time) {
+            const area = document.getElementById('focus-area');
+            if (!area) return;
+
+            // Disable further interaction
+            area.onclick = null;
+            if (state.focus.reactionSpaceHandler) {
+                document.removeEventListener('keydown', state.focus.reactionSpaceHandler);
+            }
+            if (state.focus.spaceHandler) {
+                document.removeEventListener('keydown', state.focus.spaceHandler);
+            }
+
+            if (correct && time) {
+                state.focus.results.push(time);
+                state.focus.reactionTime = time;
+                document.getElementById('focus-reaction').textContent = time + ' ms';
+                document.getElementById('focus-wait').textContent = state.focus.waitTime + ' sec';
+
+                area.style.background = '#4CAF50';
+                area.style.color = '#fff';
+                area.textContent = '✓ ' + time + ' ms';
+                area.style.fontSize = '28px';
+            }
+
+            // Focus test has only 1 attempt, so always done
+            setTimeout(() => {
+                if (state.focus.results.length > 0) {
+                    localStorage.setItem('reactions_focus_best', Math.min(...state.focus.results));
+                }
+                document.getElementById('focus-area').textContent = '✓ DONE!';
+                
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('focus');
+                }, 1000);
+            }, 1500);
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
     </script>
 </body>
