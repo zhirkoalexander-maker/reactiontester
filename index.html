@@ -220,9 +220,27 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1200px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .card {
@@ -700,6 +718,57 @@
                 </div>
                 <button class="start-btn" onclick="startTest('focus')">START</button>
             </div>
+
+            <!-- TYPING -->
+            <div class="card">
+                <div class="card-num">08 / TEST</div>
+                <div class="card-title">TYPING</div>
+                <div class="card-desc">Type phrases as fast and accurately as you can</div>
+                <div class="card-stats" id="stats-typing">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'typing')">▼</button>
+                    <div class="difficulty-menu" id="menu-typing">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'typing', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'typing', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'typing', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('typing')">START</button>
+            </div>
+
+            <!-- PATTERN -->
+            <div class="card">
+                <div class="card-num">09 / TEST</div>
+                <div class="card-title">PATTERN</div>
+                <div class="card-desc">Watch pattern, then reproduce it from memory</div>
+                <div class="card-stats" id="stats-pattern">0 / 3</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'pattern')">▼</button>
+                    <div class="difficulty-menu" id="menu-pattern">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'pattern', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'pattern', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'pattern', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('pattern')">START</button>
+            </div>
+
+            <!-- NUMBERS -->
+            <div class="card">
+                <div class="card-num">10 / TEST</div>
+                <div class="card-title">NUMBERS</div>
+                <div class="card-desc">Enter random numbers using keyboard as fast as possible</div>
+                <div class="card-stats" id="stats-numbers">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'numbers')">▼</button>
+                    <div class="difficulty-menu" id="menu-numbers">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'numbers', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'numbers', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'numbers', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('numbers')">START</button>
+            </div>
         </div>
     </div>
 
@@ -760,6 +829,24 @@
                     <td id="result-focus-best">—</td>
                     <td>—</td>
                     <td id="result-focus-status">NO DATA</td>
+                </tr>
+                <tr id="result-typing">
+                    <td>TYPING</td>
+                    <td id="result-typing-best">—</td>
+                    <td>—</td>
+                    <td id="result-typing-status">NO DATA</td>
+                </tr>
+                <tr id="result-pattern">
+                    <td>PATTERN</td>
+                    <td>—</td>
+                    <td id="result-pattern-correct">0/3</td>
+                    <td id="result-pattern-status">NO DATA</td>
+                </tr>
+                <tr id="result-numbers">
+                    <td>NUMBERS</td>
+                    <td id="result-numbers-best">—</td>
+                    <td>—</td>
+                    <td id="result-numbers-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -922,6 +1009,76 @@
         </div>
     </div>
 
+    <!-- TYPING MODAL -->
+    <div class="modal" id="modal-typing">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('typing')">✕</button>
+            <div class="modal-title">TYPING</div>
+            <div class="attempt-info" id="typing-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px;" id="typing-phrase">Type this phrase</div>
+                <input type="text" id="typing-input" placeholder="Start typing..." style="width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ddd; border-radius: 2px; font-family: inherit;">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="typing-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="typing-correct">0 / 3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATTERN MODAL -->
+    <div class="modal" id="modal-pattern">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('pattern')">✕</button>
+            <div class="modal-title">PATTERN</div>
+            <div class="attempt-info" id="pattern-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div style="font-size: 48px; font-weight: 700; color: #2e7d32; letter-spacing: 8px; margin: 20px 0; min-height: 60px;" id="pattern-display">●○●</div>
+                <div style="font-size: 11px; color: #999;">Remember the pattern</div>
+            </div>
+            <div id="button-grid"></div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Current:</span>
+                    <span class="stat-value" id="pattern-current">—</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="pattern-correct">0 / 3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NUMBERS MODAL -->
+    <div class="modal" id="modal-numbers">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('numbers')">✕</button>
+            <div class="modal-title">NUMBERS</div>
+            <div class="attempt-info" id="numbers-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div style="font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 15px; min-height: 30px;" id="numbers-target">Enter numbers</div>
+                <input type="text" id="numbers-input" placeholder="Type numbers and press Enter..." style="width: 100%; padding: 10px; font-size: 16px; border: 2px solid #999; border-radius: 2px; font-family: 'Courier New', monospace; font-weight: 600;">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="numbers-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="numbers-correct">0 / 3</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- GUIDE MODAL -->
     <div class="guide-modal" id="guide-modal">
         <div class="guide-content">
@@ -1020,7 +1177,10 @@
             mental: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentProblem: null, startTime: null, timeoutId: null },
             memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null },
             chat: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentMessage: null, startTime: null, timeoutId: null },
-            focus: { diff: 'easy', results: [], currentAttempt: 0, waitTime: null, startTime: null, reactionTime: null, timeoutId: null }
+            focus: { diff: 'easy', results: [], currentAttempt: 0, waitTime: null, startTime: null, reactionTime: null, timeoutId: null },
+            typing: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
+            pattern: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, pattern: [], userPattern: [], startTime: null },
+            numbers: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, target: null, startTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -1036,7 +1196,7 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'pattern', 'numbers'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultBest = document.getElementById(`result-${type}-best`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
@@ -1155,6 +1315,28 @@
                 }
                 state.focus.roundActive = false;
             }
+            
+            // Clean up typing handlers
+            if (type === 'typing' && state.typing.submitHandler) {
+                document.removeEventListener('keydown', state.typing.submitHandler);
+                state.typing.submitHandler = null;
+            }
+            
+            // Clean up pattern handlers
+            if (type === 'pattern') {
+                const grid = document.getElementById('button-grid');
+                if (grid) {
+                    grid.innerHTML = '';
+                    grid.style.display = 'grid';
+                }
+            }
+            
+            // Clean up numbers handlers
+            if (type === 'numbers' && state.numbers.submitHandler) {
+                document.removeEventListener('keydown', state.numbers.submitHandler);
+                state.numbers.submitHandler = null;
+            }
+            
             // Reset input fields
             const inputField = document.getElementById(`${type}-input`);
             if (inputField) {
@@ -1178,7 +1360,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'pattern', 'numbers'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1237,6 +1419,12 @@
                 runChatRound();
             } else if (type === 'focus') {
                 runFocusRound();
+            } else if (type === 'typing') {
+                generateTypingPhrase();
+            } else if (type === 'pattern') {
+                generatePatternRound();
+            } else if (type === 'numbers') {
+                generateNumbersRound();
             }
         }
 
@@ -1921,6 +2109,203 @@
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('chat');
+                }, 1500);
+            }
+        }
+
+        // ===== TYPING TEST =====
+        function generateTypingPhrase() {
+            const phrases = {
+                easy: ['hello world', 'quick fox', 'good morning', 'stay focused', 'keep typing', 'simple text', 'nice day'],
+                medium: ['the quick brown fox jumps over', 'javascript is fun', 'type this phrase fast', 'reaction testing app', 'keyboard speed matters'],
+                hard: ['the quick brown foxjumps over the lazy dog', 'advanced typing skills require practice', 'typing speed and accuracy are important']
+            };
+
+            const phraseList = phrases[state.typing.diff];
+            state.typing.currentPhrase = phraseList[Math.floor(Math.random() * phraseList.length)];
+            state.typing.results = [];
+            
+            document.getElementById('typing-phrase').textContent = state.typing.currentPhrase;
+            document.getElementById('typing-input').value = '';
+            document.getElementById('typing-input').focus();
+            
+            state.typing.startTime = performance.now();
+            
+            // Listen for Enter to submit
+            const submitTyping = (e) => {
+                if (e.code === 'Enter') {
+                    e.preventDefault();
+                    const input = document.getElementById('typing-input').value.trim();
+                    if (input === state.typing.currentPhrase) {
+                        recordTypingResult(true);
+                    } else {
+                        recordTypingResult(false);
+                    }
+                }
+            };
+            
+            state.typing.submitHandler = submitTyping;
+            document.addEventListener('keydown', submitTyping);
+        }
+
+        function recordTypingResult(correct) {
+            if (state.typing.submitHandler) {
+                document.removeEventListener('keydown', state.typing.submitHandler);
+                state.typing.submitHandler = null;
+            }
+
+            let time = '—';
+            if (correct) {
+                time = Math.round(performance.now() - state.typing.startTime) + ' ms';
+                state.typing.results.push(Math.round(performance.now() - state.typing.startTime));
+                state.typing.correct++;
+            }
+            
+            document.getElementById('typing-current').textContent = time;
+            document.getElementById('typing-correct').textContent = state.typing.correct + ' / 3';
+
+            state.typing.currentAttempt++;
+            if (state.typing.currentAttempt <= 3) {
+                document.getElementById('typing-attempt').textContent = `ATTEMPT ${state.typing.currentAttempt + 1} / 3`;
+                setTimeout(generateTypingPhrase, 1000);
+            } else {
+                if (state.typing.results.length > 0) {
+                    localStorage.setItem('reactions_typing_best', Math.min(...state.typing.results));
+                }
+                document.getElementById('typing-phrase').textContent = '✓ DONE!';
+                document.getElementById('typing-input').disabled = true;
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('typing');
+                }, 1500);
+            }
+        }
+
+        // ===== PATTERN TEST =====
+        function generatePatternRound() {
+            const lengths = { easy: 3, medium: 4, hard: 5 };
+            const len = lengths[state.pattern.diff];
+            
+            state.pattern.pattern = Array.from({length: len}, () => Math.floor(Math.random() * 4) + 1);
+            state.pattern.userPattern = [];
+            
+            // Show pattern
+            const display = document.getElementById('pattern-display');
+            display.textContent = state.pattern.pattern.map(p => (p === 1 ? '●' : p === 2 ? '○' : p === 3 ? '■' : '□')).join(' ');
+            
+            setTimeout(() => {
+                display.textContent = 'Repeat it!';
+                renderPatternButtons();
+            }, 2000);
+        }
+
+        function renderPatternButtons() {
+            const grid = document.getElementById('button-grid');
+            grid.style.display = 'grid';
+            grid.innerHTML = '';
+
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i === 1 ? '●' : i === 2 ? '○' : i === 3 ? '■' : '□';
+                btn.style.fontSize = '28px';
+                btn.setAttribute('data-pattern', i);
+                
+                const handlePatternClick = () => {
+                    state.pattern.userPattern.push(i);
+                    
+                    if (state.pattern.userPattern[state.pattern.userPattern.length - 1] !== state.pattern.pattern[state.pattern.userPattern.length - 1]) {
+                        recordPatternResult(false);
+                    } else if (state.pattern.userPattern.length === state.pattern.pattern.length) {
+                        recordPatternResult(true);
+                    }
+                };
+                
+                btn.onclick = handlePatternClick;
+                grid.appendChild(btn);
+            }
+            
+            state.pattern.startTime = performance.now();
+        }
+
+        function recordPatternResult(correct) {
+            const grid = document.getElementById('button-grid');
+            grid.style.display = 'block';
+            
+            if (correct && state.pattern.userPattern.length === state.pattern.pattern.length) {
+                state.pattern.correct++;
+            }
+            
+            document.getElementById('pattern-current').textContent = correct ? '✓' : '✗';
+            document.getElementById('pattern-correct').textContent = state.pattern.correct + ' / 3';
+
+            state.pattern.currentAttempt++;
+            if (state.pattern.currentAttempt <= 3) {
+                document.getElementById('pattern-attempt').textContent = `ATTEMPT ${state.pattern.currentAttempt + 1} / 3`;
+                setTimeout(generatePatternRound, 1500);
+            } else {
+                localStorage.setItem('reactions_pattern_correct', state.pattern.correct);
+                grid.innerHTML = '<button style="width: 100%; padding: 15px; background: #4CAF50; color: #fff; border: none; border-radius: 2px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit;" disabled>✓ DONE!</button>';
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('pattern');
+                }, 1500);
+            }
+        }
+
+        // ===== NUMBERS TEST =====
+        function generateNumbersRound() {
+            const lengths = { easy: 4, medium: 6, hard: 8 };
+            const len = lengths[state.numbers.diff];
+            
+            state.numbers.target = Array.from({length: len}, () => Math.floor(Math.random() * 10)).join('');
+            
+            document.getElementById('numbers-target').textContent = state.numbers.target;
+            document.getElementById('numbers-input').value = '';
+            document.getElementById('numbers-input').focus();
+            
+            state.numbers.startTime = performance.now();
+            
+            const submitNumbers = (e) => {
+                if (e.code === 'Enter') {
+                    e.preventDefault();
+                    const input = document.getElementById('numbers-input').value;
+                    recordNumbersResult(input === state.numbers.target);
+                }
+            };
+            
+            state.numbers.submitHandler = submitNumbers;
+            document.addEventListener('keydown', submitNumbers);
+        }
+
+        function recordNumbersResult(correct) {
+            if (state.numbers.submitHandler) {
+                document.removeEventListener('keydown', state.numbers.submitHandler);
+                state.numbers.submitHandler = null;
+            }
+
+            let time = '—';
+            if (correct) {
+                time = Math.round(performance.now() - state.numbers.startTime) + ' ms';
+                state.numbers.results.push(Math.round(performance.now() - state.numbers.startTime));
+                state.numbers.correct++;
+            }
+            
+            document.getElementById('numbers-current').textContent = time;
+            document.getElementById('numbers-correct').textContent = state.numbers.correct + ' / 3';
+
+            state.numbers.currentAttempt++;
+            if (state.numbers.currentAttempt <= 3) {
+                document.getElementById('numbers-attempt').textContent = `ATTEMPT ${state.numbers.currentAttempt + 1} / 3`;
+                setTimeout(generateNumbersRound, 1000);
+            } else {
+                if (state.numbers.results.length > 0) {
+                    localStorage.setItem('reactions_numbers_best', Math.min(...state.numbers.results));
+                }
+                document.getElementById('numbers-target').textContent = '✓ DONE!';
+                document.getElementById('numbers-input').disabled = true;
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('numbers');
                 }, 1500);
             }
         }
