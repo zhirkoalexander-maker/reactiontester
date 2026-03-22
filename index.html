@@ -1530,10 +1530,8 @@
 
         // ===== MEMORY TEST =====
         function generateMemorySequence() {
-            // Only increment if not first attempt
-            if (state.memory.currentAttempt > 0) {
-                document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt + 1}`;
-            }
+            // Set attempt display
+            document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt + 1}`;
             
             const lengths = { easy: 3, medium: 4, hard: 5 };
             const len = lengths[state.memory.diff];
@@ -1599,9 +1597,9 @@
             
             state.memory.keyHandler = (e) => {
                 const digit = parseInt(e.key);
-                if (digit >= 1 && digit <= 9 && grid.style.pointerEvents !== 'none') {
+                if (digit >= 1 && digit <= 9) {
                     const btn = document.querySelector(`#button-grid button[data-digit="${digit}"]`);
-                    if (btn && !btn.disabled) {
+                    if (btn && !btn.disabled && grid.style.pointerEvents === 'auto') {
                         e.preventDefault();
                         btn.click();
                     }
@@ -1629,17 +1627,10 @@
                 state.memory.keyHandler = null;
             }
             
-            // Check if we should continue or end
-            if (state.memory.currentAttempt >= 3) {
-                // Endless mode - show quit button
-                const grid = document.getElementById('button-grid');
-                grid.innerHTML = '<button class="retry-btn" style="width: 100%; padding: 15px; margin: 0;" onclick="closeModal(\'memory\')">✓ EXIT</button>';
-            } else {
-                // Show Continue button
-                const grid = document.getElementById('button-grid');
-                grid.innerHTML = '<button class="retry-btn" style="width: 100%; padding: 15px; margin: 0;" onclick="generateMemorySequence()">▶ CONTINUE</button>';
-            }
-        }
+            
+            // Always show Continue button for endless mode
+            const grid = document.getElementById('button-grid');
+            grid.innerHTML = '<button class="retry-btn" style="width: 100%; padding: 15px; margin: 0;" onclick="generateMemorySequence()">▶ CONTINUE</button>';
         }
 
         // ===== CHAT RESPONSE TEST =====
