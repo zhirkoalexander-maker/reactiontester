@@ -959,6 +959,22 @@
             <button class="guide-close" onclick="toggleGuide()">✕</button>
             <div class="guide-title">>> REACTION TEST MODES <<<</div>
 
+            <div class="guide-section" style="border: 2px solid #ff00ff; padding: 15px; margin-bottom: 20px; background: rgba(255, 0, 255, 0.05);">
+                <div style="font-size: 18px; color: #ff00ff; font-weight: bold; margin-bottom: 10px; text-transform: uppercase;">
+                    ⚠️ BEGINNER PROJECT - PLEASE BE KIND ⚠️
+                </div>
+                <div style="font-size: 14px; color: #00ff88; line-height: 1.8;">
+                    Hi! I'm a beginner developer learning web design and JavaScript. 
+                    This is my personal learning project to test reaction times with cyberpunk design.
+                    <br><br>
+                    If you find bugs or have ideas for improvement - thank you! 
+                    But please don't leave bad reviews. Instead, let me know how to fix things. 
+                    This helps me learn and grow as a developer. 
+                    <br><br>
+                    <strong>Thank you for understanding! 🙏</strong>
+                </div>
+            </div>
+
             <div class="guide-section">
                 <div class="guide-mode-title">01 // CLASSIC</div>
                 <div class="guide-mode-desc">The basics. Wait for the green signal to appear, then click. Simple reaction test.</div>
@@ -1910,7 +1926,7 @@
             document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
             updateProgressBar('chat');
 
-            state.chat.currentAttempt++;}
+            state.chat.currentAttempt++;
             if (state.chat.currentAttempt <= 3) {
                 document.getElementById('chat-attempt').textContent = `ATTEMPT ${state.chat.currentAttempt} / 3`;
                 setTimeout(runChatRound, 1500);
