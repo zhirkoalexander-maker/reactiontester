@@ -1617,7 +1617,7 @@
             }
 
             state.classic.currentAttempt++;
-            if (state.classic.currentAttempt <= 3) {
+            if (state.classic.currentAttempt < 3) {
                 document.getElementById('classic-attempt').textContent = `ATTEMPT ${state.classic.currentAttempt} / 3`;
                 setTimeout(runClassicRound, 1500);
             } else {
@@ -1707,7 +1707,7 @@
             saveResults('insane');
 
             state.insane.currentAttempt++;
-            if (state.insane.currentAttempt <= 3) {
+            if (state.insane.currentAttempt < 3) {
                 document.getElementById('insane-attempt').textContent = `ATTEMPT ${state.insane.currentAttempt} / 3`;
                 const area = document.getElementById('insane-area');
                 area.style.transform = 'translate(0, 0)';
@@ -1778,7 +1778,7 @@
             document.getElementById('visual-correct').textContent = state.visual.correct + '/3';
 
             state.visual.currentAttempt++;
-            if (state.visual.currentAttempt <= 3) {
+            if (state.visual.currentAttempt < 3) {
                 document.getElementById('visual-attempt').textContent = `ATTEMPT ${state.visual.currentAttempt} / 3`;
                 setTimeout(runVisualRound, 1500);
             } else {
@@ -1900,7 +1900,7 @@
             if (correct) state.mental.correct++;
 
             state.mental.currentAttempt++;
-            if (state.mental.currentAttempt <= 3) {
+            if (state.mental.currentAttempt < 3) {
                 // Clean up previous key handler
                 if (state.mental.keyHandler) {
                     document.removeEventListener('keydown', state.mental.keyHandler);
@@ -2029,7 +2029,7 @@
             }
             
             // Memory test: 3 attempts only
-            if (state.memory.currentAttempt <= 3) {
+            if (state.memory.currentAttempt < 3) {
                 // Show Continue button for next attempt (if not last)
                 const grid = document.getElementById('button-grid');
                 grid.style.pointerEvents = 'auto';  // Enable clicking on the button!
@@ -2178,7 +2178,7 @@
             document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
 
             state.chat.currentAttempt++;
-            if (state.chat.currentAttempt <= 3) {
+            if (state.chat.currentAttempt < 3) {
                 document.getElementById('chat-attempt').textContent = `ATTEMPT ${state.chat.currentAttempt} / 3`;
                 setTimeout(runChatRound, 1500);
             } else {
@@ -2257,7 +2257,7 @@
             document.getElementById('typing-correct').textContent = state.typing.correct + ' / 3';
 
             state.typing.currentAttempt++;
-            if (state.typing.currentAttempt <= 3) {
+            if (state.typing.currentAttempt < 3) {
                 document.getElementById('typing-attempt').textContent = `ATTEMPT ${state.typing.currentAttempt + 1} / 3`;
                 setTimeout(generateTypingPhrase, 1000);
             } else {
@@ -2331,7 +2331,7 @@
             document.getElementById('pattern-correct').textContent = state.pattern.correct + ' / 3';
 
             state.pattern.currentAttempt++;
-            if (state.pattern.currentAttempt <= 3) {
+            if (state.pattern.currentAttempt < 3) {
                 document.getElementById('pattern-attempt').textContent = `ATTEMPT ${state.pattern.currentAttempt + 1} / 3`;
                 setTimeout(generatePatternRound, 1500);
             } else {
@@ -2530,7 +2530,7 @@
             document.getElementById('speed-correct').textContent = state.speed.correct + ' / 3';
 
             state.speed.currentAttempt++;
-            if (state.speed.currentAttempt <= 3) {
+            if (state.speed.currentAttempt < 3) {
                 document.getElementById('speed-attempt').textContent = `ATTEMPT ${state.speed.currentAttempt + 1} / 3`;
                 setTimeout(runSpeedRound, 1500);
             } else {
@@ -2597,7 +2597,7 @@
             document.getElementById('colors-correct').textContent = state.colors.correct + ' / 3';
             
             state.colors.currentAttempt++;
-            if (state.colors.currentAttempt <= 3) {
+            if (state.colors.currentAttempt < 3) {
                 document.getElementById('colors-attempt').textContent = `ATTEMPT ${state.colors.currentAttempt + 1} / 3`;
                 setTimeout(runColorsRound, 1500);
             } else {
