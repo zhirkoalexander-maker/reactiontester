@@ -1271,7 +1271,7 @@
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus') {
+                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
                     if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
