@@ -837,19 +837,19 @@
                 <tr id="result-visual">
                     <td>VISUAL</td>
                     <td>—</td>
-                    <td id="result-visual-correct">0/3</td>
+                    <td id="result-visual-correct">0</td>
                     <td id="result-visual-status">NO DATA</td>
                 </tr>
                 <tr id="result-mental">
                     <td>MENTAL</td>
                     <td>—</td>
-                    <td id="result-mental-correct">0/3</td>
+                    <td id="result-mental-correct">0</td>
                     <td id="result-mental-status">NO DATA</td>
                 </tr>
                 <tr id="result-memory">
                     <td>MEMORY</td>
                     <td>—</td>
-                    <td id="result-memory-correct">0/3</td>
+                    <td id="result-memory-correct">0</td>
                     <td id="result-memory-status">NO DATA</td>
                 </tr>
                 <tr id="result-chat">
@@ -873,19 +873,19 @@
                 <tr id="result-pattern">
                     <td>PATTERN</td>
                     <td>—</td>
-                    <td id="result-pattern-correct">0/3</td>
+                    <td id="result-pattern-correct">0</td>
                     <td id="result-pattern-status">NO DATA</td>
                 </tr>
                 <tr id="result-speed">
                     <td>SPEED</td>
                     <td>—</td>
-                    <td id="result-speed-correct">0/3</td>
+                    <td id="result-speed-correct">0</td>
                     <td id="result-speed-status">NO DATA</td>
                 </tr>
                 <tr id="result-colors">
                     <td>COLORS</td>
                     <td>—</td>
-                    <td id="result-colors-correct">0/3</td>
+                    <td id="result-colors-correct">0</td>
                     <td id="result-colors-status">NO DATA</td>
                 </tr>
             </tbody>
@@ -954,7 +954,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="visual-correct">0/3</span>
+                    <span class="stat-value" id="visual-correct">0</span>
                 </div>
             </div>
         </div>
@@ -975,7 +975,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="mental-correct">0/3</span>
+                    <span class="stat-value" id="mental-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1066,7 +1066,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="typing-correct">0 / 3</span>
+                    <span class="stat-value" id="typing-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1093,7 +1093,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="pattern-correct">0 / 3</span>
+                    <span class="stat-value" id="pattern-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1118,7 +1118,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="speed-correct">0 / 3</span>
+                    <span class="stat-value" id="speed-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1141,7 +1141,7 @@
                 </div>
                 <div class="stat">
                     <span>Correct:</span>
-                    <span class="stat-value" id="colors-correct">0 / 3</span>
+                    <span class="stat-value" id="colors-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1279,9 +1279,9 @@
                     if (resultStatus) resultStatus.textContent = best ? '✓ Complete' : '⊘ Not Taken';
                 } else {
                     const correct = localStorage.getItem(`reactions_${type}_correct`) || '0';
-                    statsEl.textContent = `✓ ${correct} / 3`;
+                    statsEl.textContent = `✓ ${correct}`;
                     if (resultBest) resultBest.textContent = '—';
-                    if (resultCorrect) resultCorrect.textContent = `${correct} / 3`;
+                    if (resultCorrect) resultCorrect.textContent = `${correct}`;
                     if (resultStatus) resultStatus.textContent = correct > 0 ? '✓ Complete' : '⊘ Not Taken';
                 }
             });
@@ -1776,7 +1776,7 @@
         function recordVisualResult(time, correct) {
             document.getElementById('visual-current').textContent = time + ' ms';
             state.visual.correct = Math.min(state.visual.correct, 3);
-            document.getElementById('visual-correct').textContent = state.visual.correct + '/3';
+            document.getElementById('visual-correct').textContent = state.visual.correct;
 
             state.visual.currentAttempt++;
             if (state.visual.currentAttempt < 3) {
@@ -2178,7 +2178,7 @@
             }
             
             state.chat.correct = Math.min(state.chat.correct, 3);
-            document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
+            document.getElementById('chat-correct').textContent = state.chat.correct;
 
             state.chat.currentAttempt++;
             if (state.chat.currentAttempt < 3) {
@@ -2258,7 +2258,7 @@
             
             document.getElementById('typing-current').textContent = time;
             state.typing.correct = Math.min(state.typing.correct, 3);
-            document.getElementById('typing-correct').textContent = state.typing.correct + ' / 3';
+            document.getElementById('typing-correct').textContent = state.typing.correct;
 
             state.typing.currentAttempt++;
             if (state.typing.currentAttempt < 3) {
@@ -2335,7 +2335,7 @@
             
             document.getElementById('pattern-current').textContent = correct ? '✓' : '✗';
             state.pattern.correct = Math.min(state.pattern.correct, 3);
-            document.getElementById('pattern-correct').textContent = state.pattern.correct + ' / 3';
+            document.getElementById('pattern-correct').textContent = state.pattern.correct;
 
             state.pattern.currentAttempt++;
             if (state.pattern.currentAttempt < 3) {
@@ -2535,7 +2535,7 @@
             }
             
             state.speed.correct = Math.min(state.speed.correct, 3);
-            document.getElementById('speed-correct').textContent = state.speed.correct + ' / 3';
+            document.getElementById('speed-correct').textContent = state.speed.correct;
 
             state.speed.currentAttempt++;
             if (state.speed.currentAttempt < 3) {
@@ -2603,7 +2603,7 @@
             }
             
             state.colors.correct = Math.min(state.colors.correct, 3);
-            document.getElementById('colors-correct').textContent = state.colors.correct + ' / 3';
+            document.getElementById('colors-correct').textContent = state.colors.correct;
             
             state.colors.currentAttempt++;
             if (state.colors.currentAttempt < 3) {
