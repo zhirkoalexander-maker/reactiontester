@@ -786,38 +786,38 @@
             </div>
 
             <div class="section-header">V. SHOOTER GAMES TRAINING</div>
-            <!-- AIM TRAINER -->
+            <!-- TRACKING -->
             <div class="card">
                 <div class="card-num">11 / TRAINING</div>
-                <div class="card-title">AIM TRAINER</div>
-                <div class="card-desc">Train your aiming and crosshair control</div>
-                <div class="card-stats" id="stats-aim">BEST: — ms</div>
+                <div class="card-title">TRACKING</div>
+                <div class="card-desc">Follow the moving target and click it</div>
+                <div class="card-stats" id="stats-tracking">— ms</div>
                 <div class="card-controls">
-                    <button class="dropdown-btn" onclick="toggleMenu(event, 'aim')">▼</button>
-                    <div class="difficulty-menu" id="menu-aim">
-                        <div class="difficulty-option selected" onclick="setDiff(event, 'aim', 'easy')">EASY</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'aim', 'medium')">NORMAL</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'aim', 'hard')">HARD</div>
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'tracking')">▼</button>
+                    <div class="difficulty-menu" id="menu-tracking">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'tracking', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'tracking', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'tracking', 'hard')">HARD</div>
                     </div>
                 </div>
-                <button class="start-btn" onclick="startTest('aim')">START</button>
+                <button class="start-btn" onclick="startTest('tracking')">START</button>
             </div>
 
-            <!-- FLICK PRACTICE -->
+            <!-- SPRAY CONTROL -->
             <div class="card">
                 <div class="card-num">12 / TRAINING</div>
-                <div class="card-title">FLICK PRACTICE</div>
-                <div class="card-desc">Master quick flick shots to targets</div>
-                <div class="card-stats" id="stats-flick">— / 5</div>
+                <div class="card-title">SPRAY CONTROL</div>
+                <div class="card-desc">Hit targets appearing in quick succession</div>
+                <div class="card-stats" id="stats-spray">0 / 10</div>
                 <div class="card-controls">
-                    <button class="dropdown-btn" onclick="toggleMenu(event, 'flick')">▼</button>
-                    <div class="difficulty-menu" id="menu-flick">
-                        <div class="difficulty-option selected" onclick="setDiff(event, 'flick', 'easy')">EASY</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'flick', 'medium')">NORMAL</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'flick', 'hard')">HARD</div>
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'spray')">▼</button>
+                    <div class="difficulty-menu" id="menu-spray">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'spray', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'spray', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'spray', 'hard')">HARD</div>
                     </div>
                 </div>
-                <button class="start-btn" onclick="startTest('flick')">START</button>
+                <button class="start-btn" onclick="startTest('spray')">START</button>
             </div>
 
 
@@ -894,16 +894,15 @@
                     <td id="result-colors-correct">0</td>
                     <td id="result-colors-status">NO DATA</td>
                 </tr>
-                <tr id="result-aim">
-                    <td>AIM TRAINER</td>
+                <tr id="result-tracking">
+                    <td>TRACKING</td>
                     <td>—</td>
-                    <td id="result-aim-status">NO DATA</td>
+                    <td id="result-tracking-status">NO DATA</td>
                 </tr>
-                <tr id="result-flick">
-                    <td>FLICK PRACTICE</td>
-                    <td>—</td>
-                    <td id="result-flick-correct">0</td>
-                    <td id="result-flick-status">NO DATA</td>
+                <tr id="result-spray">
+                    <td>SPRAY CONTROL</td>
+                    <td id="result-spray-correct">0</td>
+                    <td id="result-spray-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -1135,51 +1134,51 @@
         </div>
     </div>
 
-    <!-- AIM TRAINER MODAL -->
-    <div class="modal" id="modal-aim">
+    <!-- TRACKING MODAL -->
+    <div class="modal" id="modal-tracking">
         <div class="modal-content">
-            <button class="close" onclick="closeModal('aim')">✕</button>
-            <div class="modal-title">AIM TRAINER</div>
-            <div class="attempt-info" id="aim-attempt">ATTEMPT 1 / 3</div>
+            <button class="close" onclick="closeModal('tracking')">✕</button>
+            <div class="modal-title">TRACKING</div>
+            <div class="attempt-info" id="tracking-attempt">ATTEMPT 1 / 3</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Track and click on moving targets
+                Follow and click the moving target
             </div>
-            <div id="aim-area" style="position: relative; width: 100%; height: 300px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; display: flex; align-items: center; justify-content: center;">
+            <div id="tracking-area" style="position: relative; width: 100%; height: 300px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
                 [WAIT]
             </div>
             <div class="stats">
                 <div class="stat">
                     <span>Time:</span>
-                    <span class="stat-value" id="aim-current">— ms</span>
+                    <span class="stat-value" id="tracking-current">— ms</span>
                 </div>
                 <div class="stat">
                     <span>Best:</span>
-                    <span class="stat-value" id="aim-best">— ms</span>
+                    <span class="stat-value" id="tracking-best">— ms</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FLICK PRACTICE MODAL -->
-    <div class="modal" id="modal-flick">
+    <!-- SPRAY CONTROL MODAL -->
+    <div class="modal" id="modal-spray">
         <div class="modal-content">
-            <button class="close" onclick="closeModal('flick')">✕</button>
-            <div class="modal-title">FLICK PRACTICE</div>
-            <div class="attempt-info" id="flick-attempt">ATTEMPT 1 / 5</div>
+            <button class="close" onclick="closeModal('spray')">✕</button>
+            <div class="modal-title">SPRAY CONTROL</div>
+            <div class="attempt-info" id="spray-attempt">ATTEMPT 1 / 10</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Perform fast flick shots
+                Click targets as they appear
             </div>
-            <div id="flick-area" style="position: relative; width: 100%; height: 250px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; display: flex; align-items: center; justify-content: center;">
+            <div id="spray-area" style="position: relative; width: 100%; height: 280px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
                 [WAIT]
             </div>
             <div class="stats">
                 <div class="stat">
                     <span>Current:</span>
-                    <span class="stat-value" id="flick-current">[X]</span>
+                    <span class="stat-value" id="spray-current">[X]</span>
                 </div>
                 <div class="stat">
                     <span>Hits:</span>
-                    <span class="stat-value" id="flick-correct">0 / 5</span>
+                    <span class="stat-value" id="spray-correct">0 / 10</span>
                 </div>
             </div>
         </div>
@@ -1287,8 +1286,8 @@
             typing: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
             colors: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, targetColor: null, startTime: null, timeoutId: null },
-            aim: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
-            flick: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null }
+            tracking: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
+            spray: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -1304,12 +1303,12 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'aim', 'flick'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'aim') {
+                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'tracking') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
                     if (resultCorrect) resultCorrect.textContent = '—';
@@ -1442,18 +1441,18 @@
                 }
             }
             
-            // Clean up aim handlers
-            if (type === 'aim') {
-                const area = document.getElementById('aim-area');
+            // Clean up tracking handlers
+            if (type === 'tracking') {
+                const area = document.getElementById('tracking-area');
                 if (area) {
                     area.innerHTML = '';
                     area.style.pointerEvents = 'auto';
                 }
             }
             
-            // Clean up flick handlers
-            if (type === 'flick') {
-                const area = document.getElementById('flick-area');
+            // Clean up spray handlers
+            if (type === 'spray') {
+                const area = document.getElementById('spray-area');
                 if (area) {
                     area.innerHTML = '';
                     area.style.pointerEvents = 'auto';
@@ -1483,7 +1482,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'aim', 'flick'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1561,10 +1560,10 @@
                 runSpeedRound();
             } else if (type === 'colors') {
                 runColorsRound();
-            } else if (type === 'aim') {
-                runAimRound();
-            } else if (type === 'flick') {
-                runFlickRound();
+            } else if (type === 'tracking') {
+                runTrackingRound();
+            } else if (type === 'spray') {
+                runSprayRound();
             }
         }
 
@@ -2596,143 +2595,176 @@
             }
         }
 
-        // ===== AIM TRAINER =====
-        function runAimRound() {
-            const area = document.getElementById('aim-area');
+        // ===== TRACKING =====
+        function runTrackingRound() {
+            const area = document.getElementById('tracking-area');
             area.textContent = '[WAIT]';
             area.style.background = '#f0f0f0';
             
             const delays = {
-                easy: [1000, 2000],
-                medium: [600, 1200],
-                hard: [300, 800]
+                easy: [800, 1200],
+                medium: [500, 900],
+                hard: [300, 600]
             };
-            const [min, max] = delays[state.aim.diff];
+            const [min, max] = delays[state.tracking.diff];
             const delay = Math.random() * (max - min) + min;
 
             const timeoutId = setTimeout(() => {
-                const targetSize = state.aim.diff === 'easy' ? 50 : (state.aim.diff === 'medium' ? 35 : 20);
+                area.innerHTML = '';
+                
+                const targetSize = state.tracking.diff === 'easy' ? 40 : (state.tracking.diff === 'medium' ? 30 : 20);
+                const target = document.createElement('div');
+                target.style.position = 'absolute';
+                target.style.width = targetSize + 'px';
+                target.style.height = targetSize + 'px';
+                target.style.background = '#4CAF50';
+                target.style.borderRadius = '50%';
+                target.style.cursor = 'crosshair';
+                target.style.left = '50px';
+                target.style.top = '50px';
+                target.style.border = '2px solid #2E7D32';
+                target.style.transition = 'all 0.1s linear';
+                
+                area.appendChild(target);
+                state.tracking.startTime = performance.now();
+                
+                let clicked = false;
+                let x = 50;
+                let y = 50;
+                const maxX = area.clientWidth - targetSize;
+                const maxY = area.clientHeight - targetSize;
+                let velX = (Math.random() - 0.5) * 3;
+                let velY = (Math.random() - 0.5) * 3;
+                
+                const moveTarget = setInterval(() => {
+                    x += velX;
+                    y += velY;
+                    
+                    if (x <= 0 || x >= maxX) velX *= -1;
+                    if (y <= 0 || y >= maxY) velY *= -1;
+                    
+                    x = Math.max(0, Math.min(x, maxX));
+                    y = Math.max(0, Math.min(y, maxY));
+                    
+                    target.style.left = x + 'px';
+                    target.style.top = y + 'px';
+                });
+                
+                target.onclick = (e) => {
+                    e.stopPropagation();
+                    if (!clicked) {
+                        clicked = true;
+                        clearInterval(moveTarget);
+                        const time = Math.round(performance.now() - state.tracking.startTime);
+                        recordTrackingResult(time);
+                    }
+                };
+                
+                // Auto-fail if not clicked within 10 seconds
+                const autoFailId = setTimeout(() => {
+                    if (!clicked) {
+                        clearInterval(moveTarget);
+                        recordTrackingResult(10000);
+                    }
+                }, 10000);
+                
+                state.tracking.timeoutId = autoFailId;
+            }, delay);
+        }
+
+        function recordTrackingResult(time) {
+            state.tracking.results.push(time);
+            document.getElementById('tracking-current').textContent = time + ' ms';
+            const min = Math.min(...state.tracking.results);
+            document.getElementById('tracking-best').textContent = min + ' ms';
+
+            saveResults('tracking');
+
+            state.tracking.currentAttempt++;
+            if (state.tracking.currentAttempt < 3) {
+                document.getElementById('tracking-attempt').textContent = `ATTEMPT ${state.tracking.currentAttempt} / 3`;
+                setTimeout(runTrackingRound, 1500);
+            } else {
+                document.getElementById('tracking-area').innerHTML = '[DONE]';
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('tracking');
+                }, 1500);
+            }
+        }
+
+        // ===== SPRAY CONTROL =====
+        function runSprayRound() {
+            const area = document.getElementById('spray-area');
+            area.textContent = '[WAIT]';
+            area.style.background = '#f0f0f0';
+            
+            const delays = {
+                easy: [1500, 2000],
+                medium: [1000, 1500],
+                hard: [500, 1000]
+            };
+            const [min, max] = delays[state.spray.diff];
+            const delay = Math.random() * (max - min) + min;
+
+            setTimeout(() => {
+                area.innerHTML = '';
+                
+                const targetSize = 35;
                 const target = document.createElement('div');
                 target.style.position = 'absolute';
                 target.style.width = targetSize + 'px';
                 target.style.height = targetSize + 'px';
                 target.style.background = '#FF5722';
-                target.style.borderRadius = '50%';
+                target.style.borderRadius = '4px';
                 target.style.cursor = 'crosshair';
                 target.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
                 target.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
                 target.style.border = '2px solid #D84315';
                 
-                area.innerHTML = '';
                 area.appendChild(target);
-                
-                state.aim.startTime = performance.now();
                 
                 let clicked = false;
                 target.onclick = (e) => {
                     e.stopPropagation();
                     if (!clicked) {
                         clicked = true;
-                        const time = Math.round(performance.now() - state.aim.startTime);
-                        recordAimResult(time);
+                        recordSprayResult(true);
                     }
                 };
                 
-                // Auto-fail if not clicked within 5 seconds
+                // Auto-fail if not clicked within 2 seconds
                 const autoFailId = setTimeout(() => {
                     if (!clicked) {
-                        recordAimResult(5000);
+                        recordSprayResult(false);
                     }
-                }, 5000);
+                }, 2000);
                 
-                state.aim.timeoutId = autoFailId;
+                state.spray.timeoutId = autoFailId;
             }, delay);
         }
 
-        function recordAimResult(time) {
-            state.aim.results.push(time);
-            document.getElementById('aim-current').textContent = time + ' ms';
-            const min = Math.min(...state.aim.results);
-            document.getElementById('aim-best').textContent = min + ' ms';
-
-            saveResults('aim');
-
-            state.aim.currentAttempt++;
-            if (state.aim.currentAttempt < 3) {
-                document.getElementById('aim-attempt').textContent = `ATTEMPT ${state.aim.currentAttempt} / 3`;
-                setTimeout(runAimRound, 1500);
-            } else {
-                document.getElementById('aim-area').innerHTML = '[DONE]';
-                setTimeout(() => {
-                    loadAndDisplayStats();
-                    closeModal('aim');
-                }, 1500);
-            }
-        }
-
-        // ===== FLICK PRACTICE =====
-        function runFlickRound() {
-            const area = document.getElementById('flick-area');
-            area.textContent = '[WAIT]';
-            area.style.background = '#f0f0f0';
-            
-            const delays = {
-                easy: [1200, 2000],
-                medium: [800, 1500],
-                hard: [400, 1000]
-            };
-            const [min, max] = delays[state.flick.diff];
-            const delay = Math.random() * (max - min) + min;
-
-            setTimeout(() => {
-                area.textContent = '[FLICK HERE]';
-                area.style.background = '#64B5F6';
-                area.style.boxShadow = '0 0 20px rgba(100, 181, 246, 0.5)';
-                state.flick.startTime = performance.now();
-                
-                let flicked = false;
-                const handleFlick = (e) => {
-                    if (!flicked) {
-                        flicked = true;
-                        const time = Math.round(performance.now() - state.flick.startTime);
-                        recordFlickResult(true, time);
-                    }
-                };
-                
-                area.onclick = handleFlick;
-                
-                // Auto-fail if not clicked within 4 seconds
-                const autoFailId = setTimeout(() => {
-                    if (!flicked) {
-                        recordFlickResult(false, 4000);
-                    }
-                }, 4000);
-                
-                state.flick.timeoutId = autoFailId;
-            }, delay);
-        }
-
-        function recordFlickResult(success, time) {
+        function recordSprayResult(success) {
             if (success) {
-                state.flick.correct++;
-                document.getElementById('flick-current').textContent = '[OK]';
+                state.spray.correct++;
+                document.getElementById('spray-current').textContent = '[HIT]';
             } else {
-                document.getElementById('flick-current').textContent = '[MISS]';
+                document.getElementById('spray-current').textContent = '[MISS]';
             }
             
-            state.flick.results.push(success ? 1 : 0);
-            document.getElementById('flick-correct').textContent = state.flick.correct + ' / 5';
+            state.spray.results.push(success ? 1 : 0);
+            document.getElementById('spray-correct').textContent = state.spray.correct + ' / 10';
 
-            state.flick.currentAttempt++;
-            if (state.flick.currentAttempt < 5) {
-                document.getElementById('flick-attempt').textContent = `ATTEMPT ${state.flick.currentAttempt} / 5`;
-                setTimeout(runFlickRound, 1500);
+            state.spray.currentAttempt++;
+            if (state.spray.currentAttempt < 10) {
+                document.getElementById('spray-attempt').textContent = `ATTEMPT ${state.spray.currentAttempt} / 10`;
+                setTimeout(runSprayRound, 800);
             } else {
-                localStorage.setItem('reactions_flick_correct', Math.min(state.flick.correct, 5));
-                document.getElementById('flick-area').innerHTML = '[DONE]';
+                localStorage.setItem('reactions_spray_correct', Math.min(state.spray.correct, 10));
+                document.getElementById('spray-area').innerHTML = '[DONE]';
                 setTimeout(() => {
                     loadAndDisplayStats();
-                    closeModal('flick');
+                    closeModal('spray');
                 }, 1500);
             }
         }
