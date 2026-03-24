@@ -611,7 +611,7 @@
         </div>
 
         <div class="grid">
-            <div class="section-header">⚡ REACTION TESTS</div>
+            <div class="section-header">I. REACTION TESTS</div>
             <!-- CLASSIC -->
             <div class="card">
                 <div class="card-num">01 / TEST</div>
@@ -663,7 +663,7 @@
                 <button class="start-btn" onclick="startTest('focus')">START</button>
             </div>
 
-            <div class="section-header">⌨️ TYPING TESTS</div>
+            <div class="section-header">II. TYPING TESTS</div>
             <!-- CHAT -->
             <div class="card">
                 <div class="card-num">04 / TEST</div>
@@ -698,7 +698,7 @@
                 <button class="start-btn" onclick="startTest('typing')">START</button>
             </div>
 
-            <div class="section-header">🧠 MEMORY / SKILL TESTS</div>
+            <div class="section-header">III. MEMORY / SKILL TESTS</div>
             <!-- VISUAL -->
             <div class="card">
                 <div class="card-num">06 / TEST</div>
@@ -750,27 +750,10 @@
                 <button class="start-btn" onclick="startTest('memory')">START</button>
             </div>
 
-            <!-- PATTERN -->
-            <div class="card">
-                <div class="card-num">09 / TEST</div>
-                <div class="card-title">PATTERN</div>
-                <div class="card-desc">Watch pattern, then reproduce it from memory</div>
-                <div class="card-stats" id="stats-pattern">0 / 3</div>
-                <div class="card-controls">
-                    <button class="dropdown-btn" onclick="toggleMenu(event, 'pattern')">▼</button>
-                    <div class="difficulty-menu" id="menu-pattern">
-                        <div class="difficulty-option selected" onclick="setDiff(event, 'pattern', 'easy')">EASY</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'pattern', 'medium')">NORMAL</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'pattern', 'hard')">HARD</div>
-                    </div>
-                </div>
-                <button class="start-btn" onclick="startTest('pattern')">START</button>
-            </div>
-
-            <div class="section-header">⚙️ SPECIAL TESTS</div>
+            <div class="section-header">IV. SPECIAL TESTS</div>
             <!-- SPEED -->
             <div class="card">
-                <div class="card-num">10 / TEST</div>
+                <div class="card-num">09 / TEST</div>
                 <div class="card-title">SPEED</div>
                 <div class="card-desc">Type random letters as fast as you can</div>
                 <div class="card-stats" id="stats-speed">0 / 3</div>
@@ -787,7 +770,7 @@
 
             <!-- COLORS -->
             <div class="card">
-                <div class="card-num">11 / TEST</div>
+                <div class="card-num">10 / TEST</div>
                 <div class="card-title">COLORS</div>
                 <div class="card-desc">Click the square matching the color name</div>
                 <div class="card-stats" id="stats-colors">0 / 3</div>
@@ -800,6 +783,40 @@
                     </div>
                 </div>
                 <button class="start-btn" onclick="startTest('colors')">START</button>
+            </div>
+
+            <!-- ACCURACY -->
+            <div class="card">
+                <div class="card-num">11 / TEST</div>
+                <div class="card-title">ACCURACY</div>
+                <div class="card-desc">Click on small targets that appear and disappear</div>
+                <div class="card-stats" id="stats-accuracy">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'accuracy')">▼</button>
+                    <div class="difficulty-menu" id="menu-accuracy">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'accuracy', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'accuracy', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'accuracy', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('accuracy')">START</button>
+            </div>
+
+            <!-- DOUBLE CLICK -->
+            <div class="card">
+                <div class="card-num">12 / TEST</div>
+                <div class="card-title">DOUBLE CLICK</div>
+                <div class="card-desc">React quickly using double-click action</div>
+                <div class="card-stats" id="stats-doubleclick">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'doubleclick')">▼</button>
+                    <div class="difficulty-menu" id="menu-doubleclick">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'doubleclick', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'doubleclick', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'doubleclick', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('doubleclick')">START</button>
             </div>
 
 
@@ -870,12 +887,6 @@
                     <td>—</td>
                     <td id="result-typing-status">NO DATA</td>
                 </tr>
-                <tr id="result-pattern">
-                    <td>PATTERN</td>
-                    <td>—</td>
-                    <td id="result-pattern-correct">0</td>
-                    <td id="result-pattern-status">NO DATA</td>
-                </tr>
                 <tr id="result-speed">
                     <td>SPEED</td>
                     <td>—</td>
@@ -887,6 +898,18 @@
                     <td>—</td>
                     <td id="result-colors-correct">0</td>
                     <td id="result-colors-status">NO DATA</td>
+                </tr>
+                <tr id="result-accuracy">
+                    <td>ACCURACY</td>
+                    <td id="result-accuracy-best">—</td>
+                    <td>—</td>
+                    <td id="result-accuracy-status">NO DATA</td>
+                </tr>
+                <tr id="result-doubleclick">
+                    <td>DOUBLE CLICK</td>
+                    <td id="result-doubleclick-best">—</td>
+                    <td>—</td>
+                    <td id="result-doubleclick-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -1072,35 +1095,6 @@
         </div>
     </div>
 
-    <!-- PATTERN MODAL -->
-    <div class="modal" id="modal-pattern">
-        <div class="modal-content">
-            <button class="close" onclick="closeModal('pattern')">✕</button>
-            <div class="modal-title">PATTERN</div>
-            <div class="attempt-info" id="pattern-attempt">ATTEMPT 1 / 3</div>
-            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
-                <div style="font-size: 11px; color: #999; margin-bottom: 10px;">
-                    ● = first  |  ○ = second  |  ■ = third  |  □ = fourth
-                </div>
-                <div style="font-size: 48px; font-weight: 700; color: #2e7d32; letter-spacing: 8px; margin: 20px 0; min-height: 60px;" id="pattern-display">●○●</div>
-                <div style="font-size: 11px; color: #999;">Remember the pattern</div>
-            </div>
-            <div id="button-grid"></div>
-            <div class="stats">
-                <div class="stat">
-                    <span>Current:</span>
-                    <span class="stat-value" id="pattern-current">—</span>
-                </div>
-                <div class="stat">
-                    <span>Correct:</span>
-                    <span class="stat-value" id="pattern-correct">0</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
     <!-- SPEED MODAL -->
     <div class="modal" id="modal-speed">
         <div class="modal-content">
@@ -1142,6 +1136,56 @@
                 <div class="stat">
                     <span>Correct:</span>
                     <span class="stat-value" id="colors-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCURACY MODAL -->
+    <div class="modal" id="modal-accuracy">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('accuracy')">✕</button>
+            <div class="modal-title">ACCURACY TEST</div>
+            <div class="attempt-info" id="accuracy-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
+                Click on the target that appears
+            </div>
+            <div id="accuracy-area" style="position: relative; width: 100%; height: 300px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: default; display: flex; align-items: center; justify-content: center;">
+                [WAIT]
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="accuracy-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Avg:</span>
+                    <span class="stat-value" id="accuracy-avg">— ms</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DOUBLE CLICK MODAL -->
+    <div class="modal" id="modal-doubleclick">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('doubleclick')">✕</button>
+            <div class="modal-title">DOUBLE CLICK TEST</div>
+            <div class="attempt-info" id="doubleclick-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
+                Double-click when the square turns green
+            </div>
+            <div id="doubleclick-area" style="position: relative; width: 100%; height: 200px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: default; display: flex; align-items: center; justify-content: center; font-size: 24px; user-select: none;">
+                [WAIT]
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="doubleclick-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Best:</span>
+                    <span class="stat-value" id="doubleclick-best">— ms</span>
                 </div>
             </div>
         </div>
@@ -1247,9 +1291,10 @@
             chat: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentMessage: null, startTime: null, timeoutId: null },
             focus: { diff: 'easy', results: [], currentAttempt: 0, waitTime: null, startTime: null, reactionTime: null, timeoutId: null },
             typing: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
-            pattern: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, pattern: [], userPattern: [], startTime: null },
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
-            colors: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, targetColor: null, startTime: null, timeoutId: null }
+            colors: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, targetColor: null, startTime: null, timeoutId: null },
+            accuracy: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
+            doubleclick: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -1265,24 +1310,24 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'pattern', 'speed', 'colors'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'accuracy', 'doubleclick'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultBest = document.getElementById(`result-${type}-best`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing') {
+                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'accuracy' || type === 'doubleclick') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
                     if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
                     if (resultCorrect) resultCorrect.textContent = '—';
-                    if (resultStatus) resultStatus.textContent = best ? '✓ Complete' : '⊘ Not Taken';
+                    if (resultStatus) resultStatus.textContent = best ? '[DONE]' : '[NOT TAKEN]';
                 } else {
                     const correct = localStorage.getItem(`reactions_${type}_correct`) || '0';
-                    statsEl.textContent = `✓ ${correct}`;
+                    statsEl.textContent = `[${correct}]`;
                     if (resultBest) resultBest.textContent = '—';
                     if (resultCorrect) resultCorrect.textContent = `${correct}`;
-                    if (resultStatus) resultStatus.textContent = correct > 0 ? '✓ Complete' : '⊘ Not Taken';
+                    if (resultStatus) resultStatus.textContent = correct > 0 ? '[DONE]' : '[NOT TAKEN]';
                 }
             });
         }
@@ -1360,7 +1405,7 @@
                 if (area) {
                     area.onclick = null;
                     area.style.transform = 'translate(0, 0)';
-                    area.textContent = '⏳';
+                    area.textContent = '[WAIT]';
                 }
             }
             // Clean up focus handlers
@@ -1391,14 +1436,6 @@
                 state.typing.submitHandler = null;
             }
             
-            // Clean up pattern handlers
-            if (type === 'pattern') {
-                const grid = document.getElementById('button-grid');
-                if (grid) {
-                    grid.innerHTML = '';
-                    grid.style.display = 'grid';
-                }
-            }
             
             // Clean up speed handlers
             if (type === 'speed' && state.speed.submitHandler) {
@@ -1411,6 +1448,29 @@
                 if (grid) {
                     grid.innerHTML = '';
                     grid.style.pointerEvents = 'auto';
+                }
+            }
+            
+            // Clean up accuracy test
+            if (type === 'accuracy') {
+                const area = document.getElementById('accuracy-area');
+                if (area) {
+                    area.innerHTML = '';
+                    area.style.pointerEvents = 'auto';
+                }
+            }
+            
+            // Clean up doubleclick test
+            if (type === 'doubleclick') {
+                const area = document.getElementById('doubleclick-area');
+                if (area) {
+                    area.innerHTML = '';
+                    area.style.pointerEvents = 'auto';
+                    area.style.backgroundColor = '';
+                }
+                if (state.doubleclick.clickHandler) {
+                    document.removeEventListener('dblclick', state.doubleclick.clickHandler);
+                    state.doubleclick.clickHandler = null;
                 }
             }
             
@@ -1437,7 +1497,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'pattern', 'speed', 'colors'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'accuracy', 'doubleclick'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1467,7 +1527,7 @@
             if (type === 'mental') attemptDisplay = `ATTEMPT 1`;
             if (type === 'memory') attemptDisplay = `ATTEMPT 1`;
             if (type === 'typing') attemptDisplay = `ATTEMPT 1 / 3`;
-            if (type === 'pattern') attemptDisplay = `ATTEMPT 1 / 3`;
+
             if (type === 'speed') attemptDisplay = `ATTEMPT 1 / 3`;
             if (type === 'colors') attemptDisplay = `ATTEMPT 1 / 3`;
             document.getElementById(`${type}-attempt`).textContent = attemptDisplay;
@@ -1511,12 +1571,14 @@
                 runFocusRound();
             } else if (type === 'typing') {
                 generateTypingPhrase();
-            } else if (type === 'pattern') {
-                generatePatternRound();
             } else if (type === 'speed') {
                 runSpeedRound();
             } else if (type === 'colors') {
                 runColorsRound();
+            } else if (type === 'accuracy') {
+                runAccuracyRound();
+            } else if (type === 'doubleclick') {
+                runDoubleClickRound();
             }
         }
 
@@ -1621,7 +1683,7 @@
                 document.getElementById('classic-attempt').textContent = `ATTEMPT ${state.classic.currentAttempt} / 3`;
                 setTimeout(runClassicRound, 1500);
             } else {
-                area.textContent = '✓ DONE!';
+                area.textContent = '[DONE]';
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('classic');
@@ -1640,7 +1702,7 @@
             
             const showFalseStart = () => {
                 area.style.background = '#ffcdd2';
-                square.textContent = '✗ FALSE START';
+                square.textContent = '[FALSE START]';
                 setTimeout(() => {
                     if (roundActive) runInsaneRound(); // restart round
                 }, 1200);
@@ -1689,7 +1751,7 @@
         function recordInsaneResult(time) {
             // If time is over 1200ms, give retry instead of counting as fail
             if (time > 1200) {
-                document.getElementById('insane-current').textContent = '⏱ RETRY';
+                document.getElementById('insane-current').textContent = '[RETRY]';
                 const area = document.getElementById('insane-area');
                 area.style.transform = 'translate(0, 0)';
                 setTimeout(runInsaneRound, 1500);
@@ -1715,7 +1777,7 @@
             } else {
                 const area = document.getElementById('insane-area');
                 area.style.transform = 'translate(0, 0)';
-                area.textContent = '✓ DONE!';
+                area.textContent = '[DONE]';
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('insane');
@@ -1736,7 +1798,7 @@
             const timeLimits = { easy: 15000, medium: 10000, hard: 6000 };
             const timeLimit = timeLimits[state.visual.diff];
 
-            let emojis = Array(count - 1).fill('⭕').concat('🔵');
+            let emojis = Array(count - 1).fill('[ ]').concat('[X]');
             emojis = emojis.sort(() => Math.random() - 0.5);
 
             state.visual.startTime = performance.now();
@@ -1758,7 +1820,7 @@
                     const time = Math.round(performance.now() - state.visual.startTime);
                     grid.style.pointerEvents = 'none';
                     document.querySelectorAll('#visual-grid button').forEach(b => b.disabled = true);
-                    if (emoji === '🔵') {
+                    if (emoji === '[X]') {
                         state.visual.correct++;
                         btn.style.borderColor = '#28a745';
                         btn.style.background = '#f0fff4';
@@ -1785,7 +1847,7 @@
             } else {
                 // Save correct to localStorage (capped at 3)
                 localStorage.setItem('reactions_visual_correct', Math.min(state.visual.correct, 3));
-                document.getElementById('visual-grid').innerHTML = '✓ DONE!';
+                document.getElementById('visual-grid').innerHTML = '[DONE]';
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('visual');
@@ -1911,7 +1973,7 @@
             } else {
                 // Save correct to localStorage (capped at 3)
                 localStorage.setItem('reactions_mental_correct', Math.min(state.mental.correct, 3));
-                document.getElementById('problem').textContent = '✓ DONE!';
+                document.getElementById('problem').textContent = '[DONE]';
                 document.getElementById('answers').innerHTML = '';
                 
                 // Clean up key handler on completion
@@ -2036,7 +2098,7 @@
                 const grid = document.getElementById('button-grid');
                 grid.style.pointerEvents = 'auto';  // Enable clicking on the button!
                 grid.style.display = 'block';  // Exit grid layout, make it full width
-                grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #c8e6c9; border: 1px solid #4CAF50; color: #2e7d32; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit;" id="memory-continue-btn" onclick="generateMemorySequence()">▶ CONTINUE</button>';
+                grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #c8e6c9; border: 1px solid #4CAF50; color: #2e7d32; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit;" id="memory-continue-btn" onclick="generateMemorySequence()">[CONTINUE]</button>';
                 
                 // Update attempt display
                 document.getElementById('memory-attempt').textContent = `ATTEMPT ${state.memory.currentAttempt + 1} / 3`;
@@ -2053,7 +2115,7 @@
                 // All 3 attempts done - show DONE and close
                 const grid = document.getElementById('button-grid');
                 grid.style.display = 'block';
-                grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #4CAF50; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit; border: none;" disabled>✓ DONE!</button>';
+                grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #4CAF50; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit; border: none;" disabled>[DONE]</button>';
                 
                 // Save to localStorage (capped at 3)
                 localStorage.setItem('reactions_memory_correct', Math.min(state.memory.correct, 3));
@@ -2174,7 +2236,7 @@
                 state.chat.correct++;
                 document.getElementById('chat-current').textContent = time + ' ms';
             } else {
-                document.getElementById('chat-current').textContent = '✗';
+                document.getElementById('chat-current').textContent = '[X]';
             }
             
             state.chat.correct = Math.min(state.chat.correct, 3);
@@ -2191,7 +2253,7 @@
                     localStorage.setItem('reactions_chat_best', Math.min(...state.chat.results));
                 }
                 document.getElementById('chat-input').disabled = true;
-                document.getElementById('chat-message').textContent = '✓ DONE!';
+                document.getElementById('chat-message').textContent = '[DONE]';
                 const exampleDisplay = document.getElementById('chat-example');
                 if (exampleDisplay) exampleDisplay.textContent = '';
                 
@@ -2270,83 +2332,11 @@
                 if (state.typing.results.length > 0) {
                     localStorage.setItem('reactions_typing_best', Math.min(...state.typing.results));
                 }
-                document.getElementById('typing-phrase').textContent = '✓ DONE!';
+                document.getElementById('typing-phrase').textContent = '[DONE]';
                 document.getElementById('typing-input').disabled = true;
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('typing');
-                }, 1500);
-            }
-        }
-
-        // ===== PATTERN TEST =====
-        function generatePatternRound() {
-            const lengths = { easy: 3, medium: 4, hard: 5 };
-            const len = lengths[state.pattern.diff];
-            
-            state.pattern.pattern = Array.from({length: len}, () => Math.floor(Math.random() * 4) + 1);
-            state.pattern.userPattern = [];
-            
-            // Show pattern
-            const display = document.getElementById('pattern-display');
-            display.textContent = state.pattern.pattern.map(p => (p === 1 ? '●' : p === 2 ? '○' : p === 3 ? '■' : '□')).join(' ');
-            
-            setTimeout(() => {
-                display.textContent = 'Repeat it!';
-                renderPatternButtons();
-            }, 2000);
-        }
-
-        function renderPatternButtons() {
-            const grid = document.getElementById('button-grid');
-            grid.style.display = 'grid';
-            grid.innerHTML = '';
-
-            for (let i = 1; i <= 4; i++) {
-                const btn = document.createElement('button');
-                btn.textContent = i === 1 ? '●' : i === 2 ? '○' : i === 3 ? '■' : '□';
-                btn.style.fontSize = '28px';
-                btn.setAttribute('data-pattern', i);
-                
-                const handlePatternClick = () => {
-                    state.pattern.userPattern.push(i);
-                    
-                    if (state.pattern.userPattern[state.pattern.userPattern.length - 1] !== state.pattern.pattern[state.pattern.userPattern.length - 1]) {
-                        recordPatternResult(false);
-                    } else if (state.pattern.userPattern.length === state.pattern.pattern.length) {
-                        recordPatternResult(true);
-                    }
-                };
-                
-                btn.onclick = handlePatternClick;
-                grid.appendChild(btn);
-            }
-            
-            state.pattern.startTime = performance.now();
-        }
-
-        function recordPatternResult(correct) {
-            const grid = document.getElementById('button-grid');
-            grid.style.display = 'block';
-            
-            if (correct && state.pattern.userPattern.length === state.pattern.pattern.length) {
-                state.pattern.correct++;
-            }
-            
-            document.getElementById('pattern-current').textContent = correct ? '✓' : '✗';
-            state.pattern.correct = Math.min(state.pattern.correct, 3);
-            document.getElementById('pattern-correct').textContent = state.pattern.correct;
-
-            state.pattern.currentAttempt++;
-            if (state.pattern.currentAttempt < 3) {
-                document.getElementById('pattern-attempt').textContent = `ATTEMPT ${state.pattern.currentAttempt + 1} / 3`;
-                setTimeout(generatePatternRound, 1500);
-            } else {
-                localStorage.setItem('reactions_pattern_correct', Math.min(state.pattern.correct, 3));
-                grid.innerHTML = '<button style="width: 100%; padding: 15px; background: #4CAF50; color: #fff; border: none; border-radius: 2px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit;" disabled>✓ DONE!</button>';
-                setTimeout(() => {
-                    loadAndDisplayStats();
-                    closeModal('pattern');
                 }, 1500);
             }
         }
@@ -2486,7 +2476,7 @@
                 if (state.focus.results.length > 0) {
                     localStorage.setItem('reactions_focus_best', Math.min(...state.focus.results));
                 }
-                document.getElementById('focus-area').textContent = '✓ DONE!';
+                document.getElementById('focus-area').textContent = '[DONE]';
                 
                 setTimeout(() => {
                     loadAndDisplayStats();
@@ -2531,7 +2521,7 @@
                 state.speed.correct++;
                 document.getElementById('speed-current').textContent = time + ' ms';
             } else {
-                document.getElementById('speed-current').textContent = '✗';
+                document.getElementById('speed-current').textContent = '[X]';
             }
             
             state.speed.correct = Math.min(state.speed.correct, 3);
@@ -2543,7 +2533,7 @@
                 setTimeout(runSpeedRound, 1500);
             } else {
                 localStorage.setItem('reactions_speed_correct', Math.min(state.speed.correct, 3));
-                document.getElementById('speed-target').textContent = '✓ DONE!';
+                document.getElementById('speed-target').textContent = '[DONE]';
                 document.getElementById('speed-input').disabled = true;
                 setTimeout(() => {
                     loadAndDisplayStats();
@@ -2599,7 +2589,7 @@
                 state.colors.correct++;
                 document.getElementById('colors-current').textContent = time + ' ms';
             } else {
-                document.getElementById('colors-current').textContent = '✗';
+                document.getElementById('colors-current').textContent = '[X]';
             }
             
             state.colors.correct = Math.min(state.colors.correct, 3);
@@ -2611,11 +2601,160 @@
                 setTimeout(runColorsRound, 1500);
             } else {
                 localStorage.setItem('reactions_colors_correct', Math.min(state.colors.correct, 3));
-                document.getElementById('colors-name').textContent = '✓ DONE!';
+                document.getElementById('colors-name').textContent = '[DONE]';
                 grid.innerHTML = '';
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('colors');
+                }, 1500);
+            }
+        }
+
+        // ===== ACCURACY TEST =====
+        function runAccuracyRound() {
+            const area = document.getElementById('accuracy-area');
+            area.textContent = '[WAIT]';
+            area.style.background = '#f0f0f0';
+            
+            const delays = {
+                easy: [1000, 2000],
+                medium: [600, 1200],
+                hard: [300, 800]
+            };
+            const [min, max] = delays[state.accuracy.diff];
+            const delay = Math.random() * (max - min) + min;
+
+            const timeoutId = setTimeout(() => {
+                const targetSize = state.accuracy.diff === 'easy' ? 60 : (state.accuracy.diff === 'medium' ? 40 : 20);
+                const target = document.createElement('div');
+                target.style.position = 'absolute';
+                target.style.width = targetSize + 'px';
+                target.style.height = targetSize + 'px';
+                target.style.background = '#2196F3';
+                target.style.borderRadius = '50%';
+                target.style.cursor = 'pointer';
+                target.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
+                target.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
+                
+                area.innerHTML = '';
+                area.appendChild(target);
+                
+                state.accuracy.startTime = performance.now();
+                
+                let clicked = false;
+                target.onclick = () => {
+                    if (!clicked) {
+                        clicked = true;
+                        const time = Math.round(performance.now() - state.accuracy.startTime);
+                        recordAccuracyResult(time);
+                    }
+                };
+                
+                // Auto-fail if not clicked within 5 seconds
+                const autoFailId = setTimeout(() => {
+                    if (!clicked) {
+                        recordAccuracyResult(5000);
+                    }
+                }, 5000);
+                
+                state.accuracy.timeoutId = autoFailId;
+            }, delay);
+        }
+
+        function recordAccuracyResult(time) {
+            state.accuracy.results.push(time);
+            document.getElementById('accuracy-current').textContent = time + ' ms';
+            const min = Math.min(...state.accuracy.results);
+            const avg = Math.round(state.accuracy.results.reduce((a, b) => a + b) / state.accuracy.results.length);
+            document.getElementById('accuracy-best').textContent = min + ' ms';
+            document.getElementById('accuracy-avg').textContent = avg + ' ms';
+
+            saveResults('accuracy');
+
+            state.accuracy.currentAttempt++;
+            if (state.accuracy.currentAttempt < 3) {
+                document.getElementById('accuracy-attempt').textContent = `ATTEMPT ${state.accuracy.currentAttempt} / 3`;
+                setTimeout(runAccuracyRound, 1500);
+            } else {
+                document.getElementById('accuracy-area').innerHTML = '[DONE]';
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('accuracy');
+                }, 1500);
+            }
+        }
+
+        // ===== DOUBLE CLICK TEST =====
+        function runDoubleClickRound() {
+            const area = document.getElementById('doubleclick-area');
+            area.textContent = '[WAIT]';
+            area.style.background = '#f0f0f0';
+            
+            const delays = {
+                easy: [1000, 2000],
+                medium: [700, 1500],
+                hard: [400, 1000]
+            };
+            const [min, max] = delays[state.doubleclick.diff];
+            const delay = Math.random() * (max - min) + min;
+
+            setTimeout(() => {
+                area.textContent = '[CLICK]';
+                area.style.background = '#4CAF50';
+                state.doubleclick.startTime = performance.now();
+                
+                let clicks = 0;
+                let lastClickTime = 0;
+                let clickTimeout = null;
+                
+                const handleDoubleClick = () => {
+                    clicks++;
+                    const now = performance.now();
+                    
+                    if (clicks === 1) {
+                        lastClickTime = now;
+                        clickTimeout = setTimeout(() => {
+                            clicks = 0;
+                        }, 300);
+                    } else if (clicks === 2) {
+                        clearTimeout(clickTimeout);
+                        const time = Math.round(now - state.doubleclick.startTime);
+                        recordDoubleClickResult(time);
+                        area.onclick = null;
+                    }
+                };
+                
+                area.onclick = handleDoubleClick;
+                
+                // Auto-fail if not double-clicked within 3 seconds
+                const autoFailId = setTimeout(() => {
+                    if (clicks < 2) {
+                        recordDoubleClickResult(3000);
+                    }
+                }, 3000);
+                
+                state.doubleclick.timeoutId = autoFailId;
+            }, delay);
+        }
+
+        function recordDoubleClickResult(time) {
+            state.doubleclick.results.push(time);
+            document.getElementById('doubleclick-current').textContent = time + ' ms';
+            const min = Math.min(...state.doubleclick.results);
+            const avg = Math.round(state.doubleclick.results.reduce((a, b) => a + b) / state.doubleclick.results.length);
+            document.getElementById('doubleclick-best').textContent = min + ' ms';
+
+            saveResults('doubleclick');
+
+            state.doubleclick.currentAttempt++;
+            if (state.doubleclick.currentAttempt < 3) {
+                document.getElementById('doubleclick-attempt').textContent = `ATTEMPT ${state.doubleclick.currentAttempt} / 3`;
+                setTimeout(runDoubleClickRound, 1500);
+            } else {
+                document.getElementById('doubleclick-area').textContent = '[DONE]';
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('doubleclick');
                 }, 1500);
             }
         }
