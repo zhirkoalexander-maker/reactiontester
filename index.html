@@ -1376,6 +1376,15 @@
                 if (typeof state[type].timeoutId === 'object' && state[type].timeoutId !== null) {
                     if (state[type].timeoutId.moveInterval) clearInterval(state[type].timeoutId.moveInterval);
                     if (state[type].timeoutId.roundTimeout) clearTimeout(state[type].timeoutId.roundTimeout);
+                    if (type === 'tracking') {
+                        const area = document.getElementById('tracking-area');
+                        if (area && state[type].timeoutId.mouseHandler) {
+                            area.removeEventListener('mousemove', state[type].timeoutId.mouseHandler);
+                        }
+                        if (area && state[type].timeoutId.leaveHandler) {
+                            area.removeEventListener('mouseleave', state[type].timeoutId.leaveHandler);
+                        }
+                    }
                 } else {
                     clearTimeout(state[type].timeoutId);
                 }
@@ -2625,9 +2634,10 @@
             const area = document.getElementById('tracking-area');
             area.textContent = '[WAIT]';
             area.style.background = '#f0f0f0';
+            document.getElementById('tracking-current').textContent = '[WAIT]';
             
             const delays = {
-                easy: [800, 1200],
+                easy: [600, 900],
                 medium: [500, 900],
                 hard: [300, 600]
             };
@@ -2638,8 +2648,8 @@
                 area.innerHTML = '';
                 
                 // Size and speed depend on difficulty
-                const sizes = { easy: 50, medium: 35, hard: 25 };
-                const speeds = { easy: 1.5, medium: 2.5, hard: 4 };
+                const sizes = { easy: 42, medium: 35, hard: 25 };
+                const speeds = { easy: 2.2, medium: 2.8, hard: 4.2 };
                 const targetSize = sizes[state.tracking.diff];
                 const speed = speeds[state.tracking.diff];
                 
@@ -2667,6 +2677,24 @@
                 let isOnTarget = false;
                 let trackingStartTime = null;
                 let trackingTime = 0;
+                let roundFinished = false;
+                document.getElementById('tracking-current').textContent = '[FALSE START]';
+
+                const finishTrackingRound = (success) => {
+                    if (roundFinished) return;
+                    roundFinished = true;
+                    clearInterval(moveTarget);
+                    clearTimeout(roundTimeoutId);
+                    area.removeEventListener('mousemove', handleMouseMove);
+                    area.removeEventListener('mouseleave', handleMouseLeave);
+
+                    if (isOnTarget && trackingStartTime !== null) {
+                        trackingTime += performance.now() - trackingStartTime;
+                        isOnTarget = false;
+                    }
+
+                    recordTrackingResult(success, trackingTime);
+                };
                 
                 const moveTarget = setInterval(() => {
                     x += velX;
@@ -2692,37 +2720,42 @@
                     const targetY = parseFloat(target.style.top) + targetSize / 2;
                     const distance = Math.sqrt(Math.pow(mouseX - targetX, 2) + Math.pow(mouseY - targetY, 2));
                     
-                    if (distance < targetSize / 2 + 10) { // Slight hitbox increase
+                    if (distance < targetSize / 2 + 4) {
                         if (!isOnTarget) {
                             isOnTarget = true;
                             trackingStartTime = performance.now();
+                            document.getElementById('tracking-current').textContent = '[TRACKING]';
                         }
                     } else {
                         if (isOnTarget) {
                             trackingTime += performance.now() - trackingStartTime;
                             isOnTarget = false;
+                            document.getElementById('tracking-current').textContent = '[FALSE START]';
+                            finishTrackingRound(false);
                         }
                     }
                 };
-                
-                area.addEventListener('mousemove', handleMouseMove);
-                
-                // 10 second limit
-                const roundTimeoutId = setTimeout(() => {
-                    clearInterval(moveTarget);
-                    area.removeEventListener('mousemove', handleMouseMove);
-                    
+
+                const handleMouseLeave = () => {
                     if (isOnTarget) {
                         trackingTime += performance.now() - trackingStartTime;
                         isOnTarget = false;
                     }
-                    
+                    document.getElementById('tracking-current').textContent = '[FALSE START]';
+                    finishTrackingRound(false);
+                };
+                
+                area.addEventListener('mousemove', handleMouseMove);
+                area.addEventListener('mouseleave', handleMouseLeave);
+                
+                // 10 second limit
+                const roundTimeoutId = setTimeout(() => {
                     const minTrackingTime = 500; // Minimum 500ms to count as hit
                     const success = trackingTime >= minTrackingTime;
-                    recordTrackingResult(success, trackingTime);
+                    finishTrackingRound(success);
                 }, 10000);
                 
-                state.tracking.timeoutId = { moveInterval: moveTarget, roundTimeout: roundTimeoutId, mouseHandler: handleMouseMove };
+                state.tracking.timeoutId = { moveInterval: moveTarget, roundTimeout: roundTimeoutId, mouseHandler: handleMouseMove, leaveHandler: handleMouseLeave };
             }, delay);
         }
 
@@ -2819,18 +2852,31 @@
             area.appendChild(target);
             
             let clicked = false;
+            const handleMissClick = (e) => {
+                if (e.target !== target && !clicked) {
+                    clicked = true;
+                    area.removeEventListener('click', handleMissClick);
+                    target.style.display = 'none';
+                    recordSprayResult(false);
+                }
+            };
+
             target.onclick = (e) => {
                 e.stopPropagation();
                 if (!clicked) {
                     clicked = true;
+                    area.removeEventListener('click', handleMissClick);
                     target.style.display = 'none';
                     recordSprayResult(true);
                 }
             };
+
+            area.addEventListener('click', handleMissClick);
             
             // Target disappears after 2 seconds
             setTimeout(() => {
                 if (!clicked && target.parentElement) {
+                    area.removeEventListener('click', handleMissClick);
                     recordSprayResult(false);
                 }
             }, 2000);
@@ -2876,11 +2922,21 @@
             area.appendChild(redTarget);
             
             let clicked = false;
+            const handleMissClick = (e) => {
+                if (e.target !== greenTarget && e.target !== redTarget && !clicked) {
+                    clicked = true;
+                    area.removeEventListener('click', handleMissClick);
+                    greenTarget.style.display = 'none';
+                    redTarget.style.display = 'none';
+                    recordSprayResult(false);
+                }
+            };
             
             greenTarget.onclick = (e) => {
                 e.stopPropagation();
                 if (!clicked) {
                     clicked = true;
+                    area.removeEventListener('click', handleMissClick);
                     greenTarget.style.display = 'none';
                     redTarget.style.display = 'none';
                     recordSprayResult(true);
@@ -2891,15 +2947,19 @@
                 e.stopPropagation();
                 if (!clicked) {
                     clicked = true;
+                    area.removeEventListener('click', handleMissClick);
                     greenTarget.style.display = 'none';
                     redTarget.style.display = 'none';
                     recordSprayResult(false);
                 }
             };
+
+            area.addEventListener('click', handleMissClick);
             
             // Targets disappear after 2 seconds
             setTimeout(() => {
                 if (!clicked && greenTarget.parentElement) {
+                    area.removeEventListener('click', handleMissClick);
                     recordSprayResult(false);
                 }
             }, 2000);
