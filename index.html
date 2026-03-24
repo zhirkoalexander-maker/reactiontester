@@ -1775,6 +1775,7 @@
 
         function recordVisualResult(time, correct) {
             document.getElementById('visual-current').textContent = time + ' ms';
+            state.visual.correct = Math.min(state.visual.correct, 3);
             document.getElementById('visual-correct').textContent = state.visual.correct + '/3';
 
             state.visual.currentAttempt++;
@@ -1782,8 +1783,8 @@
                 document.getElementById('visual-attempt').textContent = `ATTEMPT ${state.visual.currentAttempt} / 3`;
                 setTimeout(runVisualRound, 1500);
             } else {
-                // Save correct to localStorage
-                localStorage.setItem('reactions_visual_correct', state.visual.correct);
+                // Save correct to localStorage (capped at 3)
+                localStorage.setItem('reactions_visual_correct', Math.min(state.visual.correct, 3));
                 document.getElementById('visual-grid').innerHTML = '✓ DONE!';
                 setTimeout(() => {
                     loadAndDisplayStats();
@@ -1866,12 +1867,7 @@
                     const time = Math.round(performance.now() - state.mental.startTime);
                     answersDiv.style.pointerEvents = 'none';
                     document.querySelectorAll('#answers button').forEach(b => b.disabled = true);
-                    if (ans === state.mental.currentProblem.answer) {
-                        state.mental.correct++;
-                        recordMentalResult(time, true);
-                    } else {
-                        recordMentalResult(time, false);
-                    }
+                    recordMentalResult(time, ans === state.mental.currentProblem.answer);
                 };
                 
                 btn.onclick = handleMentalResponse;
@@ -1893,11 +1889,15 @@
         }
 
         function recordMentalResult(time, correct) {
+            // Increment correct count only here to avoid double-increment
+            if (correct) state.mental.correct++;
+            // Cap at 3 to prevent display errors
+            state.mental.correct = Math.min(state.mental.correct, 3);
+            
             // Display memory (digits remembered) instead of reaction time
             const memoryDisplay = `${state.mental.correct}`;
             document.getElementById('mental-current').textContent = memoryDisplay;
             document.getElementById('mental-correct').textContent = state.mental.correct;
-            if (correct) state.mental.correct++;
 
             state.mental.currentAttempt++;
             if (state.mental.currentAttempt < 3) {
@@ -1909,8 +1909,8 @@
                 document.getElementById('mental-attempt').textContent = `ATTEMPT ${state.mental.currentAttempt} / 3`;
                 setTimeout(generateMentalProblem, 1500);
             } else {
-                // Save correct to localStorage
-                localStorage.setItem('reactions_mental_correct', state.mental.correct);
+                // Save correct to localStorage (capped at 3)
+                localStorage.setItem('reactions_mental_correct', Math.min(state.mental.correct, 3));
                 document.getElementById('problem').textContent = '✓ DONE!';
                 document.getElementById('answers').innerHTML = '';
                 
@@ -2015,6 +2015,8 @@
             if (correct && state.memory.userSequence.length === state.memory.sequence.length) {
                 state.memory.correct++;
             }
+            // Cap at 3 to prevent display errors
+            state.memory.correct = Math.min(state.memory.correct, 3);
             
             // Display only the count of correct sequences
             document.getElementById('memory-current').textContent = state.memory.correct > 0 ? `${state.memory.correct} correct` : '—';
@@ -2053,8 +2055,8 @@
                 grid.style.display = 'block';
                 grid.innerHTML = '<button style="width: 100%; padding: 15px; margin: 0; background: #4CAF50; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit; border: none;" disabled>✓ DONE!</button>';
                 
-                // Save to localStorage
-                localStorage.setItem('reactions_memory_correct', state.memory.correct);
+                // Save to localStorage (capped at 3)
+                localStorage.setItem('reactions_memory_correct', Math.min(state.memory.correct, 3));
                 
                 // Close after delay
                 setTimeout(() => {
@@ -2175,6 +2177,7 @@
                 document.getElementById('chat-current').textContent = '✗';
             }
             
+            state.chat.correct = Math.min(state.chat.correct, 3);
             document.getElementById('chat-correct').textContent = state.chat.correct + '/3';
 
             state.chat.currentAttempt++;
@@ -2182,8 +2185,8 @@
                 document.getElementById('chat-attempt').textContent = `ATTEMPT ${state.chat.currentAttempt} / 3`;
                 setTimeout(runChatRound, 1500);
             } else {
-                // Save correct to localStorage
-                localStorage.setItem('reactions_chat_correct', state.chat.correct);
+                // Save correct to localStorage (capped at 3)
+                localStorage.setItem('reactions_chat_correct', Math.min(state.chat.correct, 3));
                 if (state.chat.results.length > 0) {
                     localStorage.setItem('reactions_chat_best', Math.min(...state.chat.results));
                 }
@@ -2254,6 +2257,7 @@
             }
             
             document.getElementById('typing-current').textContent = time;
+            state.typing.correct = Math.min(state.typing.correct, 3);
             document.getElementById('typing-correct').textContent = state.typing.correct + ' / 3';
 
             state.typing.currentAttempt++;
@@ -2261,6 +2265,8 @@
                 document.getElementById('typing-attempt').textContent = `ATTEMPT ${state.typing.currentAttempt + 1} / 3`;
                 setTimeout(generateTypingPhrase, 1000);
             } else {
+                // Save best time and correct count to localStorage (capped at 3)
+                localStorage.setItem('reactions_typing_correct', Math.min(state.typing.correct, 3));
                 if (state.typing.results.length > 0) {
                     localStorage.setItem('reactions_typing_best', Math.min(...state.typing.results));
                 }
@@ -2328,6 +2334,7 @@
             }
             
             document.getElementById('pattern-current').textContent = correct ? '✓' : '✗';
+            state.pattern.correct = Math.min(state.pattern.correct, 3);
             document.getElementById('pattern-correct').textContent = state.pattern.correct + ' / 3';
 
             state.pattern.currentAttempt++;
@@ -2335,7 +2342,7 @@
                 document.getElementById('pattern-attempt').textContent = `ATTEMPT ${state.pattern.currentAttempt + 1} / 3`;
                 setTimeout(generatePatternRound, 1500);
             } else {
-                localStorage.setItem('reactions_pattern_correct', state.pattern.correct);
+                localStorage.setItem('reactions_pattern_correct', Math.min(state.pattern.correct, 3));
                 grid.innerHTML = '<button style="width: 100%; padding: 15px; background: #4CAF50; color: #fff; border: none; border-radius: 2px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit;" disabled>✓ DONE!</button>';
                 setTimeout(() => {
                     loadAndDisplayStats();
@@ -2527,6 +2534,7 @@
                 document.getElementById('speed-current').textContent = '✗';
             }
             
+            state.speed.correct = Math.min(state.speed.correct, 3);
             document.getElementById('speed-correct').textContent = state.speed.correct + ' / 3';
 
             state.speed.currentAttempt++;
@@ -2534,7 +2542,7 @@
                 document.getElementById('speed-attempt').textContent = `ATTEMPT ${state.speed.currentAttempt + 1} / 3`;
                 setTimeout(runSpeedRound, 1500);
             } else {
-                localStorage.setItem('reactions_speed_correct', state.speed.correct);
+                localStorage.setItem('reactions_speed_correct', Math.min(state.speed.correct, 3));
                 document.getElementById('speed-target').textContent = '✓ DONE!';
                 document.getElementById('speed-input').disabled = true;
                 setTimeout(() => {
@@ -2594,6 +2602,7 @@
                 document.getElementById('colors-current').textContent = '✗';
             }
             
+            state.colors.correct = Math.min(state.colors.correct, 3);
             document.getElementById('colors-correct').textContent = state.colors.correct + ' / 3';
             
             state.colors.currentAttempt++;
@@ -2601,7 +2610,7 @@
                 document.getElementById('colors-attempt').textContent = `ATTEMPT ${state.colors.currentAttempt + 1} / 3`;
                 setTimeout(runColorsRound, 1500);
             } else {
-                localStorage.setItem('reactions_colors_correct', state.colors.correct);
+                localStorage.setItem('reactions_colors_correct', Math.min(state.colors.correct, 3));
                 document.getElementById('colors-name').textContent = '✓ DONE!';
                 grid.innerHTML = '';
                 setTimeout(() => {
