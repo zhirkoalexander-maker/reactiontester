@@ -790,8 +790,8 @@
             <div class="card">
                 <div class="card-num">11 / TRAINING</div>
                 <div class="card-title">TRACKING</div>
-                <div class="card-desc">Follow the moving target and click it</div>
-                <div class="card-stats" id="stats-tracking">— ms</div>
+                <div class="card-desc">Keep your cursor on the moving circle</div>
+                <div class="card-stats" id="stats-tracking">TRACK: — ms</div>
                 <div class="card-controls">
                     <button class="dropdown-btn" onclick="toggleMenu(event, 'tracking')">▼</button>
                     <div class="difficulty-menu" id="menu-tracking">
@@ -1141,18 +1141,18 @@
             <div class="modal-title">TRACKING</div>
             <div class="attempt-info" id="tracking-attempt">ATTEMPT 1 / 3</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Follow and click the moving target
+                Keep the cursor on the moving circle for as long as possible
             </div>
             <div id="tracking-area" style="position: relative; width: 100%; height: 300px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
                 [WAIT]
             </div>
             <div class="stats">
                 <div class="stat">
-                    <span>Time:</span>
+                    <span>Status:</span>
                     <span class="stat-value" id="tracking-current">— ms</span>
                 </div>
                 <div class="stat">
-                    <span>Best:</span>
+                    <span>Best Track:</span>
                     <span class="stat-value" id="tracking-best">— ms</span>
                 </div>
             </div>
@@ -1164,21 +1164,21 @@
         <div class="modal-content">
             <button class="close" onclick="closeModal('spray')">✕</button>
             <div class="modal-title">SPRAY CONTROL</div>
-            <div class="attempt-info" id="spray-attempt">ATTEMPT 1 / 10</div>
+            <div class="attempt-info" id="spray-attempt">SESSION / TIMED</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Click targets as they appear
+                Hit green targets. Misses count as false start.
             </div>
             <div id="spray-area" style="position: relative; width: 100%; height: 280px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
                 [WAIT]
             </div>
             <div class="stats">
                 <div class="stat">
-                    <span>Current:</span>
+                    <span>Status:</span>
                     <span class="stat-value" id="spray-current">[X]</span>
                 </div>
                 <div class="stat">
                     <span>Hits:</span>
-                    <span class="stat-value" id="spray-correct">0 / 10</span>
+                    <span class="stat-value" id="spray-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1251,6 +1251,22 @@
             </div>
 
             <div class="guide-section">
+                <div class="guide-mode-title">Tracking - pure cursor control</div>
+                <div class="guide-mode-desc">no shooting here. just keep your cursor on the moving circle and build track time</div>
+                <div class="guide-mode-info">
+                    easy: big + slow | medium: smaller + faster | hard: small + fast. best result = longest track time, not reaction
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Spray Control - hits over speed</div>
+                <div class="guide-mode-desc">this one counts hits, not reaction. green target = point. miss = false start. on hard there is also a red target you must avoid</div>
+                <div class="guide-mode-info">
+                    easy: 15 sec | medium: 12 sec | hard: 10 sec. your score is total hits in the time limit
+                </div>
+            </div>
+
+            <div class="guide-section">
                 <div style="font-size: 11px; color: #666; line-height: 1.6;">
                     <strong>controls:</strong><br>
                     • Space = click in Classic<br>
@@ -1295,8 +1311,10 @@
             const key = `reactions_${type}_best`;
             const currentBest = localStorage.getItem(key);
             if (state[type].results.length > 0) {
-                const best = Math.min(...state[type].results);
-                if (!currentBest || best < parseInt(currentBest)) {
+                const best = type === 'tracking'
+                    ? Math.max(...state[type].results)
+                    : Math.min(...state[type].results);
+                if (!currentBest || (type === 'tracking' ? best > parseInt(currentBest) : best < parseInt(currentBest))) {
                     localStorage.setItem(key, best);
                 }
             }
@@ -1310,7 +1328,9 @@
                 
                 if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'tracking') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
-                    statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
+                    statsEl.textContent = type === 'tracking'
+                        ? (best ? `TRACK: ${best} ms` : 'TRACK: — ms')
+                        : (best ? `BEST: ${best} ms` : '— ms');
                     if (resultCorrect) resultCorrect.textContent = '—';
                     if (resultStatus) resultStatus.textContent = best ? '[DONE]' : '[NOT TAKEN]';
                 } else {
@@ -1353,7 +1373,12 @@
         function closeModal(type) {
             // Clear any pending timeouts
             if (state[type].timeoutId) {
-                clearTimeout(state[type].timeoutId);
+                if (typeof state[type].timeoutId === 'object' && state[type].timeoutId !== null) {
+                    if (state[type].timeoutId.moveInterval) clearInterval(state[type].timeoutId.moveInterval);
+                    if (state[type].timeoutId.roundTimeout) clearTimeout(state[type].timeoutId.roundTimeout);
+                } else {
+                    clearTimeout(state[type].timeoutId);
+                }
                 state[type].timeoutId = null;
             }
             // Clean up spacebar handler for classic
@@ -2703,7 +2728,6 @@
 
         function recordTrackingResult(success, trackingTime) {
             state.tracking.results.push(trackingTime);
-            document.getElementById('tracking-current').textContent = Math.round(trackingTime) + ' ms';
             const best = Math.max(...state.tracking.results);
             document.getElementById('tracking-best').textContent = Math.round(best) + ' ms';
 
@@ -2908,8 +2932,9 @@
         function endSprayTest() {
             if (state.spray.timerInterval) {
                 clearInterval(state.spray.timerInterval);
+                state.spray.timerInterval = null;
             }
-            localStorage.setItem('reactions_spray_correct', Math.min(state.spray.correct, 10));
+            localStorage.setItem('reactions_spray_correct', state.spray.correct);
             document.getElementById('spray-area').innerHTML = '[DONE]';
             setTimeout(() => {
                 loadAndDisplayStats();
