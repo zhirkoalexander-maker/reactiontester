@@ -2696,55 +2696,163 @@
         // ===== SPRAY CONTROL =====
         function runSprayRound() {
             const area = document.getElementById('spray-area');
-            area.textContent = '[WAIT]';
-            area.style.background = '#f0f0f0';
             
-            const delays = {
-                easy: [1500, 2000],
-                medium: [1000, 1500],
-                hard: [500, 1000]
-            };
-            const [min, max] = delays[state.spray.diff];
-            const delay = Math.random() * (max - min) + min;
-
-            setTimeout(() => {
-                area.innerHTML = '';
-                
-                const targetSize = 35;
-                const target = document.createElement('div');
-                target.style.position = 'absolute';
-                target.style.width = targetSize + 'px';
-                target.style.height = targetSize + 'px';
-                target.style.background = '#FF5722';
-                target.style.borderRadius = '4px';
-                target.style.cursor = 'crosshair';
-                target.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
-                target.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
-                target.style.border = '2px solid #D84315';
-                
-                area.appendChild(target);
-                
-                let clicked = false;
-                target.onclick = (e) => {
-                    e.stopPropagation();
-                    if (!clicked) {
-                        clicked = true;
-                        recordSprayResult(true);
-                    }
+            // Initialize session on first attempt
+            if (state.spray.currentAttempt === 0) {
+                const timeLimits = {
+                    easy: 15000,
+                    medium: 12000,
+                    hard: 10000
                 };
+                state.spray.sessionStartTime = performance.now();
+                state.spray.timeLimit = timeLimits[state.spray.diff];
                 
-                // Auto-fail if not clicked within 2 seconds
-                const autoFailId = setTimeout(() => {
-                    if (!clicked) {
-                        recordSprayResult(false);
+                // Start timer display
+                const updateTimer = setInterval(() => {
+                    const elapsed = performance.now() - state.spray.sessionStartTime;
+                    const remaining = Math.max(0, state.spray.timeLimit - elapsed);
+                    const seconds = (remaining / 1000).toFixed(1);
+                    
+                    if (remaining > 0) {
+                        document.getElementById('spray-current').textContent = `TIME: ${seconds}s`;
                     }
-                }, 2000);
-                
-                state.spray.timeoutId = autoFailId;
-            }, delay);
+                    
+                    if (remaining <= 0) {
+                        clearInterval(updateTimer);
+                    }
+                }, 100);
+                state.spray.timerInterval = updateTimer;
+            }
+            
+            // Check if time is up
+            const elapsed = performance.now() - state.spray.sessionStartTime;
+            if (elapsed >= state.spray.timeLimit) {
+                endSprayTest();
+                return;
+            }
+            
+            area.style.background = '#f0f0f0';
+            area.innerHTML = '';
+            
+            if (state.spray.diff === 'hard') {
+                // Hard mode: red and green targets
+                createSprayTargetPair(area);
+            } else {
+                // Easy/Medium: single green target
+                createSprayTarget(area);
+            }
+        }
+
+        function createSprayTarget(area) {
+            const targetSize = 35;
+            const target = document.createElement('div');
+            target.style.position = 'absolute';
+            target.style.width = targetSize + 'px';
+            target.style.height = targetSize + 'px';
+            target.style.background = '#4CAF50';
+            target.style.borderRadius = '4px';
+            target.style.cursor = 'crosshair';
+            target.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
+            target.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
+            target.style.border = '2px solid #2E7D32';
+            
+            area.appendChild(target);
+            
+            let clicked = false;
+            target.onclick = (e) => {
+                e.stopPropagation();
+                if (!clicked) {
+                    clicked = true;
+                    target.style.display = 'none';
+                    recordSprayResult(true);
+                }
+            };
+            
+            // Target disappears after 2 seconds
+            setTimeout(() => {
+                if (!clicked && target.parentElement) {
+                    recordSprayResult(false);
+                }
+            }, 2000);
+        }
+
+        function createSprayTargetPair(area) {
+            const targetSize = 35;
+            
+            // Green target (hit for point)
+            const greenTarget = document.createElement('div');
+            greenTarget.style.position = 'absolute';
+            greenTarget.style.width = targetSize + 'px';
+            greenTarget.style.height = targetSize + 'px';
+            greenTarget.style.background = '#4CAF50';
+            greenTarget.style.borderRadius = '4px';
+            greenTarget.style.cursor = 'crosshair';
+            greenTarget.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
+            greenTarget.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
+            greenTarget.style.border = '2px solid #2E7D32';
+            
+            // Red target (hit = lose)
+            const redTarget = document.createElement('div');
+            redTarget.style.position = 'absolute';
+            redTarget.style.width = targetSize + 'px';
+            redTarget.style.height = targetSize + 'px';
+            redTarget.style.background = '#FF5722';
+            redTarget.style.borderRadius = '4px';
+            redTarget.style.cursor = 'not-allowed';
+            let redLeft = Math.random() * (area.clientWidth - targetSize);
+            let redTop = Math.random() * (area.clientHeight - targetSize);
+            // Ensure red doesn't overlap with green
+            let greenLeft = parseFloat(greenTarget.style.left);
+            let greenTop = parseFloat(greenTarget.style.top);
+            while (Math.abs(redLeft - greenLeft) < 100 && Math.abs(redTop - greenTop) < 100) {
+                redLeft = Math.random() * (area.clientWidth - targetSize);
+                redTop = Math.random() * (area.clientHeight - targetSize);
+            }
+            redTarget.style.left = redLeft + 'px';
+            redTarget.style.top = redTop + 'px';
+            redTarget.style.border = '2px solid #D84315';
+            
+            area.appendChild(greenTarget);
+            area.appendChild(redTarget);
+            
+            let clicked = false;
+            
+            greenTarget.onclick = (e) => {
+                e.stopPropagation();
+                if (!clicked) {
+                    clicked = true;
+                    greenTarget.style.display = 'none';
+                    redTarget.style.display = 'none';
+                    recordSprayResult(true);
+                }
+            };
+            
+            redTarget.onclick = (e) => {
+                e.stopPropagation();
+                if (!clicked) {
+                    clicked = true;
+                    greenTarget.style.display = 'none';
+                    redTarget.style.display = 'none';
+                    recordSprayResult(false);
+                }
+            };
+            
+            // Targets disappear after 2 seconds
+            setTimeout(() => {
+                if (!clicked && greenTarget.parentElement) {
+                    recordSprayResult(false);
+                }
+            }, 2000);
         }
 
         function recordSprayResult(success) {
+            // Check if time is already up
+            const elapsed = performance.now() - state.spray.sessionStartTime;
+            if (elapsed >= state.spray.timeLimit) {
+                endSprayTest();
+                return;
+            }
+            
             if (success) {
                 state.spray.correct++;
                 document.getElementById('spray-current').textContent = '[HIT]';
@@ -2753,20 +2861,24 @@
             }
             
             state.spray.results.push(success ? 1 : 0);
-            document.getElementById('spray-correct').textContent = state.spray.correct + ' / 10';
+            document.getElementById('spray-correct').textContent = state.spray.correct;
 
             state.spray.currentAttempt++;
-            if (state.spray.currentAttempt < 10) {
-                document.getElementById('spray-attempt').textContent = `ATTEMPT ${state.spray.currentAttempt} / 10`;
-                setTimeout(runSprayRound, 800);
-            } else {
-                localStorage.setItem('reactions_spray_correct', Math.min(state.spray.correct, 10));
-                document.getElementById('spray-area').innerHTML = '[DONE]';
-                setTimeout(() => {
-                    loadAndDisplayStats();
-                    closeModal('spray');
-                }, 1500);
+            
+            // Continue if time is available
+            setTimeout(runSprayRound, 600);
+        }
+        
+        function endSprayTest() {
+            if (state.spray.timerInterval) {
+                clearInterval(state.spray.timerInterval);
             }
+            localStorage.setItem('reactions_spray_correct', Math.min(state.spray.correct, 10));
+            document.getElementById('spray-area').innerHTML = '[DONE]';
+            setTimeout(() => {
+                loadAndDisplayStats();
+                closeModal('spray');
+            }, 1500);
         }
 
         function formatTime(seconds) {
