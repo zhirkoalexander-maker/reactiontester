@@ -2632,131 +2632,143 @@
         // ===== TRACKING =====
         function runTrackingRound() {
             const area = document.getElementById('tracking-area');
-            area.textContent = '[WAIT]';
             area.style.background = '#f0f0f0';
-            document.getElementById('tracking-current').textContent = '[WAIT]';
+            document.getElementById('tracking-current').textContent = 'STARTS IN 3';
+            area.innerHTML = '';
             
-            const delays = {
-                easy: [600, 900],
-                medium: [500, 900],
-                hard: [300, 600]
+            const sizes = { easy: 42, medium: 35, hard: 25 };
+            const speeds = { easy: 2.2, medium: 2.8, hard: 4.2 };
+            const targetSize = sizes[state.tracking.diff];
+            const speed = speeds[state.tracking.diff];
+            
+            const target = document.createElement('div');
+            target.style.position = 'absolute';
+            target.style.width = targetSize + 'px';
+            target.style.height = targetSize + 'px';
+            target.style.background = '#4CAF50';
+            target.style.borderRadius = '50%';
+            target.style.cursor = 'crosshair';
+            target.style.left = '50px';
+            target.style.top = '50px';
+            target.style.border = '2px solid #2E7D32';
+            target.style.transition = 'all 0.05s linear';
+            
+            area.appendChild(target);
+
+            let x = 50;
+            let y = 50;
+            const maxX = area.clientWidth - targetSize;
+            const maxY = area.clientHeight - targetSize;
+            let velX = (Math.random() - 0.5) * speed;
+            let velY = (Math.random() - 0.5) * speed;
+
+            let isOnTarget = false;
+            let trackingStartTime = null;
+            let trackingTime = 0;
+            let roundFinished = false;
+            let movementStarted = false;
+            let moveTarget = null;
+            let roundTimeoutId = null;
+
+            const finishTrackingRound = (success) => {
+                if (roundFinished) return;
+                roundFinished = true;
+                if (moveTarget) clearInterval(moveTarget);
+                if (roundTimeoutId) clearTimeout(roundTimeoutId);
+                area.removeEventListener('mousemove', handleMouseMove);
+                area.removeEventListener('mouseleave', handleMouseLeave);
+
+                if (isOnTarget && trackingStartTime !== null) {
+                    trackingTime += performance.now() - trackingStartTime;
+                    isOnTarget = false;
+                }
+
+                recordTrackingResult(success, trackingTime);
             };
-            const [min, max] = delays[state.tracking.diff];
-            const delay = Math.random() * (max - min) + min;
 
-            const timeoutId = setTimeout(() => {
-                area.innerHTML = '';
-                
-                // Size and speed depend on difficulty
-                const sizes = { easy: 42, medium: 35, hard: 25 };
-                const speeds = { easy: 2.2, medium: 2.8, hard: 4.2 };
-                const targetSize = sizes[state.tracking.diff];
-                const speed = speeds[state.tracking.diff];
-                
-                const target = document.createElement('div');
-                target.style.position = 'absolute';
-                target.style.width = targetSize + 'px';
-                target.style.height = targetSize + 'px';
-                target.style.background = '#4CAF50';
-                target.style.borderRadius = '50%';
-                target.style.cursor = 'crosshair';
-                target.style.left = '50px';
-                target.style.top = '50px';
-                target.style.border = '2px solid #2E7D32';
-                target.style.transition = 'all 0.05s linear';
-                
-                area.appendChild(target);
-                
-                let x = 50;
-                let y = 50;
-                const maxX = area.clientWidth - targetSize;
-                const maxY = area.clientHeight - targetSize;
-                let velX = (Math.random() - 0.5) * speed;
-                let velY = (Math.random() - 0.5) * speed;
-                
-                let isOnTarget = false;
-                let trackingStartTime = null;
-                let trackingTime = 0;
-                let roundFinished = false;
-                document.getElementById('tracking-current').textContent = '[FALSE START]';
+            const handleMouseMove = (e) => {
+                if (!movementStarted || roundFinished) return;
 
-                const finishTrackingRound = (success) => {
-                    if (roundFinished) return;
-                    roundFinished = true;
-                    clearInterval(moveTarget);
-                    clearTimeout(roundTimeoutId);
-                    area.removeEventListener('mousemove', handleMouseMove);
-                    area.removeEventListener('mouseleave', handleMouseLeave);
+                const rect = area.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
 
-                    if (isOnTarget && trackingStartTime !== null) {
-                        trackingTime += performance.now() - trackingStartTime;
-                        isOnTarget = false;
+                const targetX = parseFloat(target.style.left) + targetSize / 2;
+                const targetY = parseFloat(target.style.top) + targetSize / 2;
+                const distance = Math.sqrt(Math.pow(mouseX - targetX, 2) + Math.pow(mouseY - targetY, 2));
+
+                if (distance < targetSize / 2 + 4) {
+                    if (!isOnTarget) {
+                        isOnTarget = true;
+                        trackingStartTime = performance.now();
+                        document.getElementById('tracking-current').textContent = '[TRACKING]';
                     }
+                } else if (isOnTarget) {
+                    trackingTime += performance.now() - trackingStartTime;
+                    isOnTarget = false;
+                    document.getElementById('tracking-current').textContent = '[FALSE START]';
+                    finishTrackingRound(false);
+                }
+            };
 
-                    recordTrackingResult(success, trackingTime);
-                };
-                
-                const moveTarget = setInterval(() => {
+            const handleMouseLeave = () => {
+                if (!movementStarted || roundFinished) return;
+                if (isOnTarget) {
+                    trackingTime += performance.now() - trackingStartTime;
+                    isOnTarget = false;
+                }
+                document.getElementById('tracking-current').textContent = '[FALSE START]';
+                finishTrackingRound(false);
+            };
+
+            area.addEventListener('mousemove', handleMouseMove);
+            area.addEventListener('mouseleave', handleMouseLeave);
+
+            let countdown = 3;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    document.getElementById('tracking-current').textContent = `STARTS IN ${countdown}`;
+                    return;
+                }
+
+                clearInterval(countdownInterval);
+                movementStarted = true;
+                document.getElementById('tracking-current').textContent = '[TRACKING]';
+
+                moveTarget = setInterval(() => {
                     x += velX;
                     y += velY;
-                    
+
                     if (x <= 0 || x >= maxX) velX *= -1;
                     if (y <= 0 || y >= maxY) velY *= -1;
-                    
+
                     x = Math.max(0, Math.min(x, maxX));
                     y = Math.max(0, Math.min(y, maxY));
-                    
+
                     target.style.left = x + 'px';
                     target.style.top = y + 'px';
                 }, 50);
-                
-                // Tracking detection with mouse move
-                const handleMouseMove = (e) => {
-                    const rect = area.getBoundingClientRect();
-                    const mouseX = e.clientX - rect.left;
-                    const mouseY = e.clientY - rect.top;
-                    
-                    const targetX = parseFloat(target.style.left) + targetSize / 2;
-                    const targetY = parseFloat(target.style.top) + targetSize / 2;
-                    const distance = Math.sqrt(Math.pow(mouseX - targetX, 2) + Math.pow(mouseY - targetY, 2));
-                    
-                    if (distance < targetSize / 2 + 4) {
-                        if (!isOnTarget) {
-                            isOnTarget = true;
-                            trackingStartTime = performance.now();
-                            document.getElementById('tracking-current').textContent = '[TRACKING]';
-                        }
-                    } else {
-                        if (isOnTarget) {
-                            trackingTime += performance.now() - trackingStartTime;
-                            isOnTarget = false;
-                            document.getElementById('tracking-current').textContent = '[FALSE START]';
-                            finishTrackingRound(false);
-                        }
-                    }
-                };
+                state.tracking.timeoutId.moveInterval = moveTarget;
 
-                const handleMouseLeave = () => {
-                    if (isOnTarget) {
-                        trackingTime += performance.now() - trackingStartTime;
-                        isOnTarget = false;
-                    }
-                    document.getElementById('tracking-current').textContent = '[FALSE START]';
-                    finishTrackingRound(false);
-                };
-                
-                area.addEventListener('mousemove', handleMouseMove);
-                area.addEventListener('mouseleave', handleMouseLeave);
-                
-                // 10 second limit
-                const roundTimeoutId = setTimeout(() => {
-                    const minTrackingTime = 500; // Minimum 500ms to count as hit
-                    const success = trackingTime >= minTrackingTime;
+                roundTimeoutId = setTimeout(() => {
+                    const finalTrackingTime = isOnTarget && trackingStartTime !== null
+                        ? trackingTime + (performance.now() - trackingStartTime)
+                        : trackingTime;
+                    const minTrackingTime = 500;
+                    const success = finalTrackingTime >= minTrackingTime;
                     finishTrackingRound(success);
                 }, 10000);
-                
-                state.tracking.timeoutId = { moveInterval: moveTarget, roundTimeout: roundTimeoutId, mouseHandler: handleMouseMove, leaveHandler: handleMouseLeave };
-            }, delay);
+                state.tracking.timeoutId.roundTimeout = roundTimeoutId;
+            }, 1000);
+
+            state.tracking.timeoutId = {
+                countdownInterval,
+                moveInterval: moveTarget,
+                roundTimeout: roundTimeoutId,
+                mouseHandler: handleMouseMove,
+                leaveHandler: handleMouseLeave
+            };
         }
 
         function recordTrackingResult(success, trackingTime) {
