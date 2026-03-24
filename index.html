@@ -2612,7 +2612,12 @@
             const timeoutId = setTimeout(() => {
                 area.innerHTML = '';
                 
-                const targetSize = state.tracking.diff === 'easy' ? 40 : (state.tracking.diff === 'medium' ? 30 : 20);
+                // Size and speed depend on difficulty
+                const sizes = { easy: 50, medium: 35, hard: 25 };
+                const speeds = { easy: 1.5, medium: 2.5, hard: 4 };
+                const targetSize = sizes[state.tracking.diff];
+                const speed = speeds[state.tracking.diff];
+                
                 const target = document.createElement('div');
                 target.style.position = 'absolute';
                 target.style.width = targetSize + 'px';
@@ -2623,18 +2628,20 @@
                 target.style.left = '50px';
                 target.style.top = '50px';
                 target.style.border = '2px solid #2E7D32';
-                target.style.transition = 'all 0.1s linear';
+                target.style.transition = 'all 0.05s linear';
                 
                 area.appendChild(target);
-                state.tracking.startTime = performance.now();
                 
-                let clicked = false;
                 let x = 50;
                 let y = 50;
                 const maxX = area.clientWidth - targetSize;
                 const maxY = area.clientHeight - targetSize;
-                let velX = (Math.random() - 0.5) * 3;
-                let velY = (Math.random() - 0.5) * 3;
+                let velX = (Math.random() - 0.5) * speed;
+                let velY = (Math.random() - 0.5) * speed;
+                
+                let isOnTarget = false;
+                let trackingStartTime = null;
+                let trackingTime = 0;
                 
                 const moveTarget = setInterval(() => {
                     x += velX;
@@ -2648,37 +2655,66 @@
                     
                     target.style.left = x + 'px';
                     target.style.top = y + 'px';
-                });
+                }, 50);
                 
-                target.onclick = (e) => {
-                    e.stopPropagation();
-                    if (!clicked) {
-                        clicked = true;
-                        clearInterval(moveTarget);
-                        const time = Math.round(performance.now() - state.tracking.startTime);
-                        recordTrackingResult(time);
+                // Tracking detection with mouse move
+                const handleMouseMove = (e) => {
+                    const rect = area.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    
+                    const targetX = parseFloat(target.style.left) + targetSize / 2;
+                    const targetY = parseFloat(target.style.top) + targetSize / 2;
+                    const distance = Math.sqrt(Math.pow(mouseX - targetX, 2) + Math.pow(mouseY - targetY, 2));
+                    
+                    if (distance < targetSize / 2 + 10) { // Slight hitbox increase
+                        if (!isOnTarget) {
+                            isOnTarget = true;
+                            trackingStartTime = performance.now();
+                        }
+                    } else {
+                        if (isOnTarget) {
+                            trackingTime += performance.now() - trackingStartTime;
+                            isOnTarget = false;
+                        }
                     }
                 };
                 
-                // Auto-fail if not clicked within 10 seconds
-                const autoFailId = setTimeout(() => {
-                    if (!clicked) {
-                        clearInterval(moveTarget);
-                        recordTrackingResult(10000);
+                area.addEventListener('mousemove', handleMouseMove);
+                
+                // 10 second limit
+                const roundTimeoutId = setTimeout(() => {
+                    clearInterval(moveTarget);
+                    area.removeEventListener('mousemove', handleMouseMove);
+                    
+                    if (isOnTarget) {
+                        trackingTime += performance.now() - trackingStartTime;
+                        isOnTarget = false;
                     }
+                    
+                    const minTrackingTime = 500; // Minimum 500ms to count as hit
+                    const success = trackingTime >= minTrackingTime;
+                    recordTrackingResult(success, trackingTime);
                 }, 10000);
                 
-                state.tracking.timeoutId = autoFailId;
+                state.tracking.timeoutId = { moveInterval: moveTarget, roundTimeout: roundTimeoutId, mouseHandler: handleMouseMove };
             }, delay);
         }
 
-        function recordTrackingResult(time) {
-            state.tracking.results.push(time);
-            document.getElementById('tracking-current').textContent = time + ' ms';
-            const min = Math.min(...state.tracking.results);
-            document.getElementById('tracking-best').textContent = min + ' ms';
+        function recordTrackingResult(success, trackingTime) {
+            state.tracking.results.push(trackingTime);
+            document.getElementById('tracking-current').textContent = Math.round(trackingTime) + ' ms';
+            const best = Math.max(...state.tracking.results);
+            document.getElementById('tracking-best').textContent = Math.round(best) + ' ms';
 
             saveResults('tracking');
+            
+            // Display as OK or FALSE START
+            if (success) {
+                document.getElementById('tracking-current').textContent = '[OK]';
+            } else {
+                document.getElementById('tracking-current').textContent = '[FALSE START]';
+            }
 
             state.tracking.currentAttempt++;
             if (state.tracking.currentAttempt < 3) {
@@ -2855,9 +2891,9 @@
             
             if (success) {
                 state.spray.correct++;
-                document.getElementById('spray-current').textContent = '[HIT]';
+                document.getElementById('spray-current').textContent = '[OK]';
             } else {
-                document.getElementById('spray-current').textContent = '[MISS]';
+                document.getElementById('spray-current').textContent = '[FALSE START]';
             }
             
             state.spray.results.push(success ? 1 : 0);
