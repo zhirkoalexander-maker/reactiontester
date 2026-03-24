@@ -834,7 +834,6 @@
             <thead>
                 <tr>
                     <th>TEST</th>
-                    <th>BEST TIME</th>
                     <th>CORRECT</th>
                     <th>STATUS</th>
                 </tr>
@@ -842,13 +841,11 @@
             <tbody>
                 <tr id="result-classic">
                     <td>CLASSIC</td>
-                    <td id="result-classic-best">—</td>
                     <td>—</td>
                     <td id="result-classic-status">NO DATA</td>
                 </tr>
                 <tr id="result-insane">
                     <td>INSANE</td>
-                    <td id="result-insane-best">—</td>
                     <td>—</td>
                     <td id="result-insane-status">NO DATA</td>
                 </tr>
@@ -872,19 +869,16 @@
                 </tr>
                 <tr id="result-chat">
                     <td>CHAT</td>
-                    <td id="result-chat-best">—</td>
                     <td>—</td>
                     <td id="result-chat-status">NO DATA</td>
                 </tr>
                 <tr id="result-focus">
                     <td>FOCUS</td>
-                    <td id="result-focus-best">—</td>
                     <td>—</td>
                     <td id="result-focus-status">NO DATA</td>
                 </tr>
                 <tr id="result-typing">
                     <td>TYPING</td>
-                    <td id="result-typing-best">—</td>
                     <td>—</td>
                     <td id="result-typing-status">NO DATA</td>
                 </tr>
@@ -902,7 +896,6 @@
                 </tr>
                 <tr id="result-aim">
                     <td>AIM TRAINER</td>
-                    <td id="result-aim-best">—</td>
                     <td>—</td>
                     <td id="result-aim-status">NO DATA</td>
                 </tr>
@@ -1313,20 +1306,17 @@
         function loadAndDisplayStats() {
             ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'aim', 'flick'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
-                const resultBest = document.getElementById(`result-${type}-best`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
                 if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'aim') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
-                    if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
                     if (resultCorrect) resultCorrect.textContent = '—';
                     if (resultStatus) resultStatus.textContent = best ? '[DONE]' : '[NOT TAKEN]';
                 } else {
                     const correct = localStorage.getItem(`reactions_${type}_correct`) || '0';
                     statsEl.textContent = `[${correct}]`;
-                    if (resultBest) resultBest.textContent = '—';
                     if (resultCorrect) resultCorrect.textContent = `${correct}`;
                     if (resultStatus) resultStatus.textContent = correct > 0 ? '[DONE]' : '[NOT TAKEN]';
                 }
