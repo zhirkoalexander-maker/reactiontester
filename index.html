@@ -785,38 +785,39 @@
                 <button class="start-btn" onclick="startTest('colors')">START</button>
             </div>
 
-            <!-- ACCURACY -->
+            <div class="section-header">V. SHOOTER GAMES TRAINING</div>
+            <!-- AIM TRAINER -->
             <div class="card">
-                <div class="card-num">11 / TEST</div>
-                <div class="card-title">ACCURACY</div>
-                <div class="card-desc">Click on small targets that appear and disappear</div>
-                <div class="card-stats" id="stats-accuracy">— ms</div>
+                <div class="card-num">11 / TRAINING</div>
+                <div class="card-title">AIM TRAINER</div>
+                <div class="card-desc">Train your aiming and crosshair control</div>
+                <div class="card-stats" id="stats-aim">BEST: — ms</div>
                 <div class="card-controls">
-                    <button class="dropdown-btn" onclick="toggleMenu(event, 'accuracy')">▼</button>
-                    <div class="difficulty-menu" id="menu-accuracy">
-                        <div class="difficulty-option selected" onclick="setDiff(event, 'accuracy', 'easy')">EASY</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'accuracy', 'medium')">NORMAL</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'accuracy', 'hard')">HARD</div>
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'aim')">▼</button>
+                    <div class="difficulty-menu" id="menu-aim">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'aim', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'aim', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'aim', 'hard')">HARD</div>
                     </div>
                 </div>
-                <button class="start-btn" onclick="startTest('accuracy')">START</button>
+                <button class="start-btn" onclick="startTest('aim')">START</button>
             </div>
 
-            <!-- DOUBLE CLICK -->
+            <!-- FLICK PRACTICE -->
             <div class="card">
-                <div class="card-num">12 / TEST</div>
-                <div class="card-title">DOUBLE CLICK</div>
-                <div class="card-desc">React quickly using double-click action</div>
-                <div class="card-stats" id="stats-doubleclick">— ms</div>
+                <div class="card-num">12 / TRAINING</div>
+                <div class="card-title">FLICK PRACTICE</div>
+                <div class="card-desc">Master quick flick shots to targets</div>
+                <div class="card-stats" id="stats-flick">— / 5</div>
                 <div class="card-controls">
-                    <button class="dropdown-btn" onclick="toggleMenu(event, 'doubleclick')">▼</button>
-                    <div class="difficulty-menu" id="menu-doubleclick">
-                        <div class="difficulty-option selected" onclick="setDiff(event, 'doubleclick', 'easy')">EASY</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'doubleclick', 'medium')">NORMAL</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'doubleclick', 'hard')">HARD</div>
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'flick')">▼</button>
+                    <div class="difficulty-menu" id="menu-flick">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'flick', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'flick', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'flick', 'hard')">HARD</div>
                     </div>
                 </div>
-                <button class="start-btn" onclick="startTest('doubleclick')">START</button>
+                <button class="start-btn" onclick="startTest('flick')">START</button>
             </div>
 
 
@@ -899,17 +900,17 @@
                     <td id="result-colors-correct">0</td>
                     <td id="result-colors-status">NO DATA</td>
                 </tr>
-                <tr id="result-accuracy">
-                    <td>ACCURACY</td>
-                    <td id="result-accuracy-best">—</td>
+                <tr id="result-aim">
+                    <td>AIM TRAINER</td>
+                    <td id="result-aim-best">—</td>
                     <td>—</td>
-                    <td id="result-accuracy-status">NO DATA</td>
+                    <td id="result-aim-status">NO DATA</td>
                 </tr>
-                <tr id="result-doubleclick">
-                    <td>DOUBLE CLICK</td>
-                    <td id="result-doubleclick-best">—</td>
+                <tr id="result-flick">
+                    <td>FLICK PRACTICE</td>
                     <td>—</td>
-                    <td id="result-doubleclick-status">NO DATA</td>
+                    <td id="result-flick-correct">0</td>
+                    <td id="result-flick-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -1141,51 +1142,51 @@
         </div>
     </div>
 
-    <!-- ACCURACY MODAL -->
-    <div class="modal" id="modal-accuracy">
+    <!-- AIM TRAINER MODAL -->
+    <div class="modal" id="modal-aim">
         <div class="modal-content">
-            <button class="close" onclick="closeModal('accuracy')">✕</button>
-            <div class="modal-title">ACCURACY TEST</div>
-            <div class="attempt-info" id="accuracy-attempt">ATTEMPT 1 / 3</div>
+            <button class="close" onclick="closeModal('aim')">✕</button>
+            <div class="modal-title">AIM TRAINER</div>
+            <div class="attempt-info" id="aim-attempt">ATTEMPT 1 / 3</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Click on the target that appears
+                Track and click on moving targets
             </div>
-            <div id="accuracy-area" style="position: relative; width: 100%; height: 300px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: default; display: flex; align-items: center; justify-content: center;">
+            <div id="aim-area" style="position: relative; width: 100%; height: 300px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; display: flex; align-items: center; justify-content: center;">
                 [WAIT]
             </div>
             <div class="stats">
                 <div class="stat">
                     <span>Time:</span>
-                    <span class="stat-value" id="accuracy-current">— ms</span>
+                    <span class="stat-value" id="aim-current">— ms</span>
                 </div>
                 <div class="stat">
-                    <span>Avg:</span>
-                    <span class="stat-value" id="accuracy-avg">— ms</span>
+                    <span>Best:</span>
+                    <span class="stat-value" id="aim-best">— ms</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- DOUBLE CLICK MODAL -->
-    <div class="modal" id="modal-doubleclick">
+    <!-- FLICK PRACTICE MODAL -->
+    <div class="modal" id="modal-flick">
         <div class="modal-content">
-            <button class="close" onclick="closeModal('doubleclick')">✕</button>
-            <div class="modal-title">DOUBLE CLICK TEST</div>
-            <div class="attempt-info" id="doubleclick-attempt">ATTEMPT 1 / 3</div>
+            <button class="close" onclick="closeModal('flick')">✕</button>
+            <div class="modal-title">FLICK PRACTICE</div>
+            <div class="attempt-info" id="flick-attempt">ATTEMPT 1 / 5</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Double-click when the square turns green
+                Perform fast flick shots
             </div>
-            <div id="doubleclick-area" style="position: relative; width: 100%; height: 200px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: default; display: flex; align-items: center; justify-content: center; font-size: 24px; user-select: none;">
+            <div id="flick-area" style="position: relative; width: 100%; height: 250px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; display: flex; align-items: center; justify-content: center;">
                 [WAIT]
             </div>
             <div class="stats">
                 <div class="stat">
-                    <span>Time:</span>
-                    <span class="stat-value" id="doubleclick-current">— ms</span>
+                    <span>Current:</span>
+                    <span class="stat-value" id="flick-current">[X]</span>
                 </div>
                 <div class="stat">
-                    <span>Best:</span>
-                    <span class="stat-value" id="doubleclick-best">— ms</span>
+                    <span>Hits:</span>
+                    <span class="stat-value" id="flick-correct">0 / 5</span>
                 </div>
             </div>
         </div>
@@ -1293,8 +1294,8 @@
             typing: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
             colors: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, targetColor: null, startTime: null, timeoutId: null },
-            accuracy: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
-            doubleclick: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null }
+            aim: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
+            flick: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -1310,13 +1311,13 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'accuracy', 'doubleclick'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'aim', 'flick'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultBest = document.getElementById(`result-${type}-best`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'accuracy' || type === 'doubleclick') {
+                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'aim') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = best ? `BEST: ${best} ms` : '— ms';
                     if (resultBest) resultBest.textContent = best ? `${best} ms` : '—';
@@ -1451,26 +1452,21 @@
                 }
             }
             
-            // Clean up accuracy test
-            if (type === 'accuracy') {
-                const area = document.getElementById('accuracy-area');
+            // Clean up aim handlers
+            if (type === 'aim') {
+                const area = document.getElementById('aim-area');
                 if (area) {
                     area.innerHTML = '';
                     area.style.pointerEvents = 'auto';
                 }
             }
             
-            // Clean up doubleclick test
-            if (type === 'doubleclick') {
-                const area = document.getElementById('doubleclick-area');
+            // Clean up flick handlers
+            if (type === 'flick') {
+                const area = document.getElementById('flick-area');
                 if (area) {
                     area.innerHTML = '';
                     area.style.pointerEvents = 'auto';
-                    area.style.backgroundColor = '';
-                }
-                if (state.doubleclick.clickHandler) {
-                    document.removeEventListener('dblclick', state.doubleclick.clickHandler);
-                    state.doubleclick.clickHandler = null;
                 }
             }
             
@@ -1497,7 +1493,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'accuracy', 'doubleclick'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'aim', 'flick'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1575,10 +1571,10 @@
                 runSpeedRound();
             } else if (type === 'colors') {
                 runColorsRound();
-            } else if (type === 'accuracy') {
-                runAccuracyRound();
-            } else if (type === 'doubleclick') {
-                runDoubleClickRound();
+            } else if (type === 'aim') {
+                runAimRound();
+            } else if (type === 'flick') {
+                runFlickRound();
             }
         }
 
@@ -2610,9 +2606,9 @@
             }
         }
 
-        // ===== ACCURACY TEST =====
-        function runAccuracyRound() {
-            const area = document.getElementById('accuracy-area');
+        // ===== AIM TRAINER =====
+        function runAimRound() {
+            const area = document.getElementById('aim-area');
             area.textContent = '[WAIT]';
             area.style.background = '#f0f0f0';
             
@@ -2621,140 +2617,132 @@
                 medium: [600, 1200],
                 hard: [300, 800]
             };
-            const [min, max] = delays[state.accuracy.diff];
+            const [min, max] = delays[state.aim.diff];
             const delay = Math.random() * (max - min) + min;
 
             const timeoutId = setTimeout(() => {
-                const targetSize = state.accuracy.diff === 'easy' ? 60 : (state.accuracy.diff === 'medium' ? 40 : 20);
+                const targetSize = state.aim.diff === 'easy' ? 50 : (state.aim.diff === 'medium' ? 35 : 20);
                 const target = document.createElement('div');
                 target.style.position = 'absolute';
                 target.style.width = targetSize + 'px';
                 target.style.height = targetSize + 'px';
-                target.style.background = '#2196F3';
+                target.style.background = '#FF5722';
                 target.style.borderRadius = '50%';
-                target.style.cursor = 'pointer';
+                target.style.cursor = 'crosshair';
                 target.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
                 target.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
+                target.style.border = '2px solid #D84315';
                 
                 area.innerHTML = '';
                 area.appendChild(target);
                 
-                state.accuracy.startTime = performance.now();
+                state.aim.startTime = performance.now();
                 
                 let clicked = false;
-                target.onclick = () => {
+                target.onclick = (e) => {
+                    e.stopPropagation();
                     if (!clicked) {
                         clicked = true;
-                        const time = Math.round(performance.now() - state.accuracy.startTime);
-                        recordAccuracyResult(time);
+                        const time = Math.round(performance.now() - state.aim.startTime);
+                        recordAimResult(time);
                     }
                 };
                 
                 // Auto-fail if not clicked within 5 seconds
                 const autoFailId = setTimeout(() => {
                     if (!clicked) {
-                        recordAccuracyResult(5000);
+                        recordAimResult(5000);
                     }
                 }, 5000);
                 
-                state.accuracy.timeoutId = autoFailId;
+                state.aim.timeoutId = autoFailId;
             }, delay);
         }
 
-        function recordAccuracyResult(time) {
-            state.accuracy.results.push(time);
-            document.getElementById('accuracy-current').textContent = time + ' ms';
-            const min = Math.min(...state.accuracy.results);
-            const avg = Math.round(state.accuracy.results.reduce((a, b) => a + b) / state.accuracy.results.length);
-            document.getElementById('accuracy-best').textContent = min + ' ms';
-            document.getElementById('accuracy-avg').textContent = avg + ' ms';
+        function recordAimResult(time) {
+            state.aim.results.push(time);
+            document.getElementById('aim-current').textContent = time + ' ms';
+            const min = Math.min(...state.aim.results);
+            document.getElementById('aim-best').textContent = min + ' ms';
 
-            saveResults('accuracy');
+            saveResults('aim');
 
-            state.accuracy.currentAttempt++;
-            if (state.accuracy.currentAttempt < 3) {
-                document.getElementById('accuracy-attempt').textContent = `ATTEMPT ${state.accuracy.currentAttempt} / 3`;
-                setTimeout(runAccuracyRound, 1500);
+            state.aim.currentAttempt++;
+            if (state.aim.currentAttempt < 3) {
+                document.getElementById('aim-attempt').textContent = `ATTEMPT ${state.aim.currentAttempt} / 3`;
+                setTimeout(runAimRound, 1500);
             } else {
-                document.getElementById('accuracy-area').innerHTML = '[DONE]';
+                document.getElementById('aim-area').innerHTML = '[DONE]';
                 setTimeout(() => {
                     loadAndDisplayStats();
-                    closeModal('accuracy');
+                    closeModal('aim');
                 }, 1500);
             }
         }
 
-        // ===== DOUBLE CLICK TEST =====
-        function runDoubleClickRound() {
-            const area = document.getElementById('doubleclick-area');
+        // ===== FLICK PRACTICE =====
+        function runFlickRound() {
+            const area = document.getElementById('flick-area');
             area.textContent = '[WAIT]';
             area.style.background = '#f0f0f0';
             
             const delays = {
-                easy: [1000, 2000],
-                medium: [700, 1500],
+                easy: [1200, 2000],
+                medium: [800, 1500],
                 hard: [400, 1000]
             };
-            const [min, max] = delays[state.doubleclick.diff];
+            const [min, max] = delays[state.flick.diff];
             const delay = Math.random() * (max - min) + min;
 
             setTimeout(() => {
-                area.textContent = '[CLICK]';
-                area.style.background = '#4CAF50';
-                state.doubleclick.startTime = performance.now();
+                area.textContent = '[FLICK HERE]';
+                area.style.background = '#64B5F6';
+                area.style.boxShadow = '0 0 20px rgba(100, 181, 246, 0.5)';
+                state.flick.startTime = performance.now();
                 
-                let clicks = 0;
-                let lastClickTime = 0;
-                let clickTimeout = null;
-                
-                const handleDoubleClick = () => {
-                    clicks++;
-                    const now = performance.now();
-                    
-                    if (clicks === 1) {
-                        lastClickTime = now;
-                        clickTimeout = setTimeout(() => {
-                            clicks = 0;
-                        }, 300);
-                    } else if (clicks === 2) {
-                        clearTimeout(clickTimeout);
-                        const time = Math.round(now - state.doubleclick.startTime);
-                        recordDoubleClickResult(time);
-                        area.onclick = null;
+                let flicked = false;
+                const handleFlick = (e) => {
+                    if (!flicked) {
+                        flicked = true;
+                        const time = Math.round(performance.now() - state.flick.startTime);
+                        recordFlickResult(true, time);
                     }
                 };
                 
-                area.onclick = handleDoubleClick;
+                area.onclick = handleFlick;
                 
-                // Auto-fail if not double-clicked within 3 seconds
+                // Auto-fail if not clicked within 4 seconds
                 const autoFailId = setTimeout(() => {
-                    if (clicks < 2) {
-                        recordDoubleClickResult(3000);
+                    if (!flicked) {
+                        recordFlickResult(false, 4000);
                     }
-                }, 3000);
+                }, 4000);
                 
-                state.doubleclick.timeoutId = autoFailId;
+                state.flick.timeoutId = autoFailId;
             }, delay);
         }
 
-        function recordDoubleClickResult(time) {
-            state.doubleclick.results.push(time);
-            document.getElementById('doubleclick-current').textContent = time + ' ms';
-            const min = Math.min(...state.doubleclick.results);
-            const avg = Math.round(state.doubleclick.results.reduce((a, b) => a + b) / state.doubleclick.results.length);
-            document.getElementById('doubleclick-best').textContent = min + ' ms';
-
-            saveResults('doubleclick');
-
-            state.doubleclick.currentAttempt++;
-            if (state.doubleclick.currentAttempt < 3) {
-                document.getElementById('doubleclick-attempt').textContent = `ATTEMPT ${state.doubleclick.currentAttempt} / 3`;
-                setTimeout(runDoubleClickRound, 1500);
+        function recordFlickResult(success, time) {
+            if (success) {
+                state.flick.correct++;
+                document.getElementById('flick-current').textContent = '[OK]';
             } else {
-                document.getElementById('doubleclick-area').textContent = '[DONE]';
+                document.getElementById('flick-current').textContent = '[MISS]';
+            }
+            
+            state.flick.results.push(success ? 1 : 0);
+            document.getElementById('flick-correct').textContent = state.flick.correct + ' / 5';
+
+            state.flick.currentAttempt++;
+            if (state.flick.currentAttempt < 5) {
+                document.getElementById('flick-attempt').textContent = `ATTEMPT ${state.flick.currentAttempt} / 5`;
+                setTimeout(runFlickRound, 1500);
+            } else {
+                localStorage.setItem('reactions_flick_correct', Math.min(state.flick.correct, 5));
+                document.getElementById('flick-area').innerHTML = '[DONE]';
                 setTimeout(() => {
                     loadAndDisplayStats();
-                    closeModal('doubleclick');
+                    closeModal('flick');
                 }, 1500);
             }
         }
