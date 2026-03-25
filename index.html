@@ -806,9 +806,9 @@
             <!-- SPRAY CONTROL -->
             <div class="card">
                 <div class="card-num">12 / TRAINING</div>
-                <div class="card-title">SPRAY CONTROL</div>
-                <div class="card-desc">Hit targets appearing in quick succession</div>
-                <div class="card-stats" id="stats-spray">0 / 10</div>
+                <div class="card-title">TARGET BURST</div>
+                <div class="card-desc">Timed burst of hits with false starts on misses</div>
+                <div class="card-stats" id="stats-spray">[0]</div>
                 <div class="card-controls">
                     <button class="dropdown-btn" onclick="toggleMenu(event, 'spray')">▼</button>
                     <div class="difficulty-menu" id="menu-spray">
@@ -818,6 +818,38 @@
                     </div>
                 </div>
                 <button class="start-btn" onclick="startTest('spray')">START</button>
+            </div>
+
+            <div class="card">
+                <div class="card-num">13 / TRAINING</div>
+                <div class="card-title">MICRO ADJUST</div>
+                <div class="card-desc">Small corrections around center mass</div>
+                <div class="card-stats" id="stats-micro">[0]</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'micro')">▼</button>
+                    <div class="difficulty-menu" id="menu-micro">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'micro', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'micro', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'micro', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('micro')">START</button>
+            </div>
+
+            <div class="card">
+                <div class="card-num">14 / TRAINING</div>
+                <div class="card-title">TARGET SWITCH</div>
+                <div class="card-desc">Swap fast between two separate targets</div>
+                <div class="card-stats" id="stats-switch">[0]</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'switch')">▼</button>
+                    <div class="difficulty-menu" id="menu-switch">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'switch', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'switch', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'switch', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('switch')">START</button>
             </div>
 
 
@@ -900,9 +932,19 @@
                     <td id="result-tracking-status">NO DATA</td>
                 </tr>
                 <tr id="result-spray">
-                    <td>SPRAY CONTROL</td>
+                    <td>TARGET BURST</td>
                     <td id="result-spray-correct">0</td>
                     <td id="result-spray-status">NO DATA</td>
+                </tr>
+                <tr id="result-micro">
+                    <td>MICRO ADJUST</td>
+                    <td id="result-micro-correct">0</td>
+                    <td id="result-micro-status">NO DATA</td>
+                </tr>
+                <tr id="result-switch">
+                    <td>TARGET SWITCH</td>
+                    <td id="result-switch-correct">0</td>
+                    <td id="result-switch-status">NO DATA</td>
                 </tr>
             </tbody>
         </table>
@@ -1159,14 +1201,14 @@
         </div>
     </div>
 
-    <!-- SPRAY CONTROL MODAL -->
+    <!-- TARGET BURST MODAL -->
     <div class="modal" id="modal-spray">
         <div class="modal-content">
             <button class="close" onclick="closeModal('spray')">✕</button>
-            <div class="modal-title">SPRAY CONTROL</div>
+            <div class="modal-title">TARGET BURST</div>
             <div class="attempt-info" id="spray-attempt">SESSION / TIMED</div>
             <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
-                Hit green targets. Misses count as false start.
+                3 second prep, then burst the green targets. Misses count as false start.
             </div>
             <div id="spray-area" style="position: relative; width: 100%; height: 280px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
                 [WAIT]
@@ -1179,6 +1221,56 @@
                 <div class="stat">
                     <span>Hits:</span>
                     <span class="stat-value" id="spray-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MICRO ADJUST MODAL -->
+    <div class="modal" id="modal-micro">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('micro')">✕</button>
+            <div class="modal-title">MICRO ADJUST</div>
+            <div class="attempt-info" id="micro-attempt">SESSION / TIMED</div>
+            <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
+                Hit the small dot near center. Miss clicks count as false start.
+            </div>
+            <div id="micro-area" style="position: relative; width: 100%; height: 280px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
+                [WAIT]
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Status:</span>
+                    <span class="stat-value" id="micro-current">[X]</span>
+                </div>
+                <div class="stat">
+                    <span>Hits:</span>
+                    <span class="stat-value" id="micro-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TARGET SWITCH MODAL -->
+    <div class="modal" id="modal-switch">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('switch')">✕</button>
+            <div class="modal-title">TARGET SWITCH</div>
+            <div class="attempt-info" id="switch-attempt">SESSION / TIMED</div>
+            <div style="font-size: 14px; color: #666; margin: 15px 0; text-align: center;">
+                Clear both targets fast. One full pair = one point.
+            </div>
+            <div id="switch-area" style="position: relative; width: 100%; height: 280px; background: #f0f0f0; border: 2px solid #ddd; border-radius: 4px; cursor: crosshair; overflow: hidden;">
+                [WAIT]
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Status:</span>
+                    <span class="stat-value" id="switch-current">[X]</span>
+                </div>
+                <div class="stat">
+                    <span>Pairs:</span>
+                    <span class="stat-value" id="switch-correct">0</span>
                 </div>
             </div>
         </div>
@@ -1252,17 +1344,33 @@
 
             <div class="guide-section">
                 <div class="guide-mode-title">Tracking - pure cursor control</div>
-                <div class="guide-mode-desc">no shooting here. just keep your cursor on the moving circle and build track time</div>
+                <div class="guide-mode-desc">no shooting here. circle shows up instantly, then you get a 3 second prep before it starts moving. keep your cursor on it and build track time</div>
                 <div class="guide-mode-info">
-                    easy: big + slow | medium: smaller + faster | hard: small + fast. best result = longest track time, not reaction
+                    easy: a bit faster now | medium: faster again | hard: small + fast. best result = longest track time, not reaction
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Spray Control - hits over speed</div>
-                <div class="guide-mode-desc">this one counts hits, not reaction. green target = point. miss = false start. on hard there is also a red target you must avoid</div>
+                <div class="guide-mode-title">Target Burst - hits over speed</div>
+                <div class="guide-mode-desc">3 second prep, then timed burst. this one counts hits, not reaction. green target = point. miss = false start. on hard there is also a red target you must avoid</div>
                 <div class="guide-mode-info">
                     easy: 15 sec | medium: 12 sec | hard: 10 sec. your score is total hits in the time limit
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Micro Adjust - tiny corrections</div>
+                <div class="guide-mode-desc">small targets spawn near the center so you train little aim corrections instead of big flicks</div>
+                <div class="guide-mode-info">
+                    easy: larger dots and wider time | medium: smaller dots | hard: tiny dots and shorter windows. score = total hits
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Target Switch - snap between targets</div>
+                <div class="guide-mode-desc">two targets appear at once. clear both fast to score one pair</div>
+                <div class="guide-mode-info">
+                    easy: bigger pair with more time | medium: tighter window | hard: smaller targets and less time. score = completed pairs
                 </div>
             </div>
 
@@ -1303,7 +1411,9 @@
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
             colors: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, targetColor: null, startTime: null, timeoutId: null },
             tracking: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
-            spray: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null }
+            spray: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
+            micro: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
+            switch: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null }
         };
 
         // ===== STORAGE =====
@@ -1321,7 +1431,7 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
@@ -1374,7 +1484,9 @@
             // Clear any pending timeouts
             if (state[type].timeoutId) {
                 if (typeof state[type].timeoutId === 'object' && state[type].timeoutId !== null) {
+                    if (state[type].timeoutId.countdownInterval) clearInterval(state[type].timeoutId.countdownInterval);
                     if (state[type].timeoutId.moveInterval) clearInterval(state[type].timeoutId.moveInterval);
+                    if (state[type].timeoutId.spawnTimeout) clearTimeout(state[type].timeoutId.spawnTimeout);
                     if (state[type].timeoutId.roundTimeout) clearTimeout(state[type].timeoutId.roundTimeout);
                     if (type === 'tracking') {
                         const area = document.getElementById('tracking-area');
@@ -1389,6 +1501,10 @@
                     clearTimeout(state[type].timeoutId);
                 }
                 state[type].timeoutId = null;
+            }
+            if (state[type].timerInterval) {
+                clearInterval(state[type].timerInterval);
+                state[type].timerInterval = null;
             }
             // Clean up spacebar handler for classic
             if (type === 'classic' && state.classic.spaceHandler) {
@@ -1492,6 +1608,22 @@
                     area.style.pointerEvents = 'auto';
                 }
             }
+
+            if (type === 'micro') {
+                const area = document.getElementById('micro-area');
+                if (area) {
+                    area.innerHTML = '';
+                    area.style.pointerEvents = 'auto';
+                }
+            }
+
+            if (type === 'switch') {
+                const area = document.getElementById('switch-area');
+                if (area) {
+                    area.innerHTML = '';
+                    area.style.pointerEvents = 'auto';
+                }
+            }
             
             // Reset input fields
             const inputField = document.getElementById(`${type}-input`);
@@ -1516,7 +1648,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray'].forEach(type => {
+            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1540,6 +1672,10 @@
             state[type].correct = 0;
             state[type].sequence = [];
             state[type].userSequence = [];
+            state[type].sessionStartTime = null;
+            state[type].timeLimit = null;
+            state[type].timerInterval = null;
+            state[type].countdownStarted = false;
             
             // Reset display - Memory and Mental show different format
             let attemptDisplay = `ATTEMPT 1 / 3`;
@@ -1549,6 +1685,7 @@
 
             if (type === 'speed') attemptDisplay = `ATTEMPT 1 / 3`;
             if (type === 'colors') attemptDisplay = `ATTEMPT 1 / 3`;
+            if (type === 'spray' || type === 'micro' || type === 'switch') attemptDisplay = `SESSION / TIMED`;
             document.getElementById(`${type}-attempt`).textContent = attemptDisplay;
             
             // Clear all display fields for this test
@@ -1598,6 +1735,10 @@
                 runTrackingRound();
             } else if (type === 'spray') {
                 runSprayRound();
+            } else if (type === 'micro') {
+                runMicroAdjustRound();
+            } else if (type === 'switch') {
+                runTargetSwitchRound();
             }
         }
 
@@ -2637,7 +2778,7 @@
             area.innerHTML = '';
             
             const sizes = { easy: 42, medium: 35, hard: 25 };
-            const speeds = { easy: 2.2, medium: 2.8, hard: 4.2 };
+            const speeds = { easy: 2.5, medium: 3.1, hard: 4.5 };
             const targetSize = sizes[state.tracking.diff];
             const speed = speeds[state.tracking.diff];
             
@@ -2798,219 +2939,395 @@
             }
         }
 
-        // ===== SPRAY CONTROL =====
+        // ===== SHOOTER TRAINING =====
+        function startTimedShooterSession(type, areaId, setup) {
+            const area = document.getElementById(areaId);
+            area.style.background = '#f0f0f0';
+            area.innerHTML = '';
+            state[type].sessionStartTime = performance.now();
+            document.getElementById(`${type}-attempt`).textContent = `TIME LEFT ${(state[type].timeLimit / 1000).toFixed(1)}s`;
+
+            state[type].timerInterval = setInterval(() => {
+                const elapsed = performance.now() - state[type].sessionStartTime;
+                const remaining = Math.max(0, state[type].timeLimit - elapsed);
+                document.getElementById(`${type}-attempt`).textContent = `TIME LEFT ${(remaining / 1000).toFixed(1)}s`;
+                if (remaining <= 0) {
+                    clearInterval(state[type].timerInterval);
+                    state[type].timerInterval = null;
+                }
+            }, 100);
+
+            setup();
+        }
+
+        function startPrepCountdown(type, areaId, onReady) {
+            const area = document.getElementById(areaId);
+            let countdown = 3;
+            state[type].countdownStarted = true;
+            document.getElementById(`${type}-current`).textContent = 'STARTS IN 3';
+            area.innerHTML = `<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:42px; font-weight:700; color:#333;">3</div>`;
+            state[type].timeoutId = state[type].timeoutId || {};
+            state[type].timeoutId.countdownInterval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    document.getElementById(`${type}-current`).textContent = `STARTS IN ${countdown}`;
+                    area.innerHTML = `<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:42px; font-weight:700; color:#333;">${countdown}</div>`;
+                    return;
+                }
+
+                clearInterval(state[type].timeoutId.countdownInterval);
+                state[type].timeoutId.countdownInterval = null;
+                state[type].countdownStarted = false;
+                area.innerHTML = '';
+                onReady();
+            }, 1000);
+        }
+
+        function randomTargetPosition(area, size) {
+            return {
+                left: Math.random() * (area.clientWidth - size),
+                top: Math.random() * (area.clientHeight - size)
+            };
+        }
+
         function runSprayRound() {
             const area = document.getElementById('spray-area');
-            
-            // Initialize session on first attempt
-            if (state.spray.currentAttempt === 0) {
-                const timeLimits = {
-                    easy: 15000,
-                    medium: 12000,
-                    hard: 10000
-                };
-                state.spray.sessionStartTime = performance.now();
-                state.spray.timeLimit = timeLimits[state.spray.diff];
-                
-                // Start timer display
-                const updateTimer = setInterval(() => {
-                    const elapsed = performance.now() - state.spray.sessionStartTime;
-                    const remaining = Math.max(0, state.spray.timeLimit - elapsed);
-                    const seconds = (remaining / 1000).toFixed(1);
-                    
-                    if (remaining > 0) {
-                        document.getElementById('spray-current').textContent = `TIME: ${seconds}s`;
-                    }
-                    
-                    if (remaining <= 0) {
-                        clearInterval(updateTimer);
-                    }
-                }, 100);
-                state.spray.timerInterval = updateTimer;
+
+            if (!state.spray.sessionStartTime) {
+                state.spray.timeLimit = { easy: 15000, medium: 12000, hard: 10000 }[state.spray.diff];
+                if (!state.spray.countdownStarted) {
+                    startPrepCountdown('spray', 'spray-area', () => {
+                        startTimedShooterSession('spray', 'spray-area', runSprayRound);
+                    });
+                }
+                return;
             }
-            
-            // Check if time is up
-            const elapsed = performance.now() - state.spray.sessionStartTime;
-            if (elapsed >= state.spray.timeLimit) {
+
+            if (performance.now() - state.spray.sessionStartTime >= state.spray.timeLimit) {
                 endSprayTest();
                 return;
             }
-            
-            area.style.background = '#f0f0f0';
+
             area.innerHTML = '';
-            
             if (state.spray.diff === 'hard') {
-                // Hard mode: red and green targets
                 createSprayTargetPair(area);
             } else {
-                // Easy/Medium: single green target
                 createSprayTarget(area);
             }
         }
 
         function createSprayTarget(area) {
-            const targetSize = 35;
+            const targetSize = state.spray.diff === 'easy' ? 38 : 32;
             const target = document.createElement('div');
+            const { left, top } = randomTargetPosition(area, targetSize);
             target.style.position = 'absolute';
             target.style.width = targetSize + 'px';
             target.style.height = targetSize + 'px';
             target.style.background = '#4CAF50';
             target.style.borderRadius = '4px';
             target.style.cursor = 'crosshair';
-            target.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
-            target.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
+            target.style.left = left + 'px';
+            target.style.top = top + 'px';
             target.style.border = '2px solid #2E7D32';
-            
             area.appendChild(target);
-            
-            let clicked = false;
-            const handleMissClick = (e) => {
-                if (e.target !== target && !clicked) {
-                    clicked = true;
-                    area.removeEventListener('click', handleMissClick);
-                    target.style.display = 'none';
-                    recordSprayResult(false);
-                }
+
+            let resolved = false;
+            const finish = (success) => {
+                if (resolved) return;
+                resolved = true;
+                area.removeEventListener('click', missHandler);
+                recordSprayResult(success);
+            };
+
+            const missHandler = (e) => {
+                if (e.target !== target) finish(false);
             };
 
             target.onclick = (e) => {
                 e.stopPropagation();
-                if (!clicked) {
-                    clicked = true;
-                    area.removeEventListener('click', handleMissClick);
-                    target.style.display = 'none';
-                    recordSprayResult(true);
-                }
+                finish(true);
             };
 
-            area.addEventListener('click', handleMissClick);
-            
-            // Target disappears after 2 seconds
-            setTimeout(() => {
-                if (!clicked && target.parentElement) {
-                    area.removeEventListener('click', handleMissClick);
-                    recordSprayResult(false);
-                }
-            }, 2000);
+            area.addEventListener('click', missHandler);
+            state.spray.timeoutId = state.spray.timeoutId || {};
+            state.spray.timeoutId.spawnTimeout = setTimeout(() => finish(false), 1800);
         }
 
         function createSprayTargetPair(area) {
-            const targetSize = 35;
-            
-            // Green target (hit for point)
+            const targetSize = 32;
             const greenTarget = document.createElement('div');
+            const greenPos = randomTargetPosition(area, targetSize);
             greenTarget.style.position = 'absolute';
             greenTarget.style.width = targetSize + 'px';
             greenTarget.style.height = targetSize + 'px';
             greenTarget.style.background = '#4CAF50';
             greenTarget.style.borderRadius = '4px';
             greenTarget.style.cursor = 'crosshair';
-            greenTarget.style.left = Math.random() * (area.clientWidth - targetSize) + 'px';
-            greenTarget.style.top = Math.random() * (area.clientHeight - targetSize) + 'px';
+            greenTarget.style.left = greenPos.left + 'px';
+            greenTarget.style.top = greenPos.top + 'px';
             greenTarget.style.border = '2px solid #2E7D32';
-            
-            // Red target (hit = lose)
+
             const redTarget = document.createElement('div');
+            let redPos = randomTargetPosition(area, targetSize);
+            while (Math.abs(redPos.left - greenPos.left) < 100 && Math.abs(redPos.top - greenPos.top) < 100) {
+                redPos = randomTargetPosition(area, targetSize);
+            }
             redTarget.style.position = 'absolute';
             redTarget.style.width = targetSize + 'px';
             redTarget.style.height = targetSize + 'px';
             redTarget.style.background = '#FF5722';
             redTarget.style.borderRadius = '4px';
             redTarget.style.cursor = 'not-allowed';
-            let redLeft = Math.random() * (area.clientWidth - targetSize);
-            let redTop = Math.random() * (area.clientHeight - targetSize);
-            // Ensure red doesn't overlap with green
-            let greenLeft = parseFloat(greenTarget.style.left);
-            let greenTop = parseFloat(greenTarget.style.top);
-            while (Math.abs(redLeft - greenLeft) < 100 && Math.abs(redTop - greenTop) < 100) {
-                redLeft = Math.random() * (area.clientWidth - targetSize);
-                redTop = Math.random() * (area.clientHeight - targetSize);
-            }
-            redTarget.style.left = redLeft + 'px';
-            redTarget.style.top = redTop + 'px';
+            redTarget.style.left = redPos.left + 'px';
+            redTarget.style.top = redPos.top + 'px';
             redTarget.style.border = '2px solid #D84315';
-            
+
             area.appendChild(greenTarget);
             area.appendChild(redTarget);
-            
-            let clicked = false;
-            const handleMissClick = (e) => {
-                if (e.target !== greenTarget && e.target !== redTarget && !clicked) {
-                    clicked = true;
-                    area.removeEventListener('click', handleMissClick);
-                    greenTarget.style.display = 'none';
-                    redTarget.style.display = 'none';
-                    recordSprayResult(false);
-                }
-            };
-            
-            greenTarget.onclick = (e) => {
-                e.stopPropagation();
-                if (!clicked) {
-                    clicked = true;
-                    area.removeEventListener('click', handleMissClick);
-                    greenTarget.style.display = 'none';
-                    redTarget.style.display = 'none';
-                    recordSprayResult(true);
-                }
-            };
-            
-            redTarget.onclick = (e) => {
-                e.stopPropagation();
-                if (!clicked) {
-                    clicked = true;
-                    area.removeEventListener('click', handleMissClick);
-                    greenTarget.style.display = 'none';
-                    redTarget.style.display = 'none';
-                    recordSprayResult(false);
-                }
+
+            let resolved = false;
+            const finish = (success) => {
+                if (resolved) return;
+                resolved = true;
+                area.removeEventListener('click', missHandler);
+                recordSprayResult(success);
             };
 
-            area.addEventListener('click', handleMissClick);
-            
-            // Targets disappear after 2 seconds
-            setTimeout(() => {
-                if (!clicked && greenTarget.parentElement) {
-                    area.removeEventListener('click', handleMissClick);
-                    recordSprayResult(false);
-                }
-            }, 2000);
+            const missHandler = (e) => {
+                if (e.target !== greenTarget && e.target !== redTarget) finish(false);
+            };
+
+            greenTarget.onclick = (e) => {
+                e.stopPropagation();
+                finish(true);
+            };
+
+            redTarget.onclick = (e) => {
+                e.stopPropagation();
+                finish(false);
+            };
+
+            area.addEventListener('click', missHandler);
+            state.spray.timeoutId = state.spray.timeoutId || {};
+            state.spray.timeoutId.spawnTimeout = setTimeout(() => finish(false), 1500);
         }
 
         function recordSprayResult(success) {
-            // Check if time is already up
-            const elapsed = performance.now() - state.spray.sessionStartTime;
-            if (elapsed >= state.spray.timeLimit) {
+            if (performance.now() - state.spray.sessionStartTime >= state.spray.timeLimit) {
                 endSprayTest();
                 return;
             }
-            
+
             if (success) {
                 state.spray.correct++;
                 document.getElementById('spray-current').textContent = '[OK]';
             } else {
                 document.getElementById('spray-current').textContent = '[FALSE START]';
             }
-            
+
             state.spray.results.push(success ? 1 : 0);
             document.getElementById('spray-correct').textContent = state.spray.correct;
-
             state.spray.currentAttempt++;
-            
-            // Continue if time is available
-            setTimeout(runSprayRound, 600);
+            state.spray.timeoutId = state.spray.timeoutId || {};
+            state.spray.timeoutId.spawnTimeout = setTimeout(runSprayRound, 420);
         }
-        
+
         function endSprayTest() {
-            if (state.spray.timerInterval) {
-                clearInterval(state.spray.timerInterval);
-                state.spray.timerInterval = null;
-            }
             localStorage.setItem('reactions_spray_correct', state.spray.correct);
+            document.getElementById('spray-attempt').textContent = 'SESSION / DONE';
             document.getElementById('spray-area').innerHTML = '[DONE]';
             setTimeout(() => {
                 loadAndDisplayStats();
                 closeModal('spray');
+            }, 1500);
+        }
+
+        function runMicroAdjustRound() {
+            const area = document.getElementById('micro-area');
+
+            if (!state.micro.sessionStartTime) {
+                state.micro.timeLimit = { easy: 14000, medium: 12000, hard: 10000 }[state.micro.diff];
+                startTimedShooterSession('micro', 'micro-area', runMicroAdjustRound);
+                return;
+            }
+
+            if (performance.now() - state.micro.sessionStartTime >= state.micro.timeLimit) {
+                endMicroAdjustTest();
+                return;
+            }
+
+            area.innerHTML = '';
+            const targetSize = { easy: 24, medium: 18, hard: 14 }[state.micro.diff];
+            const radius = { easy: 90, medium: 125, hard: 160 }[state.micro.diff];
+            const lifetime = { easy: 1400, medium: 1050, hard: 800 }[state.micro.diff];
+            const centerX = area.clientWidth / 2;
+            const centerY = area.clientHeight / 2;
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * radius;
+            const left = Math.max(0, Math.min(centerX + Math.cos(angle) * distance - targetSize / 2, area.clientWidth - targetSize));
+            const top = Math.max(0, Math.min(centerY + Math.sin(angle) * distance - targetSize / 2, area.clientHeight - targetSize));
+
+            const target = document.createElement('div');
+            target.style.position = 'absolute';
+            target.style.width = targetSize + 'px';
+            target.style.height = targetSize + 'px';
+            target.style.background = '#111';
+            target.style.border = '2px solid #4CAF50';
+            target.style.borderRadius = '50%';
+            target.style.left = left + 'px';
+            target.style.top = top + 'px';
+            target.style.cursor = 'crosshair';
+            area.appendChild(target);
+
+            let resolved = false;
+            const finish = (success) => {
+                if (resolved) return;
+                resolved = true;
+                area.removeEventListener('click', missHandler);
+                recordMicroAdjustResult(success);
+            };
+
+            const missHandler = (e) => {
+                if (e.target !== target) finish(false);
+            };
+
+            target.onclick = (e) => {
+                e.stopPropagation();
+                finish(true);
+            };
+
+            area.addEventListener('click', missHandler);
+            state.micro.timeoutId = state.micro.timeoutId || {};
+            state.micro.timeoutId.spawnTimeout = setTimeout(() => finish(false), lifetime);
+        }
+
+        function recordMicroAdjustResult(success) {
+            if (performance.now() - state.micro.sessionStartTime >= state.micro.timeLimit) {
+                endMicroAdjustTest();
+                return;
+            }
+
+            if (success) {
+                state.micro.correct++;
+                document.getElementById('micro-current').textContent = '[OK]';
+            } else {
+                document.getElementById('micro-current').textContent = '[FALSE START]';
+            }
+
+            state.micro.results.push(success ? 1 : 0);
+            document.getElementById('micro-correct').textContent = state.micro.correct;
+            state.micro.currentAttempt++;
+            state.micro.timeoutId = state.micro.timeoutId || {};
+            state.micro.timeoutId.spawnTimeout = setTimeout(runMicroAdjustRound, 320);
+        }
+
+        function endMicroAdjustTest() {
+            localStorage.setItem('reactions_micro_correct', state.micro.correct);
+            document.getElementById('micro-attempt').textContent = 'SESSION / DONE';
+            document.getElementById('micro-area').innerHTML = '[DONE]';
+            setTimeout(() => {
+                loadAndDisplayStats();
+                closeModal('micro');
+            }, 1500);
+        }
+
+        function runTargetSwitchRound() {
+            const area = document.getElementById('switch-area');
+
+            if (!state.switch.sessionStartTime) {
+                state.switch.timeLimit = { easy: 14000, medium: 12000, hard: 10000 }[state.switch.diff];
+                startTimedShooterSession('switch', 'switch-area', runTargetSwitchRound);
+                return;
+            }
+
+            if (performance.now() - state.switch.sessionStartTime >= state.switch.timeLimit) {
+                endTargetSwitchTest();
+                return;
+            }
+
+            area.innerHTML = '';
+            const targetSize = { easy: 34, medium: 28, hard: 22 }[state.switch.diff];
+            const lifetime = { easy: 1800, medium: 1300, hard: 950 }[state.switch.diff];
+
+            const first = document.createElement('div');
+            const second = document.createElement('div');
+            const firstPos = randomTargetPosition(area, targetSize);
+            let secondPos = randomTargetPosition(area, targetSize);
+            while (Math.abs(secondPos.left - firstPos.left) < 120 && Math.abs(secondPos.top - firstPos.top) < 120) {
+                secondPos = randomTargetPosition(area, targetSize);
+            }
+
+            [
+                [first, firstPos],
+                [second, secondPos]
+            ].forEach(([el, pos]) => {
+                el.style.position = 'absolute';
+                el.style.width = targetSize + 'px';
+                el.style.height = targetSize + 'px';
+                el.style.background = '#4CAF50';
+                el.style.border = '2px solid #2E7D32';
+                el.style.borderRadius = '6px';
+                el.style.left = pos.left + 'px';
+                el.style.top = pos.top + 'px';
+                el.style.cursor = 'crosshair';
+                area.appendChild(el);
+            });
+
+            let hits = 0;
+            let resolved = false;
+            const finish = (success) => {
+                if (resolved) return;
+                resolved = true;
+                area.removeEventListener('click', missHandler);
+                recordTargetSwitchResult(success);
+            };
+
+            const missHandler = (e) => {
+                if (e.target !== first && e.target !== second) finish(false);
+            };
+
+            const handleHit = (targetEl) => (e) => {
+                e.stopPropagation();
+                if (targetEl.style.visibility === 'hidden') return;
+                targetEl.style.visibility = 'hidden';
+                hits++;
+                if (hits === 2) finish(true);
+            };
+
+            first.onclick = handleHit(first);
+            second.onclick = handleHit(second);
+            area.addEventListener('click', missHandler);
+            state.switch.timeoutId = state.switch.timeoutId || {};
+            state.switch.timeoutId.spawnTimeout = setTimeout(() => finish(false), lifetime);
+        }
+
+        function recordTargetSwitchResult(success) {
+            if (performance.now() - state.switch.sessionStartTime >= state.switch.timeLimit) {
+                endTargetSwitchTest();
+                return;
+            }
+
+            if (success) {
+                state.switch.correct++;
+                document.getElementById('switch-current').textContent = '[OK]';
+            } else {
+                document.getElementById('switch-current').textContent = '[FALSE START]';
+            }
+
+            state.switch.results.push(success ? 1 : 0);
+            document.getElementById('switch-correct').textContent = state.switch.correct;
+            state.switch.currentAttempt++;
+            state.switch.timeoutId = state.switch.timeoutId || {};
+            state.switch.timeoutId.spawnTimeout = setTimeout(runTargetSwitchRound, 360);
+        }
+
+        function endTargetSwitchTest() {
+            localStorage.setItem('reactions_switch_correct', state.switch.correct);
+            document.getElementById('switch-attempt').textContent = 'SESSION / DONE';
+            document.getElementById('switch-area').innerHTML = '[DONE]';
+            setTimeout(() => {
+                loadAndDisplayStats();
+                closeModal('switch');
             }, 1500);
         }
 
