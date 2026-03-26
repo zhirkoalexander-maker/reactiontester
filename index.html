@@ -629,26 +629,9 @@
                 <button class="start-btn" onclick="startTest('classic')">START</button>
             </div>
 
-            <!-- INSANE -->
-            <div class="card">
-                <div class="card-num">02 / TEST</div>
-                <div class="card-title">INSANE</div>
-                <div class="card-desc">Catch the moving green square - much harder!</div>
-                <div class="card-stats" id="stats-insane">— ms</div>
-                <div class="card-controls">
-                    <button class="dropdown-btn" onclick="toggleMenu(event, 'insane')">▼</button>
-                    <div class="difficulty-menu" id="menu-insane">
-                        <div class="difficulty-option selected" onclick="setDiff(event, 'insane', 'easy')">EASY</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'insane', 'medium')">NORMAL</div>
-                        <div class="difficulty-option" onclick="setDiff(event, 'insane', 'hard')">HARD</div>
-                    </div>
-                </div>
-                <button class="start-btn" onclick="startTest('insane')">START</button>
-            </div>
-
             <!-- FOCUS -->
             <div class="card">
-                <div class="card-num">03 / TEST</div>
+                <div class="card-num">02 / TEST</div>
                 <div class="card-title">FOCUS</div>
                 <div class="card-desc">Wait then react - concentration challenge</div>
                 <div class="card-stats" id="stats-focus">— ms</div>
@@ -666,7 +649,7 @@
             <div class="section-header">II. TYPING TESTS</div>
             <!-- CHAT -->
             <div class="card">
-                <div class="card-num">04 / TEST</div>
+                <div class="card-num">03 / TEST</div>
                 <div class="card-title">CHAT</div>
                 <div class="card-desc">Type fast response to chat messages</div>
                 <div class="card-stats" id="stats-chat">0 / 3</div>
@@ -683,7 +666,7 @@
 
             <!-- TYPING -->
             <div class="card">
-                <div class="card-num">05 / TEST</div>
+                <div class="card-num">04 / TEST</div>
                 <div class="card-title">TYPING</div>
                 <div class="card-desc">Type phrases as fast and accurately as you can</div>
                 <div class="card-stats" id="stats-typing">— ms</div>
@@ -701,7 +684,7 @@
             <div class="section-header">III. MEMORY / SKILL TESTS</div>
             <!-- VISUAL -->
             <div class="card">
-                <div class="card-num">06 / TEST</div>
+                <div class="card-num">05 / TEST</div>
                 <div class="card-title">VISUAL</div>
                 <div class="card-desc">Find the odd emoji out among the others</div>
                 <div class="card-stats" id="stats-visual">0 / 3</div>
@@ -876,11 +859,6 @@
                     <td>—</td>
                     <td id="result-classic-status">NO DATA</td>
                 </tr>
-                <tr id="result-insane">
-                    <td>INSANE</td>
-                    <td>—</td>
-                    <td id="result-insane-status">NO DATA</td>
-                </tr>
                 <tr id="result-visual">
                     <td>VISUAL</td>
                     <td>—</td>
@@ -969,30 +947,6 @@
                 <div class="stat">
                     <span>Average:</span>
                     <span class="stat-value" id="classic-avg">— ms</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- INSANE MODAL -->
-    <div class="modal" id="modal-insane">
-        <div class="modal-content">
-            <button class="close" onclick="closeModal('insane')">✕</button>
-            <div class="modal-title">INSANE</div>
-            <div class="attempt-info" id="insane-attempt">ATTEMPT 1 / 3</div>
-            <div class="test-area" id="insane-area" style="cursor: pointer;"><span class="square-inside" id="square-sprite">🟩</span></div>
-            <div class="stats">
-                <div class="stat">
-                    <span>Current:</span>
-                    <span class="stat-value" id="insane-current">— ms</span>
-                </div>
-                <div class="stat">
-                    <span>Best:</span>
-                    <span class="stat-value" id="insane-best">— ms</span>
-                </div>
-                <div class="stat">
-                    <span>Average:</span>
-                    <span class="stat-value" id="insane-avg">— ms</span>
                 </div>
             </div>
         </div>
@@ -1303,14 +1257,6 @@
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Insane - moving target</div>
-                <div class="guide-mode-desc">okay so theres a moving square. you gotta click it before it jumps again lol</div>
-                <div class="guide-mode-info">
-                    easy: slower jumps | medium: medium speed | hard: actually insane
-                </div>
-            </div>
-
-            <div class="guide-section">
                 <div class="guide-mode-title">Visual - spot the difference</div>
                 <div class="guide-mode-desc">theres circles and one blue dot. find it quick</div>
                 <div class="guide-mode-info">
@@ -1401,7 +1347,6 @@
         // STATE
         const state = {
             classic: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
-            insane: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, movingPos: null, timeoutId: null },
             visual: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
             mental: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentProblem: null, startTime: null, timeoutId: null },
             memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null },
@@ -1431,12 +1376,12 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'insane' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'tracking') {
+                if (type === 'classic' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'tracking') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = type === 'tracking'
                         ? (best ? `TRACK: ${best} ms` : 'TRACK: — ms')
@@ -1539,15 +1484,6 @@
                     grid.style.pointerEvents = 'auto';
                 }
             }
-            // Clean up insane area
-            if (type === 'insane') {
-                const area = document.getElementById('insane-area');
-                if (area) {
-                    area.onclick = null;
-                    area.style.transform = 'translate(0, 0)';
-                    area.textContent = '[WAIT]';
-                }
-            }
             // Clean up focus handlers
             if (type === 'focus') {
                 const area = document.getElementById('focus-area');
@@ -1648,7 +1584,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'insane', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'colors', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1713,8 +1649,6 @@
 
             if (type === 'classic') {
                 runClassicRound();
-            } else if (type === 'insane') {
-                runInsaneRound();
             } else if (type === 'visual') {
                 runVisualRound();
             } else if (type === 'mental') {
@@ -1756,11 +1690,22 @@
             };
             const [min, max] = delays[state.classic.diff];
             const delay = Math.random() * (max - min) + min;
+            let readyTimeout = null;
 
             // Prevent false starts - block clicks and space before ready
             let roundActive = false;
             
             const showFalseStart = () => {
+                if (readyTimeout) {
+                    clearTimeout(readyTimeout);
+                    readyTimeout = null;
+                }
+                if (state.classic.spaceHandler) {
+                    document.removeEventListener('keydown', state.classic.spaceHandler);
+                    state.classic.spaceHandler = null;
+                }
+                area.onclick = null;
+                roundActive = false;
                 area.style.background = '#ffcdd2';
                 area.textContent = '✗ FALSE START';
                 // Always restart after showing false start message
@@ -1784,7 +1729,7 @@
             };
             document.addEventListener('keydown', state.classic.spaceHandler);
 
-            setTimeout(() => {
+            readyTimeout = setTimeout(() => {
                 roundActive = true;
                 area.textContent = '🟢 CLICK!';
                 area.classList.add('ready');
@@ -1815,6 +1760,28 @@
                 state.classic.spaceHandler = spaceHandler;
                 document.addEventListener('keydown', state.classic.spaceHandler);
             }, delay);
+            state.classic.timeoutId = readyTimeout;
+        }
+
+        function startTypingCountdown(type, onReady) {
+            const currentEl = document.getElementById(`${type}-current`);
+            let countdown = 3;
+            currentEl.textContent = 'STARTS IN 3';
+
+            const tick = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    currentEl.textContent = `STARTS IN ${countdown}`;
+                    return;
+                }
+
+                clearInterval(tick);
+                state[type].timerInterval = null;
+                currentEl.textContent = '—';
+                onReady();
+            }, 1000);
+
+            state[type].timerInterval = tick;
         }
 
         function recordClassicResult(time) {
@@ -1847,100 +1814,6 @@
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('classic');
-                }, 1500);
-            }
-        }
-
-        // ===== INSANE TEST =====
-        function runInsaneRound() {
-            const area = document.getElementById('insane-area');
-            const square = document.getElementById('square-sprite');
-            area.style.position = 'relative';
-            
-            // Show feedback for false starts before square appears
-            let roundActive = false;
-            
-            const showFalseStart = () => {
-                area.style.background = '#ffcdd2';
-                square.textContent = '[FALSE START]';
-                setTimeout(() => {
-                    if (roundActive) runInsaneRound(); // restart round
-                }, 1200);
-            };
-            
-            area.onclick = () => {
-                if (!roundActive) {
-                    showFalseStart();
-                }
-            };
-
-            const delays = {
-                easy: [800, 1500],
-                medium: [600, 1200],
-                hard: [400, 1000]
-            };
-            const [min, max] = delays[state.insane.diff];
-            const delay = Math.random() * (max - min) + min;
-
-            setTimeout(() => {
-                roundActive = true;
-                state.insane.startTime = performance.now();
-                moveSquare(area);
-            }, delay);
-        }
-
-        function moveSquare(area) {
-            const square = document.getElementById('square-sprite');
-            const maxX = area.clientWidth - square.offsetWidth;
-            const maxY = area.clientHeight - square.offsetHeight;
-            
-            const x = Math.random() * maxX;
-            const y = Math.random() * maxY;
-            
-            square.style.left = x + 'px';
-            square.style.top = y + 'px';
-            state.insane.movingPos = { x, y };
-
-            area.onclick = () => {
-                area.onclick = null;
-                const time = Math.round(performance.now() - state.insane.startTime);
-                recordInsaneResult(time);
-            };
-        }
-
-        function recordInsaneResult(time) {
-            // If time is over 1200ms, give retry instead of counting as fail
-            if (time > 1200) {
-                document.getElementById('insane-current').textContent = '[RETRY]';
-                const area = document.getElementById('insane-area');
-                area.style.transform = 'translate(0, 0)';
-                setTimeout(runInsaneRound, 1500);
-                return;
-            }
-            
-            state.insane.results.push(time);
-            document.getElementById('insane-current').textContent = time + ' ms';
-            const min = Math.min(...state.insane.results);
-            const avg = Math.round(state.insane.results.reduce((a, b) => a + b) / state.insane.results.length);
-            document.getElementById('insane-best').textContent = min + ' ms';
-            document.getElementById('insane-avg').textContent = avg + ' ms';
-
-            // Save to localStorage
-            saveResults('insane');
-
-            state.insane.currentAttempt++;
-            if (state.insane.currentAttempt < 3) {
-                document.getElementById('insane-attempt').textContent = `ATTEMPT ${state.insane.currentAttempt} / 3`;
-                const area = document.getElementById('insane-area');
-                area.style.transform = 'translate(0, 0)';
-                setTimeout(runInsaneRound, 1500);
-            } else {
-                const area = document.getElementById('insane-area');
-                area.style.transform = 'translate(0, 0)';
-                area.textContent = '[DONE]';
-                setTimeout(() => {
-                    loadAndDisplayStats();
-                    closeModal('insane');
                 }, 1500);
             }
         }
@@ -2343,12 +2216,10 @@
             inputBox.disabled = false;
             msgDisplay.textContent = 'Waiting for message...';
             if (exampleDisplay) exampleDisplay.textContent = '';
-            
-            const timeLimits = { easy: 15000, medium: 10000, hard: 6000 };
-            const timeLimit = timeLimits[state.chat.diff];
 
-            // Show message after brief delay
-            setTimeout(() => {
+            startTypingCountdown('chat', () => {
+                const timeLimits = { easy: 15000, medium: 10000, hard: 6000 };
+                const timeLimit = timeLimits[state.chat.diff];
                 state.chat.currentMessage = generateChatMessage();
                 msgDisplay.textContent = state.chat.currentMessage.msg;
                 msgDisplay.style.color = '#333';
@@ -2385,7 +2256,7 @@
 
                 state.chat.submitHandler = handleChatSubmit;
                 document.addEventListener('keydown', state.chat.submitHandler);
-            }, 500);
+            });
         }
 
         function recordChatResult(correct, time) {
@@ -2440,29 +2311,33 @@
 
             const phraseList = phrases[state.typing.diff];
             state.typing.currentPhrase = phraseList[Math.floor(Math.random() * phraseList.length)];
-            state.typing.results = [];
-            
-            document.getElementById('typing-phrase').textContent = state.typing.currentPhrase;
+
+            document.getElementById('typing-phrase').textContent = 'Get ready...';
             document.getElementById('typing-input').value = '';
-            document.getElementById('typing-input').focus();
-            
-            state.typing.startTime = performance.now();
-            
-            // Listen for Enter to submit
-            const submitTyping = (e) => {
-                if (e.code === 'Enter') {
-                    e.preventDefault();
-                    const input = document.getElementById('typing-input').value.trim();
-                    if (input === state.typing.currentPhrase) {
-                        recordTypingResult(true);
-                    } else {
-                        recordTypingResult(false);
+            document.getElementById('typing-input').disabled = true;
+
+            startTypingCountdown('typing', () => {
+                document.getElementById('typing-phrase').textContent = state.typing.currentPhrase;
+                document.getElementById('typing-input').disabled = false;
+                document.getElementById('typing-input').focus();
+
+                state.typing.startTime = performance.now();
+
+                const submitTyping = (e) => {
+                    if (e.code === 'Enter') {
+                        e.preventDefault();
+                        const input = document.getElementById('typing-input').value.trim();
+                        if (input === state.typing.currentPhrase) {
+                            recordTypingResult(true);
+                        } else {
+                            recordTypingResult(false);
+                        }
                     }
-                }
-            };
-            
-            state.typing.submitHandler = submitTyping;
-            document.addEventListener('keydown', submitTyping);
+                };
+
+                state.typing.submitHandler = submitTyping;
+                document.addEventListener('keydown', submitTyping);
+            });
         }
 
         function recordTypingResult(correct) {
