@@ -9,17 +9,19 @@
     <title>Reaction Tester</title>
     <style>
         :root {
-            --bg-main: #f6f2ea;
-            --bg-panel: #fffdf9;
-            --bg-soft: #f1ece3;
-            --line-main: #d8d0c2;
-            --line-soft: #e7dfd2;
-            --text-main: #26231d;
-            --text-soft: #625b52;
-            --accent: #2f5d50;
-            --accent-soft: #dbe7e2;
-            --shadow-soft: 0 8px 24px rgba(41, 33, 24, 0.07);
-            --shadow-card: 0 2px 8px rgba(41, 33, 24, 0.05);
+            --bg-main: #dde5ec;
+            --bg-panel: #f8fbfd;
+            --bg-soft: #eaf0f5;
+            --line-main: #aebbc7;
+            --line-soft: #cad4dd;
+            --text-main: #182129;
+            --text-soft: #53616c;
+            --accent: #b44b36;
+            --accent-strong: #8f3524;
+            --accent-soft: #f0d8d2;
+            --ink-blue: #24425c;
+            --shadow-soft: 0 18px 40px rgba(26, 39, 52, 0.12);
+            --shadow-card: 0 6px 14px rgba(26, 39, 52, 0.08);
         }
 
         * {
@@ -30,45 +32,66 @@
 
         html, body {
             background:
-                radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 28%),
-                linear-gradient(180deg, #faf6ef 0%, var(--bg-main) 100%);
+                linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 22%),
+                linear-gradient(90deg, rgba(36, 66, 92, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(36, 66, 92, 0.05) 1px, transparent 1px),
+                linear-gradient(180deg, #e8eef3 0%, var(--bg-main) 100%);
+            background-size: auto, 24px 24px, 24px 24px, auto;
             color: var(--text-main);
         }
 
         body {
-            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Avenir Next', 'Segoe UI', sans-serif;
             font-size: 13px;
             line-height: 1.55;
             padding: 24px;
         }
 
         .container {
-            max-width: 1020px;
+            max-width: 1040px;
             margin: 0 auto;
+            padding: 18px 20px 26px;
+            background: rgba(248, 251, 253, 0.74);
+            border: 1px solid rgba(174, 187, 199, 0.8);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(8px);
         }
 
         .header {
-            margin-bottom: 46px;
-            padding: 0 0 22px 0;
-            border-bottom: 1px solid var(--line-main);
+            margin-bottom: 42px;
+            padding: 2px 0 18px 0;
+            border-bottom: 2px solid var(--ink-blue);
             text-align: left;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: flex-end;
             gap: 16px;
         }
 
         .header-copy {
             max-width: 640px;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .header-copy::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 4px;
+            width: 5px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--ink-blue) 100%);
         }
 
         .title {
-            font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-            font-size: 31px;
+            font-family: 'Avenir Next Condensed', 'Franklin Gothic Medium', 'Arial Narrow', sans-serif;
+            font-size: 34px;
             font-weight: 700;
-            margin-bottom: 6px;
-            letter-spacing: -0.6px;
-            color: #201c16;
+            margin-bottom: 4px;
+            letter-spacing: 0.02em;
+            color: var(--ink-blue);
+            text-transform: uppercase;
         }
 
         .subtitle {
@@ -77,26 +100,29 @@
             margin-bottom: 0;
             font-weight: 500;
             max-width: 560px;
+            letter-spacing: 0.01em;
         }
 
         .guide-btn {
-            padding: 7px 12px;
-            border: 1px solid #8d857a;
-            background: rgba(255, 253, 249, 0.9);
-            color: #373129;
+            padding: 8px 12px;
+            border: 1px solid var(--ink-blue);
+            background: #fdfefe;
+            color: var(--ink-blue);
             font-size: 11px;
             cursor: pointer;
-            border-radius: 999px;
+            border-radius: 4px;
             transition: all 0.14s ease;
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            font-weight: 500;
-            letter-spacing: 0.04em;
-            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            box-shadow: 3px 3px 0 rgba(36, 66, 92, 0.12);
         }
 
         .guide-btn:hover {
-            background: #f3ede3;
-            border-color: #4d463d;
+            background: var(--ink-blue);
+            color: #fff;
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0 rgba(36, 66, 92, 0.12);
         }
 
         .guide-modal {
@@ -118,16 +144,16 @@
         }
 
         .guide-content {
-            border: 1px solid var(--line-main);
+            border: 2px solid var(--ink-blue);
             background: var(--bg-panel);
             padding: 30px;
             max-width: 700px;
             max-height: 85vh;
             overflow-y: auto;
-            border-radius: 10px;
+            border-radius: 0;
             box-shadow: var(--shadow-soft);
             position: relative;
-            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Avenir Next', 'Segoe UI', sans-serif;
         }
 
         .guide-close {
@@ -152,18 +178,19 @@
         }
 
         .guide-title {
-            font-size: 21px;
-            color: #1f1a15;
+            font-size: 22px;
+            color: var(--ink-blue);
             margin-bottom: 16px;
-            letter-spacing: -0.3px;
+            letter-spacing: 0.01em;
             font-weight: 700;
-            font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+            font-family: 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
+            text-transform: uppercase;
         }
 
         .guide-section {
             margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #eee;
+            padding: 0 0 12px 0;
+            border-bottom: 1px dashed #bac6d0;
         }
 
         .guide-section:last-child {
@@ -172,10 +199,10 @@
 
         .guide-mode-title {
             font-size: 12px;
-            color: #2e2a24;
+            color: var(--ink-blue);
             margin-bottom: 4px;
-            letter-spacing: 0.05em;
-            font-weight: 600;
+            letter-spacing: 0.08em;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
@@ -188,10 +215,10 @@
 
         .guide-mode-info {
             font-size: 11px;
-            color: #756c61;
-            background: #f5f0e7;
+            color: #5d6974;
+            background: #edf2f6;
             padding: 8px;
-            border-left: 2px solid #cbbfae;
+            border-left: 3px solid var(--accent);
             margin-top: 4px;
             font-family: 'Courier New', monospace;
         }
@@ -199,49 +226,50 @@
         .results-section {
             margin-top: 50px;
             padding-top: 20px;
-            border-top: 1px solid var(--line-main);
+            border-top: 2px solid var(--ink-blue);
         }
 
         .results-title {
             font-size: 18px;
-            color: #1a1a1a;
+            color: var(--ink-blue);
             margin-bottom: 12px;
-            letter-spacing: -0.3px;
+            letter-spacing: 0.04em;
             font-weight: 700;
+            text-transform: uppercase;
         }
 
         .results-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid var(--line-main);
+            border: 2px solid var(--ink-blue);
             background: var(--bg-panel);
-            border-radius: 8px;
+            border-radius: 0;
             overflow: hidden;
             font-size: 12px;
             box-shadow: var(--shadow-card);
         }
 
         .results-table th {
-            background: #f2ece1;
-            color: #3c352d;
+            background: #e8eef4;
+            color: var(--ink-blue);
             padding: 11px 10px;
             text-align: left;
-            border-bottom: 1px solid var(--line-main);
+            border-bottom: 2px solid var(--ink-blue);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
         }
 
         .results-table td {
-            color: #5d554c;
+            color: #4f5d68;
             padding: 10px;
-            border-bottom: 1px solid var(--line-soft);
+            border-bottom: 1px solid #d5dde4;
             font-family: 'Courier New', monospace;
             font-size: 11px;
         }
 
         .results-table tr:hover {
-            background: #faf6ef;
+            background: #f0f5f8;
         }
 
         .results-table tr:last-child td {
@@ -275,86 +303,93 @@
 
         .section-header {
             grid-column: 1 / -1;
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c2923;
-            letter-spacing: 1px;
-            padding: 18px 0 10px 0;
-            border-bottom: 1px solid var(--line-main);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ink-blue);
+            letter-spacing: 0.12em;
+            padding: 8px 12px;
+            border: 1px solid var(--ink-blue);
+            background: #edf3f7;
             margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
         .card {
-            border: 1px solid var(--line-main);
-            background: linear-gradient(180deg, #fffdfa 0%, #fffaf4 100%);
+            border: 1px solid #b8c4ce;
+            background: linear-gradient(180deg, #fbfdff 0%, #f4f8fb 100%);
             padding: 16px;
-            border-radius: 10px;
-            transition: all 0.15s;
+            border-radius: 0;
+            transition: all 0.15s ease;
             box-shadow: var(--shadow-card);
             min-height: 200px;
             display: flex;
             flex-direction: column;
             position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            border-color: #aca18e;
-            box-shadow: 0 10px 22px rgba(41, 33, 24, 0.08);
-            transform: translateY(-1px);
+            border-color: var(--ink-blue);
+            box-shadow: 0 12px 28px rgba(26, 39, 52, 0.11);
+            transform: translateY(-2px);
         }
 
         .card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 14px;
-            right: 14px;
-            height: 3px;
-            background: linear-gradient(90deg, rgba(47, 93, 80, 0.95), rgba(47, 93, 80, 0.2));
-            border-radius: 0 0 4px 4px;
+            left: 0;
+            width: 10px;
+            bottom: 0;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--ink-blue) 100%);
         }
 
         .card-num {
             font-size: 10px;
-            color: #999;
+            color: #73828f;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
-            font-weight: 500;
+            letter-spacing: 0.09em;
+            margin-bottom: 6px;
+            font-weight: 700;
+            padding-left: 8px;
         }
 
         .card-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
-            color: #201c16;
-            margin-bottom: 5px;
-            letter-spacing: -0.2px;
-            font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+            color: var(--ink-blue);
+            margin-bottom: 6px;
+            letter-spacing: 0.01em;
+            font-family: 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
+            text-transform: uppercase;
+            padding-left: 8px;
         }
 
         .card-desc {
             font-size: 11px;
             color: var(--text-soft);
-            margin-bottom: 10px;
-            line-height: 1.5;
+            margin-bottom: 12px;
+            line-height: 1.55;
             flex-grow: 1;
+            padding-left: 8px;
         }
 
         .card-stats {
             font-size: 11px;
-            color: #6f675d;
+            color: #5e6d78;
             margin-bottom: 10px;
-            padding: 6px;
-            border: 1px solid var(--line-soft);
-            background: #f7f2ea;
+            padding: 7px;
+            border: 1px solid #d3dbe2;
+            background: #eef3f7;
             text-align: center;
             min-height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
+            border-radius: 0;
             font-weight: 500;
             font-family: 'Courier New', monospace;
+            margin-left: 8px;
         }
 
         .card-controls {
@@ -363,25 +398,26 @@
             margin-bottom: 10px;
             align-items: center;
             position: relative;
+            padding-left: 8px;
         }
 
         .dropdown-btn {
             width: 36px;
             height: 32px;
-            border: 1px solid #b7ad9d;
-            background: #fffdf9;
-            color: #3c352d;
+            border: 1px solid #97a9b8;
+            background: #fcfdfe;
+            color: var(--ink-blue);
             cursor: pointer;
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 700;
             transition: all 0.1s;
-            border-radius: 6px;
+            border-radius: 0;
             flex-shrink: 0;
         }
 
         .dropdown-btn:hover {
-            background: #f3ede3;
-            border-color: #8f8575;
+            background: #edf3f7;
+            border-color: var(--ink-blue);
         }
 
         .difficulty-menu {
@@ -389,12 +425,12 @@
             top: 36px;
             left: 0;
             background: var(--bg-panel);
-            border: 1px solid var(--line-main);
+            border: 2px solid var(--ink-blue);
             min-width: 120px;
             display: none;
             z-index: 300;
             box-shadow: 0 12px 26px rgba(41, 33, 24, 0.12);
-            border-radius: 8px;
+            border-radius: 0;
         }
 
         .difficulty-menu.show {
@@ -416,35 +452,39 @@
         }
 
         .difficulty-option:hover {
-            background: #f4eee5;
+            background: #edf3f7;
         }
 
         .difficulty-option.selected {
             background: var(--accent-soft);
-            color: #16382e;
+            color: var(--accent-strong);
             font-weight: 600;
         }
 
         .start-btn {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #8d857a;
-            background: #fffdf9;
-            color: #393128;
+            padding: 9px;
+            border: 1px solid var(--ink-blue);
+            background: #fbfdfe;
+            color: var(--ink-blue);
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.14s ease;
             font-family: inherit;
-            letter-spacing: 0.05em;
-            border-radius: 999px;
+            letter-spacing: 0.08em;
+            border-radius: 0;
+            box-shadow: 3px 3px 0 rgba(36, 66, 92, 0.1);
+            margin-left: 8px;
         }
 
         .start-btn:hover {
             background: var(--accent);
             color: #fff;
             border-color: var(--accent);
+            transform: translate(1px, 1px);
+            box-shadow: 2px 2px 0 rgba(36, 66, 92, 0.1);
         }
 
         .start-btn:active {
@@ -475,12 +515,12 @@
 
         .modal-content {
             background: var(--bg-panel);
-            border: 1px solid var(--line-main);
+            border: 2px solid var(--ink-blue);
             padding: 40px;
             width: 90%;
             max-width: 600px;
             position: relative;
-            border-radius: 12px;
+            border-radius: 0;
             box-shadow: 0 14px 38px rgba(41, 33, 24, 0.16);
             text-align: center;
             max-height: 90vh;
@@ -493,56 +533,57 @@
             right: 12px;
             width: 28px;
             height: 28px;
-            border: 1px solid #ccc;
-            background: #f0f0f0;
-            color: #333;
+            border: 1px solid var(--ink-blue);
+            background: #edf3f7;
+            color: var(--ink-blue);
             font-size: 16px;
             cursor: pointer;
-            border-radius: 2px;
+            border-radius: 0;
             transition: all 0.1s;
         }
 
         .close:hover {
-            background: #e0e0e0;
-            border-color: #999;
+            background: var(--ink-blue);
+            color: #fff;
+            border-color: var(--ink-blue);
         }
 
         .modal-title {
             font-size: 25px;
-            color: #211d17;
+            color: var(--ink-blue);
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: -0.3px;
+            letter-spacing: 0.04em;
             font-weight: 700;
-            font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+            font-family: 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
         }
 
         .attempt-info {
             font-size: 11px;
-            color: #999;
+            color: #667785;
             margin-bottom: 16px;
             text-transform: uppercase;
-            font-weight: 500;
-            letter-spacing: 0.05em;
+            font-weight: 700;
+            letter-spacing: 0.08em;
         }
 
         .test-area {
-            border: 2px solid #ddd;
+            border: 2px solid #b8c4ce;
             padding: 40px 20px;
             text-align: center;
             font-size: 60px;
             margin: 20px 0;
-            background: #f9f9f9;
+            background: #eef3f7;
             min-height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            outline: 1px solid #eee;
+            outline: 1px solid #d3dbe2;
             outline-offset: -6px;
             position: relative;
             overflow: hidden;
-            border-radius: 2px;
+            border-radius: 0;
         }
 
         .square-inside {
@@ -554,17 +595,17 @@
         }
 
         .test-area.ready {
-            border-color: #333;
-            outline-color: #ccc;
-            background: #f0f0f0;
+            border-color: var(--accent);
+            outline-color: #c9d2d9;
+            background: #f7ebe8;
         }
 
         .stats {
             margin-top: 20px;
-            background: #f7f2ea;
+            background: #edf3f7;
             padding: 12px;
-            border: 1px solid var(--line-soft);
-            border-radius: 8px;
+            border: 1px solid #d2dbe3;
+            border-radius: 0;
             font-size: 11px;
         }
 
@@ -573,8 +614,8 @@
             justify-content: space-between;
             padding: 6px 0;
             font-size: 11px;
-            color: #333;
-            border-bottom: 1px solid #eee;
+            color: #32414d;
+            border-bottom: 1px solid #d7dfe6;
         }
 
         .stat:last-child {
@@ -584,7 +625,7 @@
         .stat-value {
             font-weight: 600;
             font-family: 'Courier New', monospace;
-            color: #000;
+            color: #182129;
         }
 
         #visual-grid, #answers, #button-grid {
@@ -595,27 +636,27 @@
         }
 
         #visual-grid button, #answers button, #button-grid button {
-            border: 1px solid #ddd;
-            background: #fff;
-            color: #333;
+            border: 1px solid #afbcc8;
+            background: #fdfefe;
+            color: #243340;
             padding: 20px;
             font-size: 16px;
             cursor: pointer;
             transition: all 0.1s;
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
             font-weight: 500;
-            border-radius: 2px;
+            border-radius: 0;
         }
 
         #visual-grid button:hover, #answers button:hover, #button-grid button:hover {
-            background: #f0f0f0;
-            border-color: #999;
+            background: #edf3f7;
+            border-color: var(--ink-blue);
         }
 
         #problem {
             font-size: 36px;
             margin: 20px 0;
-            color: #1a1a1a;
+            color: var(--ink-blue);
             font-weight: 700;
             font-family: 'Courier New', monospace;
         }
@@ -623,22 +664,22 @@
         #mental-input {
             font-size: 18px;
             padding: 10px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            color: #333;
+            background: #fdfefe;
+            border: 1px solid #b5c2cd;
+            color: #243340;
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
             margin: 15px 0;
             text-align: center;
-            border-radius: 2px;
+            border-radius: 0;
         }
 
         .result-message {
             font-size: 16px;
             padding: 10px;
             margin-top: 15px;
-            border: 1px solid var(--line-main);
+            border: 1px solid #b5c2cd;
             color: var(--text-soft);
-            border-radius: 8px;
+            border-radius: 0;
         }
 
         .result-message.correct {
@@ -1283,101 +1324,133 @@
         <div class="guide-content">
             <button class="guide-close" onclick="toggleGuide()">✕</button>
             
-            <div class="guide-section" style="border-left: 3px solid #333; padding: 12px; margin-bottom: 16px; background: #f9f9f9;">
-                <div style="font-size: 13px; color: #1a1a1a; font-weight: 600; margin-bottom: 8px;">
-                    just me learning to code
+            <div class="guide-section" style="border: 1px solid #24425c; padding: 12px; margin-bottom: 16px; background: #edf3f7;">
+                <div style="font-size: 13px; color: #24425c; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
+                    training notes
                 </div>
-                <div style="font-size: 11px; color: #666; line-height: 1.6;">
-                    started learning JavaScript and figured why not build something. this site is a reaction tester game thing. 
+                <div style="font-size: 11px; color: #53616c; line-height: 1.6;">
+                    reaction board with click tests, typing drills, memory work and aim practice.
                     <br><br>
-                    use your keyboard or mouse to play. your scores get saved (yeah, localStorage is cool). each test lets you try 3 times.
+                    every mode gives you 3 attempts. best values and scores are saved locally in your browser. choose a difficulty first, then run the set.
                 </div>
             </div>
             
-            <div class="guide-title">What you can do here</div>
+            <div class="guide-title">Mode Guide</div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Classic - fast clicks</div>
-                <div class="guide-mode-desc">wait for the green thing, click it. that's it</div>
+                <div class="guide-mode-title">Classic</div>
+                <div class="guide-mode-desc">Wait for the signal to turn green, then click immediately. Clicking early counts as a false start and restarts the round.</div>
                 <div class="guide-mode-info">
                     easy: 1-2 sec wait | medium: 1.5-2.5 sec | hard: 2-3.5 sec
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Visual - spot the difference</div>
-                <div class="guide-mode-desc">theres circles and one blue dot. find it quick</div>
+                <div class="guide-mode-title">Focus</div>
+                <div class="guide-mode-desc">Hold steady through the delay, then react when the prompt appears. Built to punish drifting attention.</div>
+                <div class="guide-mode-info">
+                    easy: longer readable window | medium: shorter alert window | hard: tighter timing and less forgiveness
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Visual</div>
+                <div class="guide-mode-desc">One tile is different. Find it before the round times out.</div>
                 <div class="guide-mode-info">
                     easy: 6 circles total, 15 sec | medium: 9 circles, 10 sec | hard: 12 circles, 6 sec
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Mental - math stuff</div>
-                <div class="guide-mode-desc">some math problems pop up. pick the right answer from 4 options</div>
+                <div class="guide-mode-title">Mental</div>
+                <div class="guide-mode-desc">Solve the shown math problem and choose the correct answer from four options.</div>
                 <div class="guide-mode-info">
-                    easy: basic math, you got 20 sec | medium: multiply &amp; squares, 10 sec | hard: uh more complicated, 5 sec
+                    easy: basic math, 20 sec | medium: multiply and square patterns, 10 sec | hard: heavier problems, 5 sec
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Memory - the tricky one</div>
-                <div class="guide-mode-desc">i show you a number sequence, you gotta remember it and type it back. press 1-9 to answer</div>
+                <div class="guide-mode-title">Memory</div>
+                <div class="guide-mode-desc">Memorize the number sequence, then enter it back using keyboard keys 1-9 or the on-screen buttons.</div>
                 <div class="guide-mode-info">
-                    easy: 3 numbers, 3 sec to see them | medium: 4 numbers, 2 sec | hard: 5 numbers, 1 sec (pretty hard lol)
+                    easy: 3 numbers, 3 sec view | medium: 4 numbers, 2 sec view | hard: 5 numbers, 1 sec view
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Chat - respond fast</div>
-                <div class="guide-mode-desc">i send you a message, type back quick. press Enter when done</div>
+                <div class="guide-mode-title">Chat</div>
+                <div class="guide-mode-desc">After a 3-second countdown, a short message appears. Type a reasonable reply and press Enter.</div>
                 <div class="guide-mode-info">
-                    easy: 20 sec | medium: 10 sec | hard: 5 sec. you gotta actually type something reasonable
+                    easy: 20 sec | medium: 10 sec | hard: 5 sec
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Tracking - pure cursor control</div>
-                <div class="guide-mode-desc">no shooting here. circle shows up instantly, then you get a 3 second prep before it starts moving. keep your cursor on it and build track time</div>
+                <div class="guide-mode-title">Typing</div>
+                <div class="guide-mode-desc">A phrase appears after a 3-second countdown. Re-type it exactly and send it before time runs out.</div>
                 <div class="guide-mode-info">
-                    easy: a bit faster now | medium: faster again | hard: small + fast. best result = longest track time, not reaction
+                    easy: shorter phrases and more time | medium: balanced phrases | hard: longer phrases with tighter windows
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Target Burst - hits over speed</div>
-                <div class="guide-mode-desc">3 second prep, then timed burst. this one counts hits, not reaction. green target = point. miss = false start. on hard there is also a red target you must avoid</div>
+                <div class="guide-mode-title">Speed</div>
+                <div class="guide-mode-desc">Fast recognition drill. Hit the matching text target as quickly as you can during the round.</div>
                 <div class="guide-mode-info">
-                    easy: 15 sec | medium: 12 sec | hard: 10 sec. your score is total hits in the time limit
+                    easy: fewer options and slower pace | medium: denser board | hard: faster decision loop, more pressure
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Micro Adjust - tiny corrections</div>
-                <div class="guide-mode-desc">small targets spawn near the center so you train little aim corrections instead of big flicks</div>
+                <div class="guide-mode-title">Colors</div>
+                <div class="guide-mode-desc">Read the target color and select the right match under time pressure. Focus on the instruction, not the distraction.</div>
                 <div class="guide-mode-info">
-                    easy: larger dots and wider time | medium: smaller dots | hard: tiny dots and shorter windows. score = total hits
+                    easy: cleaner contrasts | medium: faster recognition | hard: tighter timing and more interference
                 </div>
             </div>
 
             <div class="guide-section">
-                <div class="guide-mode-title">Target Switch - snap between targets</div>
-                <div class="guide-mode-desc">two targets appear at once. clear both fast to score one pair</div>
+                <div class="guide-mode-title">Tracking</div>
+                <div class="guide-mode-desc">Pure cursor control. You get a 3-second prep, then the target starts moving. Stay on it and build track time.</div>
+                <div class="guide-mode-info">
+                    easy: larger target with calmer path | medium: faster movement | hard: smaller and faster. best result = longest track time, not reaction
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Target Burst</div>
+                <div class="guide-mode-desc">Timed burst drill with a 3-second prep. Green target = point. Missing the target counts as a false start. Hard mode also adds a red no-shoot target.</div>
+                <div class="guide-mode-info">
+                    easy: 15 sec | medium: 12 sec | hard: 10 sec. score = total hits in the session
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Micro Adjust</div>
+                <div class="guide-mode-desc">Small targets spawn close to center so the drill trains tiny corrections instead of large flicks.</div>
+                <div class="guide-mode-info">
+                    easy: larger dots and wider timing | medium: smaller dots | hard: tiny dots and shorter windows. score = total hits
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <div class="guide-mode-title">Target Switch</div>
+                <div class="guide-mode-desc">Two targets appear together. Clear both quickly to score one completed pair.</div>
                 <div class="guide-mode-info">
                     easy: bigger pair with more time | medium: tighter window | hard: smaller targets and less time. score = completed pairs
                 </div>
             </div>
 
             <div class="guide-section">
-                <div style="font-size: 11px; color: #666; line-height: 1.6;">
-                    <strong>controls:</strong><br>
-                    • Space = click in Classic<br>
-                    • 1-9 = answer in Memory<br>
-                    • 1-4 = pick answer in Mental<br>
-                    • Enter = send in Chat<br>
-                    • ESC = exit test<br>
+                <div style="font-size: 11px; color: #53616c; line-height: 1.6;">
+                    <strong style="color: #24425c; text-transform: uppercase; letter-spacing: 0.06em;">Controls</strong><br>
+                    Space = click in Classic<br>
+                    1-9 = enter sequence in Memory<br>
+                    1-4 = pick answer in Mental<br>
+                    Enter = submit in Chat and Typing<br>
+                    ESC = close the active test<br>
                     <br>
-                    your scores stick around (localStorage ftw), just pick a difficulty before you start
+                    scores stay saved in localStorage until you clear them from the main screen
                 </div>
             </div>
         </div>

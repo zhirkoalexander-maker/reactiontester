@@ -1,49 +1,48 @@
 # Reaction Tester
 
-Тесты для измерения времени реакции.
+This is a small browser project with reaction tests, typing drills, memory tasks, and a few aim-training modes.
 
-## Режимы
+It started as a simple reaction timer and gradually turned into a single-page practice board with different kinds of short tests. The main live file is `index.html`.
 
-**CLASSIC** - стандартный тест с фиксированной позицией квадрата
+## Live Version
 
-**INSANE** - квадрат появляется в случайных местах
+https://zhirkoalexander-maker.github.io/reactiontester/
 
-**VISUAL** - найди отличающуюся фигуру из четырёх
+## What Is Inside
 
-**MENTAL** - реши примеры как можно быстрее
+The current build includes these groups of modes:
 
-**MEMORY** - запомни и повтори последовательность
+- Reaction: Classic, Focus
+- Typing: Chat, Typing
+- Memory / Skill: Visual, Mental, Memory
+- Special: Speed, Colors
+- Shooter training: Tracking, Target Burst, Micro Adjust, Target Switch
 
-**CHAT** - ответь на сообщения как можно быстрее
+Most modes have 3 difficulty levels. Each run gives 3 attempts, and scores are saved in local storage.
 
-Для 3 последних режимов есть 3 уровня сложности.
+## Running Locally
 
-## Запуск
+The project does not need a build step.
 
-Веб-версия (рекомендуется): https://zhirkoalexander-maker.github.io/reactiontester/
+You can open `index.html` directly in a browser, or run a simple local server:
 
-Или локально:
 ```bash
-python3 reaction_timer.py
+python3 -m http.server 8000
 ```
 
-## Технологии
+Then open `http://localhost:8000`.
 
-HTML5, CSS3, JavaScript (веб), Python 3 (десктоп)
-├── manifest.json        # PWA манифест
-├── sw.js               # Service Worker
-├── reaction_timer.py   # Python десктопное приложение
-├── README.md           # Этот файл
-├── .gitignore          # Git конфиг
-└── .nojekyll           # GitHub Pages конфиг
-```
+## Project Notes
 
-## 📄 Лицензия
+- Main file: `index.html`
+- The repository is intentionally kept small now, with the current site centered around `index.html`
+- Stats are stored in the browser with `localStorage`
+- The project is plain HTML, CSS, and JavaScript with no framework
 
-MIT
+## Why This Exists
 
-## 👨‍💻 Автор
+Mostly to make something hands-on instead of another throwaway demo. It is a place to test interaction ideas, timing, small game loops, and UI changes without a lot of setup.
 
-**zhirkoalexander-maker**
-- GitHub: https://github.com/zhirkoalexander-maker
-- Проект: Reaction Tester - 2026
+## Author
+
+Made by [zhirkoalexander-maker](https://github.com/zhirkoalexander-maker).
