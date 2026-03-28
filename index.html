@@ -860,90 +860,84 @@
             <thead>
                 <tr>
                     <th>TEST</th>
-                    <th>CORRECT</th>
+                    <th>RESULT</th>
                     <th>STATUS</th>
                 </tr>
             </thead>
             <tbody>
                 <tr id="result-classic">
                     <td>CLASSIC</td>
-                    <td>—</td>
+                    <td id="result-classic-correct">—</td>
                     <td id="result-classic-status">NO DATA</td>
                 </tr>
                 <tr id="result-visual">
                     <td>VISUAL</td>
-                    <td>—</td>
                     <td id="result-visual-correct">0</td>
                     <td id="result-visual-status">NO DATA</td>
                 </tr>
                 <tr id="result-mental">
                     <td>MENTAL</td>
-                    <td>—</td>
                     <td id="result-mental-correct">0</td>
                     <td id="result-mental-status">NO DATA</td>
                 </tr>
                 <tr id="result-memory">
                     <td>MEMORY</td>
-                    <td>—</td>
                     <td id="result-memory-correct">0</td>
                     <td id="result-memory-status">NO DATA</td>
                 </tr>
                 <tr id="result-chat">
                     <td>CHAT</td>
-                    <td>—</td>
+                    <td id="result-chat-correct">0</td>
                     <td id="result-chat-status">NO DATA</td>
                 </tr>
                 <tr id="result-focus">
                     <td>FOCUS</td>
-                    <td>—</td>
+                    <td id="result-focus-correct">—</td>
                     <td id="result-focus-status">NO DATA</td>
                 </tr>
                 <tr id="result-choice">
                     <td>CHOICE</td>
-                    <td>—</td>
+                    <td id="result-choice-correct">—</td>
                     <td id="result-choice-status">NO DATA</td>
                 </tr>
                 <tr id="result-hold">
                     <td>HOLD</td>
-                    <td>—</td>
+                    <td id="result-hold-correct">—</td>
                     <td id="result-hold-status">NO DATA</td>
                 </tr>
                 <tr id="result-typing">
                     <td>TYPING</td>
-                    <td>—</td>
+                    <td id="result-typing-correct">0</td>
                     <td id="result-typing-status">NO DATA</td>
                 </tr>
                 <tr id="result-blind">
                     <td>BLIND</td>
-                    <td>—</td>
+                    <td id="result-blind-correct">0</td>
                     <td id="result-blind-status">NO DATA</td>
                 </tr>
                 <tr id="result-reverse">
                     <td>REVERSE</td>
-                    <td>—</td>
+                    <td id="result-reverse-correct">0</td>
                     <td id="result-reverse-status">NO DATA</td>
                 </tr>
                 <tr id="result-speed">
                     <td>SPEED</td>
-                    <td>—</td>
                     <td id="result-speed-correct">0</td>
                     <td id="result-speed-status">NO DATA</td>
                 </tr>
                 <tr id="result-symbols">
                     <td>SYMBOLS</td>
-                    <td>—</td>
                     <td id="result-symbols-correct">0</td>
                     <td id="result-symbols-status">NO DATA</td>
                 </tr>
                 <tr id="result-shift">
                     <td>SHIFT</td>
-                    <td>—</td>
                     <td id="result-shift-correct">0</td>
                     <td id="result-shift-status">NO DATA</td>
                 </tr>
                 <tr id="result-tracking">
                     <td>TRACKING</td>
-                    <td>—</td>
+                    <td id="result-tracking-correct">—</td>
                     <td id="result-tracking-status">NO DATA</td>
                 </tr>
                 <tr id="result-spray">
@@ -1434,23 +1428,32 @@
         }
 
         function loadAndDisplayStats() {
+            const timeBasedTests = ['classic', 'focus', 'choice', 'hold', 'tracking'];
+            const accuracyTests = ['visual', 'mental', 'memory', 'chat', 'typing', 'blind', 'reverse', 'speed', 'symbols', 'shift'];
+            const sessionScoreTests = ['spray', 'micro', 'switch'];
+
             ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'symbols', 'shift', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'chat' || type === 'focus' || type === 'choice' || type === 'hold' || type === 'typing' || type === 'blind' || type === 'reverse' || type === 'tracking') {
+                if (timeBasedTests.includes(type)) {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = type === 'tracking'
                         ? (best ? `TRACK: ${best} ms` : 'TRACK: — ms')
                         : (best ? `BEST: ${best} ms` : '— ms');
-                    if (resultCorrect) resultCorrect.textContent = '—';
+                    if (resultCorrect) resultCorrect.textContent = best ? `${best} ms` : '—';
                     if (resultStatus) resultStatus.textContent = best ? '[DONE]' : '[NOT TAKEN]';
-                } else {
+                } else if (accuracyTests.includes(type)) {
+                    const correct = localStorage.getItem(`reactions_${type}_correct`) || '0';
+                    statsEl.textContent = `${correct} / 3`;
+                    if (resultCorrect) resultCorrect.textContent = `${correct} / 3`;
+                    if (resultStatus) resultStatus.textContent = Number(correct) > 0 ? '[DONE]' : '[NOT TAKEN]';
+                } else if (sessionScoreTests.includes(type)) {
                     const correct = localStorage.getItem(`reactions_${type}_correct`) || '0';
                     statsEl.textContent = `[${correct}]`;
                     if (resultCorrect) resultCorrect.textContent = `${correct}`;
-                    if (resultStatus) resultStatus.textContent = correct > 0 ? '[DONE]' : '[NOT TAKEN]';
+                    if (resultStatus) resultStatus.textContent = Number(correct) > 0 ? '[DONE]' : '[NOT TAKEN]';
                 }
             });
         }
