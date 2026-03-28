@@ -645,10 +645,42 @@
                 <button class="start-btn" onclick="startTest('typing')">START</button>
             </div>
 
+            <div class="card">
+                <div class="card-num">07 / TEST</div>
+                <div class="card-title">BLIND</div>
+                <div class="card-desc">Memorize the phrase, then type it after it disappears</div>
+                <div class="card-stats" id="stats-blind">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'blind')">▼</button>
+                    <div class="difficulty-menu" id="menu-blind">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'blind', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'blind', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'blind', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('blind')">START</button>
+            </div>
+
+            <div class="card">
+                <div class="card-num">08 / TEST</div>
+                <div class="card-title">REVERSE</div>
+                <div class="card-desc">Type the shown word or phrase in reverse order</div>
+                <div class="card-stats" id="stats-reverse">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'reverse')">▼</button>
+                    <div class="difficulty-menu" id="menu-reverse">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'reverse', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'reverse', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'reverse', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('reverse')">START</button>
+            </div>
+
             <div class="section-header">III. MEMORY / SKILL TESTS</div>
             <!-- VISUAL -->
             <div class="card">
-                <div class="card-num">07 / TEST</div>
+                <div class="card-num">09 / TEST</div>
                 <div class="card-title">VISUAL</div>
                 <div class="card-desc">Find the odd emoji out among the others</div>
                 <div class="card-stats" id="stats-visual">0 / 3</div>
@@ -665,7 +697,7 @@
 
             <!-- MENTAL -->
             <div class="card">
-                <div class="card-num">08 / TEST</div>
+                <div class="card-num">10 / TEST</div>
                 <div class="card-title">MENTAL</div>
                 <div class="card-desc">Solve math: from basic to squares and roots</div>
                 <div class="card-stats" id="stats-mental">0 / 3</div>
@@ -682,7 +714,7 @@
 
             <!-- MEMORY -->
             <div class="card">
-                <div class="card-num">09 / TEST</div>
+                <div class="card-num">11 / TEST</div>
                 <div class="card-title">MEMORY</div>
                 <div class="card-desc">Remember the sequence and repeat it correctly</div>
                 <div class="card-stats" id="stats-memory">0 / 3</div>
@@ -700,7 +732,7 @@
             <div class="section-header">IV. SPECIAL TESTS</div>
             <!-- SPEED -->
             <div class="card">
-                <div class="card-num">10 / TEST</div>
+                <div class="card-num">12 / TEST</div>
                 <div class="card-title">SPEED</div>
                 <div class="card-desc">Type random letters as fast as you can</div>
                 <div class="card-stats" id="stats-speed">0 / 3</div>
@@ -718,7 +750,7 @@
             <div class="section-header">V. SHOOTER GAMES TRAINING</div>
             <!-- TRACKING -->
             <div class="card">
-                <div class="card-num">11 / TRAINING</div>
+                <div class="card-num">13 / TRAINING</div>
                 <div class="card-title">TRACKING</div>
                 <div class="card-desc">Keep your cursor on the moving circle</div>
                 <div class="card-stats" id="stats-tracking">TRACK: — ms</div>
@@ -735,7 +767,7 @@
 
             <!-- SPRAY CONTROL -->
             <div class="card">
-                <div class="card-num">12 / TRAINING</div>
+                <div class="card-num">14 / TRAINING</div>
                 <div class="card-title">TARGET BURST</div>
                 <div class="card-desc">Timed burst of hits with false starts on misses</div>
                 <div class="card-stats" id="stats-spray">[0]</div>
@@ -751,7 +783,7 @@
             </div>
 
             <div class="card">
-                <div class="card-num">13 / TRAINING</div>
+                <div class="card-num">15 / TRAINING</div>
                 <div class="card-title">MICRO ADJUST</div>
                 <div class="card-desc">Small corrections around center mass</div>
                 <div class="card-stats" id="stats-micro">[0]</div>
@@ -767,7 +799,7 @@
             </div>
 
             <div class="card">
-                <div class="card-num">14 / TRAINING</div>
+                <div class="card-num">16 / TRAINING</div>
                 <div class="card-title">TARGET SWITCH</div>
                 <div class="card-desc">Swap fast between two separate targets</div>
                 <div class="card-stats" id="stats-switch">[0]</div>
@@ -848,6 +880,16 @@
                     <td>TYPING</td>
                     <td>—</td>
                     <td id="result-typing-status">NO DATA</td>
+                </tr>
+                <tr id="result-blind">
+                    <td>BLIND</td>
+                    <td>—</td>
+                    <td id="result-blind-status">NO DATA</td>
+                </tr>
+                <tr id="result-reverse">
+                    <td>REVERSE</td>
+                    <td>—</td>
+                    <td id="result-reverse-status">NO DATA</td>
                 </tr>
                 <tr id="result-speed">
                     <td>SPEED</td>
@@ -1085,6 +1127,54 @@
         </div>
     </div>
 
+    <!-- BLIND MODAL -->
+    <div class="modal" id="modal-blind">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('blind')">✕</button>
+            <div class="modal-title">BLIND</div>
+            <div class="attempt-info" id="blind-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div id="blind-info" style="margin-bottom: 10px;">Memorize the phrase before it disappears</div>
+                <div style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; min-height: 24px;" id="blind-phrase">Get ready...</div>
+                <input type="text" id="blind-input" placeholder="Type from memory..." style="width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ddd; border-radius: 2px; font-family: inherit;">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="blind-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="blind-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REVERSE MODAL -->
+    <div class="modal" id="modal-reverse">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('reverse')">✕</button>
+            <div class="modal-title">REVERSE</div>
+            <div class="attempt-info" id="reverse-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div id="reverse-info" style="margin-bottom: 10px;">Type the phrase backwards</div>
+                <div style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; min-height: 24px;" id="reverse-phrase">Get ready...</div>
+                <input type="text" id="reverse-input" placeholder="Type the reversed phrase..." style="width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ddd; border-radius: 2px; font-family: inherit;">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="reverse-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="reverse-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SPEED MODAL -->
     <div class="modal" id="modal-speed">
         <div class="modal-content">
@@ -1228,6 +1318,8 @@
             choice: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, prompt: null, timeoutId: null },
             hold: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null, isHolding: false, readyToRelease: false },
             typing: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
+            blind: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
+            reverse: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, expectedPhrase: null, startTime: null, timeoutId: null },
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
             tracking: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
             spray: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
@@ -1250,12 +1342,12 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'chat' || type === 'focus' || type === 'choice' || type === 'hold' || type === 'typing' || type === 'tracking') {
+                if (type === 'classic' || type === 'chat' || type === 'focus' || type === 'choice' || type === 'hold' || type === 'typing' || type === 'blind' || type === 'reverse' || type === 'tracking') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = type === 'tracking'
                         ? (best ? `TRACK: ${best} ms` : 'TRACK: — ms')
@@ -1412,6 +1504,16 @@
                 state.hold.isHolding = false;
                 state.hold.readyToRelease = false;
             }
+
+            if (type === 'blind' && state.blind.submitHandler) {
+                document.removeEventListener('keydown', state.blind.submitHandler);
+                state.blind.submitHandler = null;
+            }
+
+            if (type === 'reverse' && state.reverse.submitHandler) {
+                document.removeEventListener('keydown', state.reverse.submitHandler);
+                state.reverse.submitHandler = null;
+            }
             
             // Clean up typing handlers
             if (type === 'typing' && state.typing.submitHandler) {
@@ -1478,7 +1580,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1512,6 +1614,8 @@
             if (type === 'mental') attemptDisplay = `ATTEMPT 1`;
             if (type === 'memory') attemptDisplay = `ATTEMPT 1`;
             if (type === 'typing') attemptDisplay = `ATTEMPT 1 / 3`;
+            if (type === 'blind') attemptDisplay = `ATTEMPT 1 / 3`;
+            if (type === 'reverse') attemptDisplay = `ATTEMPT 1 / 3`;
 
             if (type === 'speed') attemptDisplay = `ATTEMPT 1 / 3`;
             if (type === 'spray' || type === 'micro' || type === 'switch') attemptDisplay = `SESSION / TIMED`;
@@ -1558,6 +1662,10 @@
                 runHoldRound();
             } else if (type === 'typing') {
                 generateTypingPhrase();
+            } else if (type === 'blind') {
+                generateBlindPhrase();
+            } else if (type === 'reverse') {
+                generateReversePhrase();
             } else if (type === 'speed') {
                 runSpeedRound();
             } else if (type === 'tracking') {
@@ -2267,6 +2375,172 @@
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('typing');
+                }, 1500);
+            }
+        }
+
+        function generateBlindPhrase() {
+            const phrases = {
+                easy: ['blue moon', 'small river', 'night train', 'open road'],
+                medium: ['carry the signal forward', 'practice beats luck', 'steady hands win rounds'],
+                hard: ['precision typing needs calm attention', 'memory fades faster under pressure', 'clean inputs make faster runs']
+            };
+
+            const revealTimes = {
+                easy: 2200,
+                medium: 1600,
+                hard: 1100
+            };
+
+            const phraseList = phrases[state.blind.diff];
+            state.blind.currentPhrase = phraseList[Math.floor(Math.random() * phraseList.length)];
+
+            const info = document.getElementById('blind-info');
+            const phraseEl = document.getElementById('blind-phrase');
+            const input = document.getElementById('blind-input');
+
+            phraseEl.textContent = 'Get ready...';
+            input.value = '';
+            input.disabled = true;
+            info.textContent = 'Memorize the phrase before it disappears';
+
+            startTypingCountdown('blind', () => {
+                phraseEl.textContent = state.blind.currentPhrase;
+                info.textContent = 'Memorize it';
+
+                state.blind.timeoutId = setTimeout(() => {
+                    phraseEl.textContent = '[HIDDEN]';
+                    info.textContent = 'Type it from memory and press Enter';
+                    input.disabled = false;
+                    input.focus();
+                    state.blind.startTime = performance.now();
+
+                    const submitBlind = (e) => {
+                        if (e.code !== 'Enter') return;
+                        e.preventDefault();
+                        const value = input.value.trim();
+                        recordBlindResult(value === state.blind.currentPhrase);
+                    };
+
+                    state.blind.submitHandler = submitBlind;
+                    document.addEventListener('keydown', submitBlind);
+                }, revealTimes[state.blind.diff]);
+            });
+        }
+
+        function recordBlindResult(correct) {
+            if (state.blind.submitHandler) {
+                document.removeEventListener('keydown', state.blind.submitHandler);
+                state.blind.submitHandler = null;
+            }
+            if (state.blind.timeoutId) {
+                clearTimeout(state.blind.timeoutId);
+                state.blind.timeoutId = null;
+            }
+
+            let time = '—';
+            if (correct) {
+                const result = Math.round(performance.now() - state.blind.startTime);
+                time = result + ' ms';
+                state.blind.results.push(result);
+                state.blind.correct++;
+            }
+
+            document.getElementById('blind-current').textContent = time;
+            state.blind.correct = Math.min(state.blind.correct, 3);
+            document.getElementById('blind-correct').textContent = state.blind.correct;
+
+            state.blind.currentAttempt++;
+            if (state.blind.currentAttempt < 3) {
+                document.getElementById('blind-attempt').textContent = `ATTEMPT ${state.blind.currentAttempt + 1} / 3`;
+                setTimeout(generateBlindPhrase, 1000);
+            } else {
+                localStorage.setItem('reactions_blind_correct', Math.min(state.blind.correct, 3));
+                if (state.blind.results.length > 0) {
+                    localStorage.setItem('reactions_blind_best', Math.min(...state.blind.results));
+                }
+                document.getElementById('blind-phrase').textContent = '[DONE]';
+                document.getElementById('blind-info').textContent = 'Session complete';
+                document.getElementById('blind-input').disabled = true;
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('blind');
+                }, 1500);
+            }
+        }
+
+        function generateReversePhrase() {
+            const phrases = {
+                easy: ['laser', 'focus', 'input', 'signal'],
+                medium: ['quick hands', 'clean shots', 'steady tempo'],
+                hard: ['reaction window', 'typing under pressure', 'precision over panic']
+            };
+
+            const phraseList = phrases[state.reverse.diff];
+            state.reverse.currentPhrase = phraseList[Math.floor(Math.random() * phraseList.length)];
+            state.reverse.expectedPhrase = state.reverse.currentPhrase.split('').reverse().join('');
+
+            const phraseEl = document.getElementById('reverse-phrase');
+            const info = document.getElementById('reverse-info');
+            const input = document.getElementById('reverse-input');
+
+            phraseEl.textContent = 'Get ready...';
+            info.textContent = 'Type the phrase backwards';
+            input.value = '';
+            input.disabled = true;
+
+            startTypingCountdown('reverse', () => {
+                phraseEl.textContent = state.reverse.currentPhrase;
+                info.textContent = 'Reverse it exactly and press Enter';
+                input.disabled = false;
+                input.focus();
+                state.reverse.startTime = performance.now();
+
+                const submitReverse = (e) => {
+                    if (e.code !== 'Enter') return;
+                    e.preventDefault();
+                    const value = input.value.trim();
+                    recordReverseResult(value === state.reverse.expectedPhrase);
+                };
+
+                state.reverse.submitHandler = submitReverse;
+                document.addEventListener('keydown', submitReverse);
+            });
+        }
+
+        function recordReverseResult(correct) {
+            if (state.reverse.submitHandler) {
+                document.removeEventListener('keydown', state.reverse.submitHandler);
+                state.reverse.submitHandler = null;
+            }
+
+            let time = '—';
+            if (correct) {
+                const result = Math.round(performance.now() - state.reverse.startTime);
+                time = result + ' ms';
+                state.reverse.results.push(result);
+                state.reverse.correct++;
+            }
+
+            document.getElementById('reverse-current').textContent = time;
+            state.reverse.correct = Math.min(state.reverse.correct, 3);
+            document.getElementById('reverse-correct').textContent = state.reverse.correct;
+
+            state.reverse.currentAttempt++;
+            if (state.reverse.currentAttempt < 3) {
+                document.getElementById('reverse-attempt').textContent = `ATTEMPT ${state.reverse.currentAttempt + 1} / 3`;
+                setTimeout(generateReversePhrase, 1000);
+            } else {
+                localStorage.setItem('reactions_reverse_correct', Math.min(state.reverse.correct, 3));
+                if (state.reverse.results.length > 0) {
+                    localStorage.setItem('reactions_reverse_best', Math.min(...state.reverse.results));
+                }
+                document.getElementById('reverse-phrase').textContent = '[DONE]';
+                document.getElementById('reverse-info').textContent = 'Session complete';
+                document.getElementById('reverse-input').disabled = true;
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('reverse');
                 }, 1500);
             }
         }
