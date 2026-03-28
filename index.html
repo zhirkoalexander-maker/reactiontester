@@ -747,10 +747,42 @@
                 <button class="start-btn" onclick="startTest('speed')">START</button>
             </div>
 
+            <div class="card">
+                <div class="card-num">13 / TEST</div>
+                <div class="card-title">SYMBOLS</div>
+                <div class="card-desc">Type symbol strings fast without missing special characters</div>
+                <div class="card-stats" id="stats-symbols">0 / 3</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'symbols')">▼</button>
+                    <div class="difficulty-menu" id="menu-symbols">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'symbols', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'symbols', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'symbols', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('symbols')">START</button>
+            </div>
+
+            <div class="card">
+                <div class="card-num">14 / TEST</div>
+                <div class="card-title">SHIFT</div>
+                <div class="card-desc">Copy mixed-case text exactly to test Shift control under pressure</div>
+                <div class="card-stats" id="stats-shift">0 / 3</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'shift')">▼</button>
+                    <div class="difficulty-menu" id="menu-shift">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'shift', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'shift', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'shift', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('shift')">START</button>
+            </div>
+
             <div class="section-header">V. SHOOTER GAMES TRAINING</div>
             <!-- TRACKING -->
             <div class="card">
-                <div class="card-num">13 / TRAINING</div>
+                <div class="card-num">15 / TRAINING</div>
                 <div class="card-title">TRACKING</div>
                 <div class="card-desc">Keep your cursor on the moving circle</div>
                 <div class="card-stats" id="stats-tracking">TRACK: — ms</div>
@@ -767,7 +799,7 @@
 
             <!-- SPRAY CONTROL -->
             <div class="card">
-                <div class="card-num">14 / TRAINING</div>
+                <div class="card-num">16 / TRAINING</div>
                 <div class="card-title">TARGET BURST</div>
                 <div class="card-desc">Timed burst of hits with false starts on misses</div>
                 <div class="card-stats" id="stats-spray">[0]</div>
@@ -783,7 +815,7 @@
             </div>
 
             <div class="card">
-                <div class="card-num">15 / TRAINING</div>
+                <div class="card-num">17 / TRAINING</div>
                 <div class="card-title">MICRO ADJUST</div>
                 <div class="card-desc">Small corrections around center mass</div>
                 <div class="card-stats" id="stats-micro">[0]</div>
@@ -799,7 +831,7 @@
             </div>
 
             <div class="card">
-                <div class="card-num">16 / TRAINING</div>
+                <div class="card-num">18 / TRAINING</div>
                 <div class="card-title">TARGET SWITCH</div>
                 <div class="card-desc">Swap fast between two separate targets</div>
                 <div class="card-stats" id="stats-switch">[0]</div>
@@ -896,6 +928,18 @@
                     <td>—</td>
                     <td id="result-speed-correct">0</td>
                     <td id="result-speed-status">NO DATA</td>
+                </tr>
+                <tr id="result-symbols">
+                    <td>SYMBOLS</td>
+                    <td>—</td>
+                    <td id="result-symbols-correct">0</td>
+                    <td id="result-symbols-status">NO DATA</td>
+                </tr>
+                <tr id="result-shift">
+                    <td>SHIFT</td>
+                    <td>—</td>
+                    <td id="result-shift-correct">0</td>
+                    <td id="result-shift-status">NO DATA</td>
                 </tr>
                 <tr id="result-tracking">
                     <td>TRACKING</td>
@@ -1198,6 +1242,52 @@
         </div>
     </div>
 
+    <!-- SYMBOLS MODAL -->
+    <div class="modal" id="modal-symbols">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('symbols')">✕</button>
+            <div class="modal-title">SYMBOLS</div>
+            <div class="attempt-info" id="symbols-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div style="font-size: 24px; font-weight: 700; color: #d14f1f; letter-spacing: 2px; margin: 20px 0; min-height: 40px; font-family: 'SF Mono', Monaco;" id="symbols-target">!@#</div>
+                <input type="text" id="symbols-input" placeholder="Type the symbol string..." style="width: 100%; padding: 10px; font-size: 16px; border: 2px solid #999; border-radius: 2px; font-family: 'SF Mono', Monaco; font-weight: 600;">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="symbols-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="symbols-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHIFT MODAL -->
+    <div class="modal" id="modal-shift">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('shift')">✕</button>
+            <div class="modal-title">SHIFT</div>
+            <div class="attempt-info" id="shift-attempt">ATTEMPT 1 / 3</div>
+            <div style="font-size: 12px; color: #666; margin: 15px 0; text-align: center;">
+                <div style="font-size: 22px; font-weight: 700; color: #b13e6b; letter-spacing: 1px; margin: 20px 0; min-height: 40px; font-family: 'SF Mono', Monaco;" id="shift-target">Aa Bb</div>
+                <input type="text" id="shift-input" placeholder="Match upper and lower case exactly..." style="width: 100%; padding: 10px; font-size: 16px; border: 2px solid #999; border-radius: 2px; font-family: 'SF Mono', Monaco; font-weight: 600;">
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Time:</span>
+                    <span class="stat-value" id="shift-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Correct:</span>
+                    <span class="stat-value" id="shift-correct">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TRACKING MODAL -->
     <div class="modal" id="modal-tracking">
         <div class="modal-content">
@@ -1321,6 +1411,8 @@
             blind: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
             reverse: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, expectedPhrase: null, startTime: null, timeoutId: null },
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
+            symbols: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
+            shift: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
             tracking: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
             spray: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
             micro: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, startTime: null, timeoutId: null },
@@ -1342,7 +1434,7 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'symbols', 'shift', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
@@ -1514,6 +1606,16 @@
                 document.removeEventListener('keydown', state.reverse.submitHandler);
                 state.reverse.submitHandler = null;
             }
+
+            if (type === 'symbols' && state.symbols.submitHandler) {
+                document.removeEventListener('keydown', state.symbols.submitHandler);
+                state.symbols.submitHandler = null;
+            }
+
+            if (type === 'shift' && state.shift.submitHandler) {
+                document.removeEventListener('keydown', state.shift.submitHandler);
+                state.shift.submitHandler = null;
+            }
             
             // Clean up typing handlers
             if (type === 'typing' && state.typing.submitHandler) {
@@ -1580,7 +1682,7 @@
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'blind', 'reverse', 'speed', 'symbols', 'shift', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1618,6 +1720,8 @@
             if (type === 'reverse') attemptDisplay = `ATTEMPT 1 / 3`;
 
             if (type === 'speed') attemptDisplay = `ATTEMPT 1 / 3`;
+            if (type === 'symbols') attemptDisplay = `ATTEMPT 1 / 3`;
+            if (type === 'shift') attemptDisplay = `ATTEMPT 1 / 3`;
             if (type === 'spray' || type === 'micro' || type === 'switch') attemptDisplay = `SESSION / TIMED`;
             document.getElementById(`${type}-attempt`).textContent = attemptDisplay;
             
@@ -1668,6 +1772,10 @@
                 generateReversePhrase();
             } else if (type === 'speed') {
                 runSpeedRound();
+            } else if (type === 'symbols') {
+                runSymbolsRound();
+            } else if (type === 'shift') {
+                runShiftRound();
             } else if (type === 'tracking') {
                 runTrackingRound();
             } else if (type === 'spray') {
@@ -2980,6 +3088,128 @@
                 setTimeout(() => {
                     loadAndDisplayStats();
                     closeModal('speed');
+                }, 1500);
+            }
+        }
+
+        function runSymbolsRound() {
+            document.getElementById('symbols-input').value = '';
+            document.getElementById('symbols-input').focus();
+
+            const targets = {
+                easy: ['!@#$', '#$%&', '?!=+', '@@!!'],
+                medium: ['!@#$%^', '&*()_+', '{}[]!?'],
+                hard: ['!@#{}[]', '^&*()_+=', '<>?{}[]|']
+            };
+
+            const pool = targets[state.symbols.diff];
+            state.symbols.currentText = pool[Math.floor(Math.random() * pool.length)];
+
+            document.getElementById('symbols-target').textContent = state.symbols.currentText;
+            state.symbols.startTime = performance.now();
+
+            const submitSymbols = (e) => {
+                if (e.code === 'Enter') {
+                    e.preventDefault();
+                    const input = document.getElementById('symbols-input').value;
+                    recordSymbolsResult(input === state.symbols.currentText);
+                }
+            };
+
+            state.symbols.submitHandler = submitSymbols;
+            document.addEventListener('keydown', submitSymbols);
+        }
+
+        function recordSymbolsResult(correct) {
+            if (state.symbols.submitHandler) {
+                document.removeEventListener('keydown', state.symbols.submitHandler);
+                state.symbols.submitHandler = null;
+            }
+
+            const time = Math.round(performance.now() - state.symbols.startTime);
+            if (correct) {
+                state.symbols.results.push(time);
+                state.symbols.correct++;
+                document.getElementById('symbols-current').textContent = time + ' ms';
+            } else {
+                document.getElementById('symbols-current').textContent = '[X]';
+            }
+
+            state.symbols.correct = Math.min(state.symbols.correct, 3);
+            document.getElementById('symbols-correct').textContent = state.symbols.correct;
+
+            state.symbols.currentAttempt++;
+            if (state.symbols.currentAttempt < 3) {
+                document.getElementById('symbols-attempt').textContent = `ATTEMPT ${state.symbols.currentAttempt + 1} / 3`;
+                setTimeout(runSymbolsRound, 1500);
+            } else {
+                localStorage.setItem('reactions_symbols_correct', Math.min(state.symbols.correct, 3));
+                document.getElementById('symbols-target').textContent = '[DONE]';
+                document.getElementById('symbols-input').disabled = true;
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('symbols');
+                }, 1500);
+            }
+        }
+
+        function runShiftRound() {
+            document.getElementById('shift-input').value = '';
+            document.getElementById('shift-input').focus();
+
+            const targets = {
+                easy: ['AaBb', 'QwEr', 'mNop', 'TeSt'],
+                medium: ['FastAim', 'QuickTap', 'ShiftKey', 'MixedCase'],
+                hard: ['PreSsFaSt', 'TypEExacT', 'LowHiGhLow', 'CaseControl']
+            };
+
+            const pool = targets[state.shift.diff];
+            state.shift.currentText = pool[Math.floor(Math.random() * pool.length)];
+
+            document.getElementById('shift-target').textContent = state.shift.currentText;
+            state.shift.startTime = performance.now();
+
+            const submitShift = (e) => {
+                if (e.code === 'Enter') {
+                    e.preventDefault();
+                    const input = document.getElementById('shift-input').value;
+                    recordShiftResult(input === state.shift.currentText);
+                }
+            };
+
+            state.shift.submitHandler = submitShift;
+            document.addEventListener('keydown', submitShift);
+        }
+
+        function recordShiftResult(correct) {
+            if (state.shift.submitHandler) {
+                document.removeEventListener('keydown', state.shift.submitHandler);
+                state.shift.submitHandler = null;
+            }
+
+            const time = Math.round(performance.now() - state.shift.startTime);
+            if (correct) {
+                state.shift.results.push(time);
+                state.shift.correct++;
+                document.getElementById('shift-current').textContent = time + ' ms';
+            } else {
+                document.getElementById('shift-current').textContent = '[X]';
+            }
+
+            state.shift.correct = Math.min(state.shift.correct, 3);
+            document.getElementById('shift-correct').textContent = state.shift.correct;
+
+            state.shift.currentAttempt++;
+            if (state.shift.currentAttempt < 3) {
+                document.getElementById('shift-attempt').textContent = `ATTEMPT ${state.shift.currentAttempt + 1} / 3`;
+                setTimeout(runShiftRound, 1500);
+            } else {
+                localStorage.setItem('reactions_shift_correct', Math.min(state.shift.correct, 3));
+                document.getElementById('shift-target').textContent = '[DONE]';
+                document.getElementById('shift-input').disabled = true;
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('shift');
                 }, 1500);
             }
         }
