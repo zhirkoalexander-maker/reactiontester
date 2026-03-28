@@ -9,19 +9,15 @@
     <title>Reaction Tester</title>
     <style>
         :root {
-            --bg-main: #dde5ec;
-            --bg-panel: #f8fbfd;
-            --bg-soft: #eaf0f5;
-            --line-main: #aebbc7;
-            --line-soft: #cad4dd;
-            --text-main: #182129;
-            --text-soft: #53616c;
-            --accent: #b44b36;
-            --accent-strong: #8f3524;
-            --accent-soft: #f0d8d2;
-            --ink-blue: #24425c;
-            --shadow-soft: 0 18px 40px rgba(26, 39, 52, 0.12);
-            --shadow-card: 0 6px 14px rgba(26, 39, 52, 0.08);
+            --bg-main: #f4f5f7;
+            --bg-panel: #ffffff;
+            --bg-soft: #f0f2f5;
+            --line-main: #d6dbe1;
+            --line-soft: #e6e9ee;
+            --text-main: #1f2328;
+            --text-soft: #66707a;
+            --accent: #2f6fed;
+            --accent-soft: #e8f0ff;
         }
 
         * {
@@ -31,12 +27,7 @@
         }
 
         html, body {
-            background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 22%),
-                linear-gradient(90deg, rgba(36, 66, 92, 0.05) 1px, transparent 1px),
-                linear-gradient(180deg, rgba(36, 66, 92, 0.05) 1px, transparent 1px),
-                linear-gradient(180deg, #e8eef3 0%, var(--bg-main) 100%);
-            background-size: auto, 24px 24px, 24px 24px, auto;
+            background: var(--bg-main);
             color: var(--text-main);
         }
 
@@ -48,216 +39,73 @@
         }
 
         .container {
-            max-width: 1040px;
+            max-width: 1020px;
             margin: 0 auto;
-            padding: 18px 20px 26px;
-            background: rgba(248, 251, 253, 0.74);
-            border: 1px solid rgba(174, 187, 199, 0.8);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(8px);
+            padding: 0;
         }
 
         .header {
-            margin-bottom: 42px;
-            padding: 2px 0 18px 0;
-            border-bottom: 2px solid var(--ink-blue);
+            margin-bottom: 32px;
+            padding: 0 0 16px 0;
+            border-bottom: 1px solid var(--line-main);
             text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 16px;
+            display: block;
         }
 
         .header-copy {
             max-width: 640px;
-            position: relative;
-            padding-left: 16px;
-        }
-
-        .header-copy::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 8px;
-            bottom: 4px;
-            width: 5px;
-            background: linear-gradient(180deg, var(--accent) 0%, var(--ink-blue) 100%);
         }
 
         .title {
-            font-family: 'Avenir Next Condensed', 'Franklin Gothic Medium', 'Arial Narrow', sans-serif;
-            font-size: 34px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 4px;
-            letter-spacing: 0.02em;
-            color: var(--ink-blue);
-            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0;
+            color: var(--text-main);
         }
 
         .subtitle {
             font-size: 12px;
             color: var(--text-soft);
             margin-bottom: 0;
-            font-weight: 500;
+            font-weight: 400;
             max-width: 560px;
-            letter-spacing: 0.01em;
-        }
-
-        .guide-btn {
-            padding: 8px 12px;
-            border: 1px solid var(--ink-blue);
-            background: #fdfefe;
-            color: var(--ink-blue);
-            font-size: 11px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.14s ease;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Courier New', monospace;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            box-shadow: 3px 3px 0 rgba(36, 66, 92, 0.12);
-        }
-
-        .guide-btn:hover {
-            background: var(--ink-blue);
-            color: #fff;
-            transform: translate(1px, 1px);
-            box-shadow: 2px 2px 0 rgba(36, 66, 92, 0.12);
-        }
-
-        .guide-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .guide-modal.active {
-            display: flex;
-        }
-
-        .guide-content {
-            border: 2px solid var(--ink-blue);
-            background: var(--bg-panel);
-            padding: 30px;
-            max-width: 700px;
-            max-height: 85vh;
-            overflow-y: auto;
-            border-radius: 0;
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            font-family: 'Avenir Next', 'Segoe UI', sans-serif;
-        }
-
-        .guide-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            border: 1px solid #ccc;
-            background: #f0f0f0;
-            color: #333;
-            width: 28px;
-            height: 28px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: normal;
-            transition: all 0.1s;
-            border-radius: 2px;
-        }
-
-        .guide-close:hover {
-            border-color: #333;
-            background: #e0e0e0;
-        }
-
-        .guide-title {
-            font-size: 22px;
-            color: var(--ink-blue);
-            margin-bottom: 16px;
-            letter-spacing: 0.01em;
-            font-weight: 700;
-            font-family: 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
-            text-transform: uppercase;
-        }
-
-        .guide-section {
-            margin-bottom: 16px;
-            padding: 0 0 12px 0;
-            border-bottom: 1px dashed #bac6d0;
-        }
-
-        .guide-section:last-child {
-            border-bottom: none;
-        }
-
-        .guide-mode-title {
-            font-size: 12px;
-            color: var(--ink-blue);
-            margin-bottom: 4px;
-            letter-spacing: 0.08em;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .guide-mode-desc {
-            font-size: 12px;
-            color: var(--text-soft);
-            line-height: 1.6;
-            margin-bottom: 4px;
-        }
-
-        .guide-mode-info {
-            font-size: 11px;
-            color: #5d6974;
-            background: #edf2f6;
-            padding: 8px;
-            border-left: 3px solid var(--accent);
-            margin-top: 4px;
-            font-family: 'Courier New', monospace;
         }
 
         .results-section {
             margin-top: 50px;
             padding-top: 20px;
-            border-top: 2px solid var(--ink-blue);
+            border-top: 1px solid var(--line-main);
         }
 
         .results-title {
             font-size: 18px;
-            color: var(--ink-blue);
+            color: var(--text-main);
             margin-bottom: 12px;
-            letter-spacing: 0.04em;
+            letter-spacing: 0;
             font-weight: 700;
-            text-transform: uppercase;
         }
 
         .results-table {
             width: 100%;
             border-collapse: collapse;
-            border: 2px solid var(--ink-blue);
+            border: 1px solid var(--line-main);
             background: var(--bg-panel);
-            border-radius: 0;
+            border-radius: 6px;
             overflow: hidden;
             font-size: 12px;
-            box-shadow: var(--shadow-card);
         }
 
         .results-table th {
-            background: #e8eef4;
-            color: var(--ink-blue);
+            background: var(--bg-soft);
+            color: var(--text-main);
             padding: 11px 10px;
             text-align: left;
-            border-bottom: 2px solid var(--ink-blue);
+            border-bottom: 1px solid var(--line-main);
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.04em;
         }
 
         .results-table td {
@@ -269,7 +117,7 @@
         }
 
         .results-table tr:hover {
-            background: #f0f5f8;
+            background: #fafbfc;
         }
 
         .results-table tr:last-child td {
@@ -305,64 +153,51 @@
             grid-column: 1 / -1;
             font-size: 12px;
             font-weight: 700;
-            color: var(--ink-blue);
-            letter-spacing: 0.12em;
-            padding: 8px 12px;
-            border: 1px solid var(--ink-blue);
-            background: #edf3f7;
+            color: var(--text-soft);
+            letter-spacing: 0.08em;
+            padding: 4px 0;
+            border: none;
+            background: transparent;
             margin-bottom: 8px;
             text-transform: uppercase;
         }
 
         .card {
-            border: 1px solid #b8c4ce;
-            background: linear-gradient(180deg, #fbfdff 0%, #f4f8fb 100%);
+            border: 1px solid var(--line-main);
+            background: var(--bg-panel);
             padding: 16px;
-            border-radius: 0;
+            border-radius: 8px;
             transition: all 0.15s ease;
-            box-shadow: var(--shadow-card);
             min-height: 200px;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
         }
 
         .card:hover {
-            border-color: var(--ink-blue);
-            box-shadow: 0 12px 28px rgba(26, 39, 52, 0.11);
-            transform: translateY(-2px);
+            border-color: #b9c1ca;
         }
 
         .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 10px;
-            bottom: 0;
-            background: linear-gradient(180deg, var(--accent) 0%, var(--ink-blue) 100%);
+            display: none;
         }
 
         .card-num {
             font-size: 10px;
-            color: #73828f;
+            color: var(--text-soft);
             text-transform: uppercase;
-            letter-spacing: 0.09em;
+            letter-spacing: 0.06em;
             margin-bottom: 6px;
-            font-weight: 700;
-            padding-left: 8px;
+            font-weight: 600;
         }
 
         .card-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            color: var(--ink-blue);
+            color: var(--text-main);
             margin-bottom: 6px;
-            letter-spacing: 0.01em;
-            font-family: 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
-            text-transform: uppercase;
-            padding-left: 8px;
+            letter-spacing: 0;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .card-desc {
@@ -371,25 +206,23 @@
             margin-bottom: 12px;
             line-height: 1.55;
             flex-grow: 1;
-            padding-left: 8px;
         }
 
         .card-stats {
             font-size: 11px;
-            color: #5e6d78;
+            color: var(--text-soft);
             margin-bottom: 10px;
             padding: 7px;
-            border: 1px solid #d3dbe2;
-            background: #eef3f7;
+            border: 1px solid var(--line-soft);
+            background: var(--bg-soft);
             text-align: center;
             min-height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 0;
+            border-radius: 6px;
             font-weight: 500;
             font-family: 'Courier New', monospace;
-            margin-left: 8px;
         }
 
         .card-controls {
@@ -398,26 +231,25 @@
             margin-bottom: 10px;
             align-items: center;
             position: relative;
-            padding-left: 8px;
         }
 
         .dropdown-btn {
             width: 36px;
             height: 32px;
-            border: 1px solid #97a9b8;
-            background: #fcfdfe;
-            color: var(--ink-blue);
+            border: 1px solid var(--line-main);
+            background: var(--bg-panel);
+            color: var(--text-main);
             cursor: pointer;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 600;
             transition: all 0.1s;
-            border-radius: 0;
+            border-radius: 6px;
             flex-shrink: 0;
         }
 
         .dropdown-btn:hover {
-            background: #edf3f7;
-            border-color: var(--ink-blue);
+            background: var(--bg-soft);
+            border-color: #b9c1ca;
         }
 
         .difficulty-menu {
@@ -425,12 +257,11 @@
             top: 36px;
             left: 0;
             background: var(--bg-panel);
-            border: 2px solid var(--ink-blue);
+            border: 1px solid var(--line-main);
             min-width: 120px;
             display: none;
             z-index: 300;
-            box-shadow: 0 12px 26px rgba(41, 33, 24, 0.12);
-            border-radius: 0;
+            border-radius: 6px;
         }
 
         .difficulty-menu.show {
@@ -452,43 +283,58 @@
         }
 
         .difficulty-option:hover {
-            background: #edf3f7;
+            background: var(--bg-soft);
         }
 
         .difficulty-option.selected {
             background: var(--accent-soft);
-            color: var(--accent-strong);
+            color: var(--accent);
             font-weight: 600;
         }
 
         .start-btn {
             width: 100%;
             padding: 9px;
-            border: 1px solid var(--ink-blue);
-            background: #fbfdfe;
-            color: var(--ink-blue);
+            border: 1px solid var(--line-main);
+            background: var(--bg-panel);
+            color: var(--text-main);
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.14s ease;
             font-family: inherit;
-            letter-spacing: 0.08em;
-            border-radius: 0;
-            box-shadow: 3px 3px 0 rgba(36, 66, 92, 0.1);
-            margin-left: 8px;
+            letter-spacing: 0.04em;
+            border-radius: 6px;
         }
 
         .start-btn:hover {
             background: var(--accent);
             color: #fff;
             border-color: var(--accent);
-            transform: translate(1px, 1px);
-            box-shadow: 2px 2px 0 rgba(36, 66, 92, 0.1);
         }
 
         .start-btn:active {
             transform: scale(0.98);
+        }
+
+        .secondary-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--line-main);
+            background: var(--bg-panel);
+            color: var(--text-main);
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.14s ease;
+            font-family: inherit;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .secondary-btn:hover {
+            background: var(--bg-soft);
+            border-color: #b9c1ca;
         }
 
         .start-btn:disabled {
@@ -515,13 +361,12 @@
 
         .modal-content {
             background: var(--bg-panel);
-            border: 2px solid var(--ink-blue);
+            border: 1px solid var(--line-main);
             padding: 40px;
             width: 90%;
             max-width: 600px;
             position: relative;
-            border-radius: 0;
-            box-shadow: 0 14px 38px rgba(41, 33, 24, 0.16);
+            border-radius: 8px;
             text-align: center;
             max-height: 90vh;
             overflow-y: auto;
@@ -533,29 +378,28 @@
             right: 12px;
             width: 28px;
             height: 28px;
-            border: 1px solid var(--ink-blue);
-            background: #edf3f7;
-            color: var(--ink-blue);
+            border: 1px solid var(--line-main);
+            background: var(--bg-soft);
+            color: var(--text-main);
             font-size: 16px;
             cursor: pointer;
-            border-radius: 0;
+            border-radius: 6px;
             transition: all 0.1s;
         }
 
         .close:hover {
-            background: var(--ink-blue);
-            color: #fff;
-            border-color: var(--ink-blue);
+            background: #e6e9ee;
+            border-color: #b9c1ca;
         }
 
         .modal-title {
             font-size: 25px;
-            color: var(--ink-blue);
+            color: var(--text-main);
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.02em;
             font-weight: 700;
-            font-family: 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .attempt-info {
@@ -605,7 +449,7 @@
             background: #edf3f7;
             padding: 12px;
             border: 1px solid #d2dbe3;
-            border-radius: 0;
+            border-radius: 6px;
             font-size: 11px;
         }
 
@@ -679,7 +523,7 @@
             margin-top: 15px;
             border: 1px solid #b5c2cd;
             color: var(--text-soft);
-            border-radius: 0;
+            border-radius: 6px;
         }
 
         .result-message.correct {
@@ -694,9 +538,8 @@
         <div class="header">
             <div class="header-copy">
                 <div class="title">REACTION TESTER</div>
-                <div class="subtitle">small training board for clicks, tracking, typing and aim drills. still being tuned by hand.</div>
+                <div class="subtitle">Simple reaction, typing, memory and aim practice in one page.</div>
             </div>
-            <button class="guide-btn" onclick="toggleGuide()">? GUIDE ?</button>
         </div>
 
         <div class="grid">
@@ -735,10 +578,42 @@
                 <button class="start-btn" onclick="startTest('focus')">START</button>
             </div>
 
+            <div class="card">
+                <div class="card-num">03 / TEST</div>
+                <div class="card-title">CHOICE</div>
+                <div class="card-desc">Wait for the prompt, then choose the correct side fast</div>
+                <div class="card-stats" id="stats-choice">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'choice')">▼</button>
+                    <div class="difficulty-menu" id="menu-choice">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'choice', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'choice', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'choice', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('choice')">START</button>
+            </div>
+
+            <div class="card">
+                <div class="card-num">04 / TEST</div>
+                <div class="card-title">HOLD</div>
+                <div class="card-desc">Hold, wait for the signal, then release as fast as you can</div>
+                <div class="card-stats" id="stats-hold">— ms</div>
+                <div class="card-controls">
+                    <button class="dropdown-btn" onclick="toggleMenu(event, 'hold')">▼</button>
+                    <div class="difficulty-menu" id="menu-hold">
+                        <div class="difficulty-option selected" onclick="setDiff(event, 'hold', 'easy')">EASY</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'hold', 'medium')">NORMAL</div>
+                        <div class="difficulty-option" onclick="setDiff(event, 'hold', 'hard')">HARD</div>
+                    </div>
+                </div>
+                <button class="start-btn" onclick="startTest('hold')">START</button>
+            </div>
+
             <div class="section-header">II. TYPING TESTS</div>
             <!-- CHAT -->
             <div class="card">
-                <div class="card-num">03 / TEST</div>
+                <div class="card-num">05 / TEST</div>
                 <div class="card-title">CHAT</div>
                 <div class="card-desc">Type fast response to chat messages</div>
                 <div class="card-stats" id="stats-chat">0 / 3</div>
@@ -755,7 +630,7 @@
 
             <!-- TYPING -->
             <div class="card">
-                <div class="card-num">04 / TEST</div>
+                <div class="card-num">06 / TEST</div>
                 <div class="card-title">TYPING</div>
                 <div class="card-desc">Type phrases as fast and accurately as you can</div>
                 <div class="card-stats" id="stats-typing">— ms</div>
@@ -773,7 +648,7 @@
             <div class="section-header">III. MEMORY / SKILL TESTS</div>
             <!-- VISUAL -->
             <div class="card">
-                <div class="card-num">05 / TEST</div>
+                <div class="card-num">07 / TEST</div>
                 <div class="card-title">VISUAL</div>
                 <div class="card-desc">Find the odd emoji out among the others</div>
                 <div class="card-stats" id="stats-visual">0 / 3</div>
@@ -790,7 +665,7 @@
 
             <!-- MENTAL -->
             <div class="card">
-                <div class="card-num">07 / TEST</div>
+                <div class="card-num">08 / TEST</div>
                 <div class="card-title">MENTAL</div>
                 <div class="card-desc">Solve math: from basic to squares and roots</div>
                 <div class="card-stats" id="stats-mental">0 / 3</div>
@@ -807,7 +682,7 @@
 
             <!-- MEMORY -->
             <div class="card">
-                <div class="card-num">08 / TEST</div>
+                <div class="card-num">09 / TEST</div>
                 <div class="card-title">MEMORY</div>
                 <div class="card-desc">Remember the sequence and repeat it correctly</div>
                 <div class="card-stats" id="stats-memory">0 / 3</div>
@@ -825,7 +700,7 @@
             <div class="section-header">IV. SPECIAL TESTS</div>
             <!-- SPEED -->
             <div class="card">
-                <div class="card-num">09 / TEST</div>
+                <div class="card-num">10 / TEST</div>
                 <div class="card-title">SPEED</div>
                 <div class="card-desc">Type random letters as fast as you can</div>
                 <div class="card-stats" id="stats-speed">0 / 3</div>
@@ -843,7 +718,7 @@
             <div class="section-header">V. SHOOTER GAMES TRAINING</div>
             <!-- TRACKING -->
             <div class="card">
-                <div class="card-num">10 / TRAINING</div>
+                <div class="card-num">11 / TRAINING</div>
                 <div class="card-title">TRACKING</div>
                 <div class="card-desc">Keep your cursor on the moving circle</div>
                 <div class="card-stats" id="stats-tracking">TRACK: — ms</div>
@@ -860,7 +735,7 @@
 
             <!-- SPRAY CONTROL -->
             <div class="card">
-                <div class="card-num">11 / TRAINING</div>
+                <div class="card-num">12 / TRAINING</div>
                 <div class="card-title">TARGET BURST</div>
                 <div class="card-desc">Timed burst of hits with false starts on misses</div>
                 <div class="card-stats" id="stats-spray">[0]</div>
@@ -876,7 +751,7 @@
             </div>
 
             <div class="card">
-                <div class="card-num">12 / TRAINING</div>
+                <div class="card-num">13 / TRAINING</div>
                 <div class="card-title">MICRO ADJUST</div>
                 <div class="card-desc">Small corrections around center mass</div>
                 <div class="card-stats" id="stats-micro">[0]</div>
@@ -892,7 +767,7 @@
             </div>
 
             <div class="card">
-                <div class="card-num">13 / TRAINING</div>
+                <div class="card-num">14 / TRAINING</div>
                 <div class="card-title">TARGET SWITCH</div>
                 <div class="card-desc">Swap fast between two separate targets</div>
                 <div class="card-stats" id="stats-switch">[0]</div>
@@ -915,7 +790,7 @@
     <div class="results-section">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div class="results-title">RESULTS & STATS</div>
-            <button class="guide-btn" onclick="clearAllStats()" style="font-size: 11px; padding: 6px 12px;">CLEAR DATA</button>
+            <button class="secondary-btn" onclick="clearAllStats()">CLEAR DATA</button>
         </div>
         <table class="results-table">
             <thead>
@@ -958,6 +833,16 @@
                     <td>FOCUS</td>
                     <td>—</td>
                     <td id="result-focus-status">NO DATA</td>
+                </tr>
+                <tr id="result-choice">
+                    <td>CHOICE</td>
+                    <td>—</td>
+                    <td id="result-choice-status">NO DATA</td>
+                </tr>
+                <tr id="result-hold">
+                    <td>HOLD</td>
+                    <td>—</td>
+                    <td id="result-hold-status">NO DATA</td>
                 </tr>
                 <tr id="result-typing">
                     <td>TYPING</td>
@@ -1127,6 +1012,56 @@
         </div>
     </div>
 
+    <!-- CHOICE MODAL -->
+    <div class="modal" id="modal-choice">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('choice')">✕</button>
+            <div class="modal-title">CHOICE</div>
+            <div class="attempt-info" id="choice-attempt">ATTEMPT 1 / 3</div>
+            <div id="choice-prompt" style="font-size: 12px; color: #666; margin: 12px 0 16px;">Wait for LEFT or RIGHT</div>
+            <div id="choice-area" class="test-area" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 20px; padding: 24px;"></div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Current:</span>
+                    <span class="stat-value" id="choice-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Best:</span>
+                    <span class="stat-value" id="choice-best">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Average:</span>
+                    <span class="stat-value" id="choice-avg">— ms</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOLD MODAL -->
+    <div class="modal" id="modal-hold">
+        <div class="modal-content">
+            <button class="close" onclick="closeModal('hold')">✕</button>
+            <div class="modal-title">HOLD</div>
+            <div class="attempt-info" id="hold-attempt">ATTEMPT 1 / 3</div>
+            <div id="hold-instruction" style="font-size: 12px; color: #666; margin: 12px 0 16px;">Hold mouse or Space, then release on signal</div>
+            <div id="hold-area" class="test-area" style="font-size: 30px;">PRESS AND HOLD</div>
+            <div class="stats">
+                <div class="stat">
+                    <span>Current:</span>
+                    <span class="stat-value" id="hold-current">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Best:</span>
+                    <span class="stat-value" id="hold-best">— ms</span>
+                </div>
+                <div class="stat">
+                    <span>Average:</span>
+                    <span class="stat-value" id="hold-avg">— ms</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TYPING MODAL -->
     <div class="modal" id="modal-typing">
         <div class="modal-content">
@@ -1273,135 +1208,6 @@
         </div>
     </div>
 
-    <!-- GUIDE MODAL -->
-    <div class="guide-modal" id="guide-modal">
-        <div class="guide-content">
-            <button class="guide-close" onclick="toggleGuide()">✕</button>
-            
-            <div class="guide-section" style="border: 1px solid #24425c; padding: 12px; margin-bottom: 16px; background: #edf3f7;">
-                <div style="font-size: 13px; color: #24425c; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;">
-                    training notes
-                </div>
-                <div style="font-size: 11px; color: #53616c; line-height: 1.6;">
-                    reaction board with click tests, typing drills, memory work and aim practice.
-                    <br><br>
-                    every mode gives you 3 attempts. best values and scores are saved locally in your browser. choose a difficulty first, then run the set.
-                </div>
-            </div>
-            
-            <div class="guide-title">Mode Guide</div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Classic</div>
-                <div class="guide-mode-desc">Wait for the signal to turn green, then click immediately. Clicking early counts as a false start and restarts the round.</div>
-                <div class="guide-mode-info">
-                    easy: 1-2 sec wait | medium: 1.5-2.5 sec | hard: 2-3.5 sec
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Focus</div>
-                <div class="guide-mode-desc">Hold steady through the delay, then react when the prompt appears. Built to punish drifting attention.</div>
-                <div class="guide-mode-info">
-                    easy: longer readable window | medium: shorter alert window | hard: tighter timing and less forgiveness
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Visual</div>
-                <div class="guide-mode-desc">One tile is different. Find it before the round times out.</div>
-                <div class="guide-mode-info">
-                    easy: 6 circles total, 15 sec | medium: 9 circles, 10 sec | hard: 12 circles, 6 sec
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Mental</div>
-                <div class="guide-mode-desc">Solve the shown math problem and choose the correct answer from four options.</div>
-                <div class="guide-mode-info">
-                    easy: basic math, 20 sec | medium: multiply and square patterns, 10 sec | hard: heavier problems, 5 sec
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Memory</div>
-                <div class="guide-mode-desc">Memorize the number sequence, then enter it back using keyboard keys 1-9 or the on-screen buttons.</div>
-                <div class="guide-mode-info">
-                    easy: 3 numbers, 3 sec view | medium: 4 numbers, 2 sec view | hard: 5 numbers, 1 sec view
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Chat</div>
-                <div class="guide-mode-desc">After a 3-second countdown, a short message appears. Type a reasonable reply and press Enter.</div>
-                <div class="guide-mode-info">
-                    easy: 20 sec | medium: 10 sec | hard: 5 sec
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Typing</div>
-                <div class="guide-mode-desc">A phrase appears after a 3-second countdown. Re-type it exactly and send it before time runs out.</div>
-                <div class="guide-mode-info">
-                    easy: shorter phrases and more time | medium: balanced phrases | hard: longer phrases with tighter windows
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Speed</div>
-                <div class="guide-mode-desc">Fast recognition drill. Hit the matching text target as quickly as you can during the round.</div>
-                <div class="guide-mode-info">
-                    easy: fewer options and slower pace | medium: denser board | hard: faster decision loop, more pressure
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Tracking</div>
-                <div class="guide-mode-desc">Pure cursor control. You get a 3-second prep, then the target starts moving. Stay on it and build track time.</div>
-                <div class="guide-mode-info">
-                    easy: larger target with calmer path | medium: faster movement | hard: smaller and faster. best result = longest track time, not reaction
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Target Burst</div>
-                <div class="guide-mode-desc">Timed burst drill with a 3-second prep. Green target = point. Missing the target counts as a false start. Hard mode also adds a red no-shoot target.</div>
-                <div class="guide-mode-info">
-                    easy: 15 sec | medium: 12 sec | hard: 10 sec. score = total hits in the session
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Micro Adjust</div>
-                <div class="guide-mode-desc">Small targets spawn close to center so the drill trains tiny corrections instead of large flicks.</div>
-                <div class="guide-mode-info">
-                    easy: larger dots and wider timing | medium: smaller dots | hard: tiny dots and shorter windows. score = total hits
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div class="guide-mode-title">Target Switch</div>
-                <div class="guide-mode-desc">Two targets appear together. Clear both quickly to score one completed pair.</div>
-                <div class="guide-mode-info">
-                    easy: bigger pair with more time | medium: tighter window | hard: smaller targets and less time. score = completed pairs
-                </div>
-            </div>
-
-            <div class="guide-section">
-                <div style="font-size: 11px; color: #53616c; line-height: 1.6;">
-                    <strong style="color: #24425c; text-transform: uppercase; letter-spacing: 0.06em;">Controls</strong><br>
-                    Space = click in Classic<br>
-                    1-9 = enter sequence in Memory<br>
-                    1-4 = pick answer in Mental<br>
-                    Enter = submit in Chat and Typing<br>
-                    ESC = close the active test<br>
-                    <br>
-                    scores stay saved in localStorage until you clear them from the main screen
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         const BUILD_TIME = '2026-03 HUMAN DESIGN';
         console.log('>>> Reaction Tester - ' + BUILD_TIME);
@@ -1419,6 +1225,8 @@
             memory: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, sequence: [], userSequence: [], startTime: null },
             chat: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentMessage: null, startTime: null, timeoutId: null },
             focus: { diff: 'easy', results: [], currentAttempt: 0, waitTime: null, startTime: null, reactionTime: null, timeoutId: null },
+            choice: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, prompt: null, timeoutId: null },
+            hold: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null, isHolding: false, readyToRelease: false },
             typing: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentPhrase: null, startTime: null, timeoutId: null },
             speed: { diff: 'easy', results: [], currentAttempt: 0, correct: 0, currentText: null, startTime: null, timeoutId: null },
             tracking: { diff: 'easy', results: [], currentAttempt: 0, startTime: null, timeoutId: null },
@@ -1442,12 +1250,12 @@
         }
 
         function loadAndDisplayStats() {
-            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 const statsEl = document.getElementById(`stats-${type}`);
                 const resultCorrect = document.getElementById(`result-${type}-correct`);
                 const resultStatus = document.getElementById(`result-${type}-status`);
                 
-                if (type === 'classic' || type === 'chat' || type === 'focus' || type === 'typing' || type === 'tracking') {
+                if (type === 'classic' || type === 'chat' || type === 'focus' || type === 'choice' || type === 'hold' || type === 'typing' || type === 'tracking') {
                     const best = localStorage.getItem(`reactions_${type}_best`);
                     statsEl.textContent = type === 'tracking'
                         ? (best ? `TRACK: ${best} ms` : 'TRACK: — ms')
@@ -1571,6 +1379,39 @@
                 }
                 state.focus.roundActive = false;
             }
+
+            if (type === 'choice') {
+                const area = document.getElementById('choice-area');
+                if (area) {
+                    area.innerHTML = '';
+                }
+                if (state.choice.keyHandler) {
+                    document.removeEventListener('keydown', state.choice.keyHandler);
+                    state.choice.keyHandler = null;
+                }
+            }
+
+            if (type === 'hold') {
+                const area = document.getElementById('hold-area');
+                if (area) {
+                    area.onmousedown = null;
+                    area.onmouseup = null;
+                }
+                if (state.hold.keyDownHandler) {
+                    document.removeEventListener('keydown', state.hold.keyDownHandler);
+                    state.hold.keyDownHandler = null;
+                }
+                if (state.hold.keyUpHandler) {
+                    document.removeEventListener('keyup', state.hold.keyUpHandler);
+                    state.hold.keyUpHandler = null;
+                }
+                if (state.hold.mouseUpHandler) {
+                    document.removeEventListener('mouseup', state.hold.mouseUpHandler);
+                    state.hold.mouseUpHandler = null;
+                }
+                state.hold.isHolding = false;
+                state.hold.readyToRelease = false;
+            }
             
             // Clean up typing handlers
             if (type === 'typing' && state.typing.submitHandler) {
@@ -1634,15 +1475,10 @@
             document.getElementById(`modal-${type}`).classList.remove('active');
         }
 
-        function toggleGuide() {
-            const guideModal = document.getElementById('guide-modal');
-            guideModal.classList.toggle('active');
-        }
-
         function clearAllStats() {
             if (!confirm('Clear all saved stats? This cannot be undone.')) return;
             
-            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'typing', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
+            ['classic', 'visual', 'mental', 'memory', 'chat', 'focus', 'choice', 'hold', 'typing', 'speed', 'tracking', 'spray', 'micro', 'switch'].forEach(type => {
                 localStorage.removeItem(`reactions_${type}_best`);
                 localStorage.removeItem(`reactions_${type}_correct`);
             });
@@ -1716,6 +1552,10 @@
                 runChatRound();
             } else if (type === 'focus') {
                 runFocusRound();
+            } else if (type === 'choice') {
+                runChoiceRound();
+            } else if (type === 'hold') {
+                runHoldRound();
             } else if (type === 'typing') {
                 generateTypingPhrase();
             } else if (type === 'speed') {
@@ -2573,6 +2413,244 @@
                     closeModal('focus');
                 }, 1000);
             }, 1500);
+        }
+
+        // ===== CHOICE TEST =====
+        function runChoiceRound() {
+            const area = document.getElementById('choice-area');
+            const prompt = document.getElementById('choice-prompt');
+            if (!area || !prompt) return;
+
+            if (state.choice.keyHandler) {
+                document.removeEventListener('keydown', state.choice.keyHandler);
+                state.choice.keyHandler = null;
+            }
+
+            area.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:120px;border:1px solid #d6dbe1;border-radius:6px;background:#f0f2f5;">LEFT</div><div style="display:flex;align-items:center;justify-content:center;height:120px;border:1px solid #d6dbe1;border-radius:6px;background:#f0f2f5;">RIGHT</div>';
+            prompt.textContent = 'Wait for LEFT or RIGHT';
+
+            const delays = {
+                easy: [900, 1600],
+                medium: [1200, 2200],
+                hard: [1600, 3000]
+            };
+            const [min, max] = delays[state.choice.diff];
+            const delay = Math.random() * (max - min) + min;
+            let active = false;
+
+            const restartFalseStart = (message) => {
+                if (state.choice.timeoutId) {
+                    clearTimeout(state.choice.timeoutId);
+                    state.choice.timeoutId = null;
+                }
+                active = false;
+                area.innerHTML = `<div style="grid-column:1 / -1;display:flex;align-items:center;justify-content:center;height:120px;border:1px solid #f1b7b7;border-radius:6px;background:#fff1f1;color:#b42318;font-weight:700;">${message}</div>`;
+                prompt.textContent = 'Too early or wrong side';
+                if (state.choice.keyHandler) {
+                    document.removeEventListener('keydown', state.choice.keyHandler);
+                    state.choice.keyHandler = null;
+                }
+                setTimeout(runChoiceRound, 1200);
+            };
+
+            state.choice.keyHandler = (e) => {
+                if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+                e.preventDefault();
+                if (!active) {
+                    restartFalseStart('FALSE START');
+                    return;
+                }
+                const selected = e.key === 'ArrowLeft' ? 'LEFT' : 'RIGHT';
+                handleChoiceResponse(selected);
+            };
+            document.addEventListener('keydown', state.choice.keyHandler);
+
+            const handleChoiceResponse = (selected) => {
+                if (!active) return;
+                if (selected !== state.choice.prompt) {
+                    restartFalseStart('WRONG SIDE');
+                    return;
+                }
+
+                active = false;
+                if (state.choice.keyHandler) {
+                    document.removeEventListener('keydown', state.choice.keyHandler);
+                    state.choice.keyHandler = null;
+                }
+                const time = Math.round(performance.now() - state.choice.startTime);
+                recordChoiceResult(time);
+            };
+
+            state.choice.timeoutId = setTimeout(() => {
+                state.choice.prompt = Math.random() > 0.5 ? 'LEFT' : 'RIGHT';
+                state.choice.startTime = performance.now();
+                active = true;
+                prompt.textContent = 'Use arrow keys or click the correct side';
+                area.innerHTML = '';
+
+                ['LEFT', 'RIGHT'].forEach(side => {
+                    const button = document.createElement('button');
+                    button.textContent = side;
+                    button.style.height = '120px';
+                    button.style.border = side === state.choice.prompt ? '2px solid #2f6fed' : '1px solid #d6dbe1';
+                    button.style.borderRadius = '6px';
+                    button.style.background = side === state.choice.prompt ? '#eef4ff' : '#f8f9fb';
+                    button.style.fontSize = '22px';
+                    button.style.fontWeight = '700';
+                    button.style.cursor = 'pointer';
+                    button.onclick = () => {
+                        if (!active) {
+                            restartFalseStart('FALSE START');
+                            return;
+                        }
+                        handleChoiceResponse(side);
+                    };
+                    area.appendChild(button);
+                });
+            }, delay);
+        }
+
+        function recordChoiceResult(time) {
+            state.choice.results.push(time);
+            document.getElementById('choice-current').textContent = time + ' ms';
+            document.getElementById('choice-best').textContent = Math.min(...state.choice.results) + ' ms';
+            document.getElementById('choice-avg').textContent = Math.round(state.choice.results.reduce((a, b) => a + b, 0) / state.choice.results.length) + ' ms';
+            saveResults('choice');
+
+            state.choice.currentAttempt++;
+            if (state.choice.currentAttempt < 3) {
+                document.getElementById('choice-attempt').textContent = `ATTEMPT ${state.choice.currentAttempt + 1} / 3`;
+                setTimeout(runChoiceRound, 1200);
+            } else {
+                document.getElementById('choice-area').innerHTML = '<div style="grid-column:1 / -1;display:flex;align-items:center;justify-content:center;height:120px;">[DONE]</div>';
+                setTimeout(() => {
+                    loadAndDisplayStats();
+                    closeModal('choice');
+                }, 1200);
+            }
+        }
+
+        // ===== HOLD TEST =====
+        function runHoldRound() {
+            const area = document.getElementById('hold-area');
+            const instruction = document.getElementById('hold-instruction');
+            if (!area || !instruction) return;
+
+            if (state.hold.keyDownHandler) document.removeEventListener('keydown', state.hold.keyDownHandler);
+            if (state.hold.keyUpHandler) document.removeEventListener('keyup', state.hold.keyUpHandler);
+            if (state.hold.mouseUpHandler) document.removeEventListener('mouseup', state.hold.mouseUpHandler);
+
+            state.hold.isHolding = false;
+            state.hold.readyToRelease = false;
+            area.textContent = 'PRESS AND HOLD';
+            area.style.background = '#f0f2f5';
+            area.style.color = '#1f2328';
+            instruction.textContent = 'Hold mouse or Space, then release on signal';
+
+            const showHoldFalseStart = () => {
+                if (state.hold.timeoutId) {
+                    clearTimeout(state.hold.timeoutId);
+                    state.hold.timeoutId = null;
+                }
+                area.textContent = 'FALSE START';
+                area.style.background = '#fff1f1';
+                area.style.color = '#b42318';
+                instruction.textContent = 'Released too early';
+                state.hold.isHolding = false;
+                state.hold.readyToRelease = false;
+                setTimeout(runHoldRound, 1200);
+            };
+
+            const finishHold = () => {
+                if (!state.hold.isHolding) return;
+                if (!state.hold.readyToRelease) {
+                    showHoldFalseStart();
+                    return;
+                }
+
+                const time = Math.round(performance.now() - state.hold.startTime);
+                state.hold.isHolding = false;
+                state.hold.readyToRelease = false;
+                recordHoldResult(time);
+            };
+
+            const beginHold = () => {
+                if (state.hold.isHolding) return;
+                state.hold.isHolding = true;
+                area.textContent = 'HOLD...';
+                area.style.background = '#f8f9fb';
+                instruction.textContent = 'Keep holding until it turns green';
+
+                const delays = {
+                    easy: [900, 1600],
+                    medium: [1200, 2200],
+                    hard: [1600, 3000]
+                };
+                const [min, max] = delays[state.hold.diff];
+                const delay = Math.random() * (max - min) + min;
+
+                state.hold.timeoutId = setTimeout(() => {
+                    if (!state.hold.isHolding) return;
+                    state.hold.readyToRelease = true;
+                    state.hold.startTime = performance.now();
+                    area.textContent = 'RELEASE!';
+                    area.style.background = '#dff3e4';
+                    area.style.color = '#166534';
+                    instruction.textContent = 'Release now';
+                }, delay);
+            };
+
+            area.onmousedown = (e) => {
+                e.preventDefault();
+                beginHold();
+            };
+
+            state.hold.mouseUpHandler = () => {
+                finishHold();
+            };
+            document.addEventListener('mouseup', state.hold.mouseUpHandler);
+
+            state.hold.keyDownHandler = (e) => {
+                if (e.code !== 'Space' && e.key !== ' ') return;
+                e.preventDefault();
+                beginHold();
+            };
+            state.hold.keyUpHandler = (e) => {
+                if (e.code !== 'Space' && e.key !== ' ') return;
+                e.preventDefault();
+                finishHold();
+            };
+            document.addEventListener('keydown', state.hold.keyDownHandler);
+            document.addEventListener('keyup', state.hold.keyUpHandler);
+        }
+
+        function recordHoldResult(time) {
+            const area = document.getElementById('hold-area');
+            const instruction = document.getElementById('hold-instruction');
+            if (!area || !instruction) return;
+
+            state.hold.results.push(time);
+            document.getElementById('hold-current').textContent = time + ' ms';
+            document.getElementById('hold-best').textContent = Math.min(...state.hold.results) + ' ms';
+            document.getElementById('hold-avg').textContent = Math.round(state.hold.results.reduce((a, b) => a + b, 0) / state.hold.results.length) + ' ms';
+            saveResults('hold');
+
+            area.textContent = time + ' ms';
+            area.style.background = '#eef4ff';
+            area.style.color = '#2f6fed';
+            instruction.textContent = 'Good release';
+
+            state.hold.currentAttempt++;
+            if (state.hold.currentAttempt < 3) {
+                document.getElementById('hold-attempt').textContent = `ATTEMPT ${state.hold.currentAttempt + 1} / 3`;
+                setTimeout(runHoldRound, 1200);
+            } else {
+                setTimeout(() => {
+                    area.textContent = '[DONE]';
+                    loadAndDisplayStats();
+                    closeModal('hold');
+                }, 1200);
+            }
         }
 
         // ===== SPEED TEST =====
